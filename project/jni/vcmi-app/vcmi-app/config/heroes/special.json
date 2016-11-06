@@ -1,0 +1,250 @@
+{
+// "special" heroes for campaigns
+	"sirMullich":
+	{
+		"index": 144,
+		"class" : "knight",
+		"female": false,
+		"special" : false, // available in single scenario, replacement for no longer available Lord Haart
+		"skills":
+		[
+			{ "skill" : "leadership", "level": "advanced" }
+		],
+		"specialties":
+		[
+			{ "type":12, "val": 2, "subtype": 0, "info": 0 }
+		]
+	},
+	"adrienne":
+	{
+		"index": 145,
+		"class" : "witch",
+		"female": true,
+		"special" : true,
+		"spellbook": [ "inferno" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "fireMagic", "level": "expert" } ],
+		"specialties":
+		[
+			{ "type":11, "val": 14, "subtype": 0, "info": 3 }
+		]
+	},
+	"catherine":
+	{
+		"index": 146,
+		"class" : "knight",
+		"female": true,
+		"special" : true,
+		"skills":
+		[
+			{ "skill" : "leadership", "level": "basic" },
+			{ "skill" : "offence", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":1, "val": 0, "subtype": 0, "info": 4 }
+		]
+	},
+	"dracon":
+	{
+		"index": 147,
+		"class" : "wizard",
+		"female": false,
+		"special" : true,
+		"spellbook": [ "haste" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "advanced" }
+		],
+		"specialties":
+		[
+			{ "type":9, "val": 0, "subtype": 8, "info": 136 },
+			{ "type":9, "val": 0, "subtype": 34, "info": 136 }
+		]
+	},
+	"gelu":
+	{
+		"index": 148,
+		"class" : "ranger",
+		"female": false,
+		"special" : true,
+		"skills":
+		[
+			{ "skill" : "archery", "level": "basic" },
+			{ "skill" : "leadership", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":9, "val": 0, "subtype": 2, "info": 137 },
+			{ "type":9, "val": 0, "subtype": 18, "info": 137 }
+		]
+	},
+	"kilgor":
+	{
+		"index": 149,
+		"class" : "barbarian",
+		"female": false,
+		"special" : true,
+		"skills":
+		[
+			{ "skill" : "offence", "level": "advanced" }
+		],
+		"specialties":
+		[
+			{ "type":4, "val": 5,  "subtype": 1, "info": 96 },
+			{ "type":4, "val": 5,  "subtype": 2, "info": 96 },
+			{ "type":4, "val": 10, "subtype": 3, "info": 96 }
+		]
+	},
+	"undeadHaart": // undead version of Lord Haart
+	{
+		"index": 150,
+		"class" : "deathknight",
+		"female": false,
+		"special" : true,
+		"spellbook": [ "slow" ],
+		"skills":
+		[
+			{ "skill" : "necromancy", "level": "advanced" }
+		],
+		"specialties":
+		[
+			{ "type":4, "val": 5,  "subtype": 1, "info": 66 },
+			{ "type":4, "val": 5,  "subtype": 2, "info": 66 },
+			{ "type":4, "val": 10, "subtype": 3, "info": 66 }
+		]
+	},
+	"mutare":
+	{
+		"index": 151,
+		"class" : "warlock",
+		"female": true,
+		"special" : true,
+		"spellbook": [ "magicArrow" ],
+		"skills":
+		[
+			{ "skill" : "estates", "level": "basic" },
+			{ "skill" : "tactics", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":13, "val": 5, "subtype": 1, "info": 0 },
+			{ "type":13, "val": 5, "subtype": 2, "info": 0 }
+		]
+	},
+	"roland":
+	{
+		"index": 152,
+		"class" : "knight",
+		"female": false,
+		"special" : true,
+		"skills":
+		[
+			{ "skill" : "leadership", "level": "basic" },
+			{ "skill" : "armorer", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":1, "val": 0, "subtype": 0, "info": 4 }
+		]
+	},
+	"mutareDrake":
+	{
+		"index": 153,
+		"class" : "warlock",
+		"female": true,
+		"special" : true,
+		"spellbook": [ "magicArrow" ],
+		"skills":
+		[
+			{ "skill" : "estates", "level": "basic" },
+			{ "skill" : "tactics", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":13, "val": 1, "subtype": 1, "info": 5 },
+			{ "type":13, "val": 1, "subtype": 1, "info": 5 }
+		],
+		"army" :
+		[
+			{
+				"min" : 10, "max" : 20,
+				"creature" : "troglodyte"
+			},
+			{
+				"min" : 4, "max" : 7,
+				"creature" : "harpy"
+			},
+			{
+				"min" : 2, "max" : 3,
+				"creature" : "evilEye"
+			}
+		]
+	},
+	"boragus":
+	{
+		"index": 154,
+		"class" : "barbarian",
+		"female": false,
+		"special" : true,
+		"skills":
+		[
+			{ "skill" : "tactics", "level": "basic" },
+			{ "skill" : "offence", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":1, "val": 0, "subtype": 0, "info": 90 }
+		],
+		"army" :
+		[
+			{
+				"min" : 10, "max" : 20,
+				"creature" : "goblin"
+			},
+			{
+				"min" : 4, "max" : 7,
+				"creature" : "goblinWolfRider"
+			},
+			{
+				"min" : 2, "max" : 3,
+				"creature" : "orc"
+			}
+		]
+	},
+	"xeron":
+	{
+		"index": 155,
+		"class" : "demoniac",
+		"female": false,
+		"special" : true,
+		"skills":
+		[
+			{ "skill" : "leadership", "level": "basic" },
+			{ "skill" : "tactics", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":4, "val": 4, "subtype": 1, "info": 54 },
+			{ "type":4, "val": 2, "subtype": 2, "info": 54 },
+			{ "type":4, "val": 1, "subtype": 5, "info": 54 }
+		],
+		"army" :
+		[
+			{
+				"min" : 10, "max" : 20,
+				"creature" : "imp"
+			},
+			{
+				"min" : 4, "max" : 7,
+				"creature" : "hellHound"
+			},
+			{
+				"min" : 2, "max" : 3,
+				"creature" : "hellHound"
+			}
+		]
+	}
+}

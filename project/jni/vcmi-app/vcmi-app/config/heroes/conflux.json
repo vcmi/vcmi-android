@@ -1,0 +1,258 @@
+{
+	"pasis":
+	{
+		"index": 128,
+		"class" : "planeswalker",
+		"female": true,
+		"skills":
+		[
+			{ "skill" : "artillery", "level": "basic" },
+			{ "skill" : "offence", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":4, "val": 3, "subtype": 1, "info": 120 },
+			{ "type":4, "val": 3, "subtype": 2, "info": 120 }
+		]
+	},
+	"thunar":
+	{
+		"index": 129,
+		"class" : "planeswalker",
+		"female": true,
+		"skills":
+		[
+			{ "skill" : "estates", "level": "basic" },
+			{ "skill" : "tactics", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":4, "val": 2, "subtype": 1, "info": 113 },
+			{ "type":4, "val": 1, "subtype": 2, "info": 113 },
+			{ "type":4, "val": 5, "subtype": 4, "info": 113 }
+		]
+	},
+	"ignissa":
+	{
+		"index": 130,
+		"class" : "planeswalker",
+		"female": true,
+		"skills":
+		[
+			{ "skill" : "artillery", "level": "basic" },
+			{ "skill" : "offence", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":4, "val": 1, "subtype": 1, "info": 114 },
+			{ "type":4, "val": 2, "subtype": 1, "info": 114 },
+			{ "type":4, "val": 2, "subtype": 3, "info": 114 }
+		]
+	},
+	"lacus":
+	{
+		"index": 131,
+		"class" : "planeswalker",
+		"female": true,
+		"skills":
+		[
+			{ "skill" : "tactics", "level": "advanced" }
+		],
+		"specialties":
+		[
+			{ "type":4, "val": 2, "subtype": 1, "info": 115 }
+		]
+	},
+	"monere":
+	{
+		"index": 132,
+		"class" : "planeswalker",
+		"female": false,
+		"skills":
+		[
+			{ "skill" : "logistics", "level": "basic" },
+			{ "skill" : "offence", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":4, "val": 3, "subtype": 1, "info": 120 },
+			{ "type":4, "val": 3, "subtype": 2, "info": 120 }
+		]
+	},
+	"erdamon":
+	{
+		"index": 133,
+		"class" : "planeswalker",
+		"female": false,
+		"skills":
+		[
+			{ "skill" : "estates", "level": "basic" },
+			{ "skill" : "tactics", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":4, "val": 2, "subtype": 1, "info": 113 },
+			{ "type":4, "val": 1, "subtype": 2, "info": 113 },
+			{ "type":4, "val": 5, "subtype": 4, "info": 113 }
+		]
+	},
+	"fiur":
+	{
+		"index": 134,
+		"class" : "planeswalker",
+		"female": false,
+		"skills":
+		[
+			{ "skill" : "offence", "level": "advanced" }
+		],
+		"specialties":
+		[
+			{ "type":4, "val": 1, "subtype": 1, "info": 114 },
+			{ "type":4, "val": 2, "subtype": 1, "info": 114 },
+			{ "type":4, "val": 2, "subtype": 3, "info": 114 }
+		]
+	},
+	"kalt":
+	{
+		"index": 135,
+		"class" : "planeswalker",
+		"female": false,
+		"skills":
+		[
+			{ "skill" : "tactics", "level": "basic" },
+			{ "skill" : "learning", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":4, "val": 2, "subtype": 1, "info": 115 }
+		]
+	},
+	"luna":
+	{
+		"index": 136,
+		"class" : "elementalist",
+		"spellbook": [ "fireWall" ],
+		"female": true,
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "fireMagic", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":5, "val": 100, "subtype": 13, "info": 0 }
+		]
+	},
+	"brissa":
+	{
+		"index": 137,
+		"class" : "elementalist",
+		"female": true,
+		"spellbook": [ "haste" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "airMagic", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":8, "val": 0, "subtype": 53, "info": 0 }
+		]
+	},
+	"ciele":
+	{
+		"index": 138,
+		"class" : "elementalist",
+		"female": true,
+		"spellbook": [ "magicArrow" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "waterMagic", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":5, "val": 50, "subtype": 15, "info": 0 }
+		]
+	},
+	"labetha":
+	{
+		"index": 139,
+		"class" : "elementalist",
+		"female": true,
+		"spellbook": [ "stoneSkin" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "earthMagic", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":8, "val": 0, "subtype": 46, "info": 0 }
+		]
+	},
+	"inteus":
+	{
+		"index": 140,
+		"class" : "elementalist",
+		"female": false,
+		"spellbook": [ "bloodlust" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "fireMagic", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":8, "val": 0, "subtype": 43, "info": 0 }
+		]
+	},
+	"aenain":
+	{
+		"index": 141,
+		"class" : "elementalist",
+		"female": false,
+		"spellbook": [ "disruptingRay" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "airMagic", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":8, "val": 0, "subtype": 47, "info": 0 }
+		]
+	},
+	"gelare":
+	{
+		"index": 142,
+		"class" : "elementalist",
+		"female": false,
+		"spellbook": [ "dispel" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "waterMagic", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":10, "val": 350, "subtype": 6, "info": 0 }
+		]
+	},
+	"grindan":
+	{
+		"index": 143,
+		"class" : "elementalist",
+		"female": false,
+		"spellbook": [ "slow" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "earthMagic", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":10, "val": 350, "subtype": 6, "info": 0 }
+		]
+	}
+}

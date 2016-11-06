@@ -1,0 +1,80 @@
+{
+	"factions" :
+	[
+		"config/factions/castle.json",
+		"config/factions/rampart.json",
+		"config/factions/tower.json",
+		"config/factions/necropolis.json",
+		"config/factions/inferno.json",
+		"config/factions/dungeon.json",
+		"config/factions/stronghold.json",
+		"config/factions/fortress.json",
+		"config/factions/conflux.json",
+		"config/factions/neutral.json"
+	],
+
+	"creatures" :
+	[
+		"config/creatures/castle.json",
+		"config/creatures/rampart.json",
+		"config/creatures/tower.json",
+
+		"config/creatures/necropolis.json",
+		"config/creatures/inferno.json",
+		"config/creatures/dungeon.json",
+
+		"config/creatures/stronghold.json",
+		"config/creatures/fortress.json",
+		"config/creatures/conflux.json",
+
+		"config/creatures/neutral.json",
+		"config/creatures/special.json"
+	],
+
+	"heroes" :
+	[
+		"config/heroes/castle.json",
+		"config/heroes/rampart.json",
+		"config/heroes/tower.json",
+		"config/heroes/necropolis.json",
+		"config/heroes/inferno.json",
+		"config/heroes/dungeon.json",
+		"config/heroes/stronghold.json",
+		"config/heroes/fortress.json",
+		"config/heroes/conflux.json",
+		"config/heroes/special.json"
+	],
+
+	"objects" :
+	[
+		"config/objects/generic.json",
+		"config/objects/moddables.json",
+		"config/objects/creatureBanks.json",
+		"config/objects/dwellings.json",
+		"config/objects/rewardable.json"
+	],
+
+	"artifacts" :
+	[
+		"config/artifacts.json"
+	],
+	
+	"heroClasses" :
+	[
+		"config/heroClasses.json"
+	],
+
+	"bonuses" :
+	[
+		"config/bonuses.json",
+		"config/bonuses_texts.json"
+	],
+	"spells" :
+	[
+		"config/spells/adventure.json",
+		"config/spells/offensive.json",
+		"config/spells/other.json",
+		"config/spells/timed.json",
+		"config/spells/ability.json"
+	]
+}

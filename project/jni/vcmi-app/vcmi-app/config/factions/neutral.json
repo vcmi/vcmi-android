@@ -1,0 +1,13 @@
+{
+	"neutral" :
+	{
+		"name" : "Neutral",
+		"index" : 9,
+		"alignment" : "neutral",
+		"creatureBackground" :
+		{
+			"120px" : "TPCASNEU",
+			"130px" : "CRBKGNEU"
+		}
+	}
+}

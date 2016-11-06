@@ -1,0 +1,6 @@
+[submodule "vcmi"]
+	path = vcmi
+	url = https://github.com/vcmi/vcmi.git
+[submodule "ext/vcmi"]
+	path = ext/vcmi
+	url = https://github.com/vcmi/vcmi.git

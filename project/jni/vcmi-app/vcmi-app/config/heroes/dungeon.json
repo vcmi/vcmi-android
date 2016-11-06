@@ -1,0 +1,248 @@
+{
+	"lorelei":
+	{
+		"index": 80,
+		"class" : "warlock",
+		"female": true,
+		"skills":
+		[
+			{ "skill" : "scouting", "level": "basic" },
+			{ "skill" : "leadership", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":1, "val": 0, "subtype": 0, "info": 72 }
+		]
+	},
+	"arlach":
+	{
+		"index": 81,
+		"class" : "warlock",
+		"female": false,
+		"skills":
+		[
+			{ "skill" : "artillery", "level": "basic" },
+			{ "skill" : "offence", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":1, "val": 0, "subtype": 0, "info": 146 }
+		]
+	},
+	"dace":
+	{
+		"index": 82,
+		"class" : "warlock",
+		"female": false,
+		"skills":
+		[
+			{ "skill" : "tactics", "level": "basic" },
+			{ "skill" : "offence", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":1, "val": 0, "subtype": 0, "info": 78 }
+		]
+	},
+	"ajit":
+	{
+		"index": 83,
+		"class" : "warlock",
+		"female": false,
+		"skills":
+		[
+			{ "skill" : "leadership", "level": "basic" },
+			{ "skill" : "resistance", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":1, "val": 0, "subtype": 0, "info": 74 }
+		]
+	},
+	"damacon":
+	{
+		"index": 84,
+		"class" : "warlock",
+		"female": false,
+		"skills":
+		[
+			{ "skill" : "offence", "level": "advanced" }
+		],
+		"specialties":
+		[
+			{ "type":10, "val": 350, "subtype": 6, "info": 0 }
+		]
+	},
+	"gunnar":
+	{
+		"index": 85,
+		"class" : "warlock",
+		"female": false,
+		"skills":
+		[
+			{ "skill" : "logistics", "level": "basic" },
+			{ "skill" : "tactics", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":2, "val": 5, "subtype": 2, "info": 0 }
+		]
+	},
+	"synca":
+	{
+		"index": 86,
+		"class" : "warlock",
+		"female": true,
+		"skills":
+		[
+			{ "skill" : "leadership", "level": "basic" },
+			{ "skill" : "scholar", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":1, "val": 0, "subtype": 0, "info": 80 }
+		]
+	},
+	"shakti":
+	{
+		"index": 87,
+		"class" : "warlock",
+		"female": false,
+		"skills":
+		[
+			{ "skill" : "tactics", "level": "basic" },
+			{ "skill" : "offence", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":1, "val": 0, "subtype": 0, "info": 70 }
+		]
+	},
+	"alamar":
+	{
+		"index": 88,
+		"class" : "overlord",
+		"spellbook": [ "resurrection" ],
+		"female": false,
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "scholar", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":3, "val": 3, "subtype": 38, "info": 0 }
+		]
+	},
+	"jaegar":
+	{
+		"index": 89,
+		"class" : "overlord",
+		"female": false,
+		"spellbook": [ "shield" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "mysticism", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":2, "val": 5, "subtype": 8, "info": 1 }
+		]
+	},
+	"malekith":
+	{
+		"index": 90,
+		"class" : "overlord",
+		"female": false,
+		"spellbook": [ "bloodlust" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "sorcery", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":2, "val": 5, "subtype": 25, "info": 0 }
+		]
+	},
+	"jeddite":
+	{
+		"index": 91,
+		"class" : "overlord",
+		"female": true,
+		"spellbook": [ "resurrection" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "advanced" }
+		],
+		"specialties":
+		[
+			{ "type":3, "val": 3, "subtype": 38, "info": 0 }
+		]
+	},
+	"geon":
+	{
+		"index": 92,
+		"class" : "overlord",
+		"female": false,
+		"spellbook": [ "slow" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "eagleEye", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":2, "val": 5, "subtype": 11, "info": 1 }
+		]
+	},
+	"deemer":
+	{
+		"index": 93,
+		"class" : "overlord",
+		"female": false,
+		"spellbook": [ "meteorShower" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "scouting", "level": "advanced" }
+		],
+		"specialties":
+		[
+			{ "type":3, "val": 3, "subtype": 23, "info": 0 }
+		]
+	},
+	"sephinroth":
+	{
+		"index": 94,
+		"class" : "overlord",
+		"female": true,
+		"spellbook": [ "protectAir" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "intelligence", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":10, "val": 1, "subtype": 4, "info": 0 }
+		]
+	},
+	"darkstorn":
+	{
+		"index": 95,
+		"class" : "overlord",
+		"female": false,
+		"spellbook": [ "stoneSkin" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "learning", "level": "basic" }
+		],
+		"specialties":
+		[
+			{ "type":8, "val": 0, "subtype": 46, "info": 0 }
+		]
+	}
+}

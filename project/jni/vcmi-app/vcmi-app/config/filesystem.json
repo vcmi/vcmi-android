@@ -1,0 +1,53 @@
+{
+	// Complete filesystem available after initialization
+	// All paths and names here are case-insensitive
+	// If same filename is found twice entry from latest source will be used
+	// NOTES:
+	// - this file must be available as "config/filesystem.json"
+	// - some locations are hardcoded (user config directory, cache/tmp directory, saved games location)
+	"filesystem":
+	{
+		"DATA/" :
+		[
+			{"type" : "lod", "path" : "Data/H3ab_bmp.lod"},
+			{"type" : "lod", "path" : "Data/H3bitmap.lod"},
+			{"type" : "dir",  "path" : "Data"}
+		],
+		"SPRITES/":
+		[
+			{"type" : "lod", "path" : "Data/H3ab_spr.lod"},
+			{"type" : "lod", "path" : "Data/H3sprite.lod"},
+			{"type" : "dir",  "path" : "Sprites"}
+		],
+		"SOUNDS/":
+		[
+			{"type" : "snd", "path" : "Data/H3ab_ahd.snd"},
+			{"type" : "snd", "path" : "Data/Heroes3-cd2.snd"},
+			{"type" : "snd", "path" : "Data/Heroes3.snd"},
+			//WoG have overriden sounds with .82m extension in Data
+			{"type" : "dir",  "path" : "Data", "depth": 0}
+		],
+		"MUSIC/":
+		[
+			{"type" : "dir",  "path" : "Mp3"}
+		],
+		"VIDEO/":
+		[
+			{"type" : "vid", "path" : "Data/H3ab_ahd.vid"},
+			{"type" : "vid", "path" : "Data/Heroes3.vid"},
+			{"type" : "vid", "path" : "Data/video.vid"}
+		],
+		"CONFIG/":
+		[
+			{"type" : "dir",  "path" : "config"}
+		],
+		"MAPS/":
+		[
+			{"type" : "dir",  "path" : "Maps"}
+		],
+		"MODS/":
+		[
+			{"type" : "dir",  "path" : "Mods", "depth": 1}
+		]
+	}
+}

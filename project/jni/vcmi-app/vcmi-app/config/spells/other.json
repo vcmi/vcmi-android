@@ -1,0 +1,356 @@
+{
+	"quicksand" : {
+		"index" : 10,
+		"targetType" : "NO_TARGET",
+
+		"sounds": {
+			"cast": "QUIKSAND"
+		},
+		"levels" : {
+			"base":{
+				"range" : "X"
+			}
+		},
+		"flags" : {
+			"indifferent": true
+		}
+	},
+	"landMine" : {
+		"index" : 11,
+		"targetType" : "NO_TARGET",
+
+		"sounds": {
+			"cast": ""
+		},
+		"levels" : {
+			"base":{
+				"range" : "X"
+			}
+		},
+		"flags" : {
+			"damage": true,
+			"indifferent": true
+		},
+		"immunity" : {
+			"DIRECT_DAMAGE_IMMUNITY": true
+		}
+	},
+	"forceField" : {
+		"index" : 12,
+		"targetType" : "LOCATION",
+
+		"sounds": {
+			"cast": "FORCEFLD"
+		},
+		"levels" : {
+			"base":{
+				"range" : "0",
+				"targetModifier":{
+					"clearAffected": true
+				}
+			}
+		},
+		"flags" : {
+			"indifferent": true
+		}
+	},
+	"fireWall" : {
+		"index" : 13,
+		"targetType" : "LOCATION",
+
+		"sounds": {
+			"cast": "FIREWALL"
+		},
+		"levels" : {
+			"base":{
+				"range" : "0",
+				"targetModifier":{
+					"clearAffected": true
+				}
+			}
+		},
+		"flags" : {
+			"damage": true,
+			"indifferent": true
+		},
+		"immunity" : {
+			"DIRECT_DAMAGE_IMMUNITY": true
+		}
+	},
+	"earthquake" : {
+		"index" : 14,
+		"targetType" : "NO_TARGET",
+
+		"sounds": {
+			"cast": "ERTHQUAK"
+		},
+		"levels" : {
+			"base":{
+				"targetModifier":{"smart":true},
+				"range" : "X"
+			}
+		},
+		"flags" : {
+			"indifferent": true
+		}
+	},
+
+	"dispel" : {
+		"index" : 35,
+		"targetType" : "CREATURE",
+
+		"animation":{
+			"affect":["C05SPW"] //C05SPW0
+		},
+		"sounds": {
+			"cast": "DISPELL"
+		},
+		"levels" : {
+ 			"base":{
+				"targetModifier":{"smart":true},
+ 				"range" : "0"
+ 			},
+			"advanced":{
+				"targetModifier":{"smart":false}
+			},
+ 			"expert":{
+				"targetModifier":{"smart":false},
+ 				"range" : "X"
+ 			}
+		},
+		"flags" : {
+			"positive": true
+		}
+	},
+	"cure" : {
+		"index" : 37,
+		"targetType" : "CREATURE",
+		"animation":{
+			"affect":["C03SPW"]//C03SPW0
+		},
+
+		"sounds": {
+			"cast": "CURE"
+		},
+		"levels" : {
+			"base":{
+				"targetModifier":{"smart":true},
+				"range" : "0"
+			},
+			"expert":{
+				"range" : "X"
+			}
+		},
+		"flags" : {
+			"positive": true
+		}
+	},
+	"resurrection" : {
+		"index" : 38,
+		"targetType" : "CREATURE",
+
+		"animation":{
+			"affect":["C01SPE0"]
+		},
+		"sounds": {
+			"cast": "RESURECT"
+		},
+		"levels" : {
+			"base":{
+				"range" : "0",
+				"targetModifier":{"smart":true}
+			}
+		},
+		"flags" : {
+			"rising": true,
+			"positive": true
+		},
+		"absoluteImmunity" : {
+			"UNDEAD": true,
+			"SIEGE_WEAPON": true,
+			"NON_LIVING": true
+		}
+	},
+	"animateDead" : {
+		"index" : 39,
+		"targetType" : "CREATURE",
+
+		"animation":{
+			"affect":["C01SPE0"]
+		},
+		"sounds": {
+			"cast": "ANIMDEAD"
+		},
+		"levels" : {
+			"base":{
+				"range" : "0",
+				"targetModifier":{"smart":true}
+			}
+		},
+		"flags" : {
+			"rising": true,
+			"positive": true
+		},
+		"absoluteLimit" : {
+			"UNDEAD": true
+		}
+	},
+	"sacrifice" : {
+		"index" : 40,
+		"targetType" : "CREATURE",
+
+		"animation":{
+			"affect":["C01SPE0"]
+		},
+		"sounds": {
+			"cast": "SACRIF1"
+		},
+		"levels" : {
+			"base":{
+				"range" : "0",
+				"targetModifier":{"smart":true}
+			}
+		},
+		"flags" : {
+			"rising": true,
+			"positive": true
+		},
+		"absoluteImmunity" : {
+			"SIEGE_WEAPON": true,
+			"UNDEAD": true,
+			"NON_LIVING": true
+		}
+	},
+	"teleport" : {
+		"index" : 63,
+		"targetType" : "CREATURE",
+
+		"sounds": {
+			"cast": "TELPTOUT"
+		},
+		"levels" : {
+			"base":{
+				"range" : "0",
+				"targetModifier":{"smart":true}
+			}
+		},
+		"absoluteImmunity" : {
+			"SIEGE_WEAPON": true
+		},
+		"flags" : {
+			"positive": true
+		}
+	},
+	"removeObstacle" : {
+		"index" : 64,
+		"targetType" : "OBSTACLE",
+		"animation":{
+			"cast":[2]
+		},
+		"sounds": {
+			"cast": "REMOVEOB"
+		},
+		"levels" : {
+			"base":{
+				"range" : "0"
+			}
+		},
+		"flags" : {
+			"indifferent": true
+		}
+	},
+	"clone" : {
+		"index" : 65,
+		"targetType" : "CREATURE",
+		"animation":{
+			"cast":[2]
+		},
+		"sounds": {
+			"cast": "CLONE"
+		},
+		"levels" : {
+			"base":{
+				"range" : "0",
+				"targetModifier":{"smart":true}
+			}
+		},
+		"absoluteImmunity" : {
+			"SIEGE_WEAPON": true
+		},
+		"flags" : {
+			"positive": true
+		}
+	},
+	"fireElemental" : {
+		"index" : 66,
+		"targetType" : "NO_TARGET",
+		"animation":{
+			"cast":[2]
+		},
+		"sounds": {
+			"cast": "SUMNELM"
+		},
+		"levels" : {
+			"base":{
+				"range" : "X"
+			}
+		},
+		"flags" : {
+			"indifferent": true
+		}
+	},
+	"earthElemental" : {
+		"index" : 67,
+		"targetType" : "NO_TARGET",
+		"animation":{
+			"cast":[2]
+		},
+		"sounds": {
+			"cast": "SUMNELM"
+		},
+		"levels" : {
+			"base":{
+				"range" : "X"
+			}
+		},
+		"flags" : {
+			"indifferent": true
+		}
+	},
+	"waterElemental" : {
+		"index" : 68,
+		"targetType" : "NO_TARGET",
+		"animation":{
+			"cast":[2]
+		},
+		"sounds": {
+			"cast": "SUMNELM"
+		},
+		"levels" : {
+			"base":{
+				"range" : "X"
+			}
+		},
+		"flags" : {
+			"indifferent": true
+		}
+	},
+	"airElemental" : {
+		"index" : 69,
+		"targetType" : "NO_TARGET",
+		"animation":{
+			"cast":[2]
+		},
+		"sounds": {
+			"cast": "SUMNELM"
+		},
+		"levels" : {
+			"base":{
+				"range" : "X"
+			}
+		},
+		"flags" : {
+			"indifferent": true
+		}
+	}
+}
