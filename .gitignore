@@ -1,3 +1,5 @@
-/project/jni/boost/boost_1_61_0/*
-/project/obj
-/project/libs
+/ext/boost/boost_1_61_0/*
+/ext/ffmpeg/ffmpeg-toolchain
+/obj
+/libs
+/project/jni/vcmi-app/vcmi-app/Version.cpp
