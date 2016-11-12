@@ -1,0 +1,38 @@
+apply plugin: 'com.android.model.native'
+
+model {
+    android {
+        compileSdkVersion 24
+        buildToolsVersion "25.0.0"
+
+        defaultConfig {
+            minSdkVersion.apiLevel 16
+            targetSdkVersion.apiLevel 24
+        }
+    }
+
+    android.ndk {
+        moduleName "minizip"
+        platformVersion 16
+        toolchain "clang"
+        stl "c++_shared"
+        CFlags.addAll("-DIOAPI_NO_64",
+                "-I" + file("${VCMI_PATH_VCMI}/lib/minizip").absolutePath)
+        ldLibs.addAll("z")
+        abiFilters.add("armeabi")
+    }
+
+    android.sources {
+        main {
+            jni {
+                source {
+                    srcDir "../jni/vcmi-app/vcmi-app/lib/minizip"
+                    exclude "iowin32.c"
+                    exclude "mztools.c"
+                    exclude "miniunz.c"
+                    exclude "minizip.c"
+                }
+            }
+        }
+    }
+}

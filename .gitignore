@@ -3,3 +3,9 @@
 /obj
 /libs
 /project/jni/vcmi-app/vcmi-app/Version.cpp
+/**/jniLibs/
+/project/build
+/project/**/build
+/**/.gradle
+/project/.idea/workspace.xml
+/project/jni/**/*.suo

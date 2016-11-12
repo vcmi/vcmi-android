@@ -4,6 +4,7 @@
 #include "../../SDL_internal.h"
 
 #ifdef __ANDROID__
+#include <android/log.h>
 
 /* Include the SDL main definition header */
 #include "SDL_main.h"
@@ -17,16 +18,25 @@
 extern void SDL_Android_Init(JNIEnv* env, jclass cls);
 
 /* This prototype is needed to prevent a warning about the missing prototype for global function below */
-JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv* env, jclass cls, jobject array);
+JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv* env, jclass cls, jobject array, jstring dataPath);
 
+JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeQuit(JNIEnv* env, jclass cls)
+{
+	return 0;
+}
 /* Start up the SDL app */
-JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv* env, jclass cls, jobject array)
+JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv* env, jclass cls, jobject array, jstring dataPath)
 {
     int i;
     int argc;
     int status;
     int len;
     char** argv;
+	
+	const char *nativeDataPath = (*env)->GetStringUTFChars(env, dataPath, 0);
+	setenv("VCMI_DATA_ROOT", dataPath, 1);
+	__android_log_write(ANDROID_LOG_ERROR, "xx#", dataPath);
+	(*env)->ReleaseStringUTFChars(env, dataPath, nativeDataPath);
 
     /* This interface could expand with ABI negotiation, callbacks, etc. */
     SDL_Android_Init(env, cls);
@@ -63,9 +73,9 @@ JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv* env, jc
 
 
     /* Run the application. */
-
+	__android_log_write(ANDROID_LOG_ERROR, "xx#", "CALLING main");
     status = SDL_main(argc, argv);
-
+	__android_log_write(ANDROID_LOG_ERROR, "xx#", "AFTER main");
     /* Release the arguments. */
 
     for (i = 0; i < argc; ++i) {
