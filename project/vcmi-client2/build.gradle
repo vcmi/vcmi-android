@@ -1,0 +1,89 @@
+apply plugin: 'com.android.model.native'
+
+model {
+    repositories {
+
+        libs(PrebuiltLibraries) { libs ->
+            LIBS_DEF.each { entry ->
+                libs.create(entry[0]) {
+                    if (entry[2] != "") {
+                        headers.srcDir entry[2]
+                    }
+                    entry[1].each { binEntry ->
+                        binaries.withType(SharedLibraryBinary) {
+                            sharedLibraryFile = file("${PROJECT_PATH_BASE}/obj/local/${TMP_ARCH}/${binEntry}")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    android {
+        compileSdkVersion 24
+        buildToolsVersion "25.0.0"
+
+        defaultConfig {
+            minSdkVersion.apiLevel 16
+            targetSdkVersion.apiLevel 24
+        }
+    }
+
+    android.ndk {
+        moduleName "vcmi-client2"
+        platformVersion 16
+        toolchain "clang"
+        stl "c++_shared"
+        cppFlags.addAll("-std=c++11",
+                "-fcxx-exceptions",
+                "-frtti",
+                "-I" + file("${VCMI_PATH_VCMI}/include").absolutePath,
+                "-I" + file("${VCMI_PATH_VCMI}/client").absolutePath,
+                "-I" + file("${VCMI_PATH_VCMI}/lib").absolutePath,
+                "-I" + file("${VCMI_PATH_VCMI}").absolutePath,
+                "-I" + file("${VCMI_INCL_SDL}").absolutePath,
+                "-I" + file("${VCMI_INCL_SDL_IMAGE}").absolutePath,
+                "-I" + file("${VCMI_INCL_SDL_MIXER}").absolutePath,
+                "-I" + file("${VCMI_INCL_SDL_TTF}").absolutePath,
+                "-I" + file("${VCMI_INCL_BOOST}").absolutePath,
+                "-I" + file("${VCMI_INCL_FFMPEG}").absolutePath)
+        ldLibs.addAll("z", "log", "atomic")
+        abiFilters.add("armeabi")
+    }
+
+    android.sources {
+        main {
+            jni {
+                source {
+                    srcDir "../jni/vcmi-app/vcmi-app/client"
+                    srcDir "${VCMI_PATH_SDL}/src/main/android/SDL_android.main.c"
+                    srcDir "src/main/jni/gradle-hack"
+                }
+                dependencies {
+                    library "prebuiltSDL" linkage "shared"
+                    library "prebuiltSDLImage" linkage "shared"
+                    library "prebuiltSDLMixer" linkage "shared"
+                    library "prebuiltSDLTTF" linkage "shared"
+                    library "prebuiltFFcodec" linkage "shared"
+                    library "prebuiltFFdevice" linkage "shared"
+                    library "prebuiltFFfilter" linkage "shared"
+                    library "prebuiltFFformat" linkage "shared"
+                    library "prebuiltFFutil" linkage "shared"
+                    library "prebuiltFFpostproc" linkage "shared"
+                    library "prebuiltFFswresample" linkage "shared"
+                    library "prebuiltFFswscale" linkage "shared"
+                    project ":minizip"
+                    project ":fuzzylite"
+                    project ":vcmi-lib"
+                    project ":boost-datetime"
+                    project ":boost-locale"
+                    project ":boost-system"
+                    project ":boost-filesystem"
+                    project ":boost-smartptr"
+                    project ":boost-program-options"
+                    project ":boost-thread"
+                }
+            }
+        }
+    }
+}

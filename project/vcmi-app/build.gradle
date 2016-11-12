@@ -1,0 +1,23 @@
+apply plugin: 'com.android.model.application'
+model {
+    android {
+        compileSdkVersion 24
+        buildToolsVersion "25.0.0"
+
+        defaultConfig {
+            applicationId "com.testing.vcmi"
+            minSdkVersion.apiLevel 16
+            targetSdkVersion.apiLevel 24
+        }
+    }
+
+    android.sources {
+        main {
+            jniLibs {
+                dependencies {
+                    project ":vcmi-client2"
+                }
+            }
+        }
+    }
+}

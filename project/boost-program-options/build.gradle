@@ -1,0 +1,35 @@
+apply plugin: 'com.android.model.native'
+
+model {
+    android {
+        compileSdkVersion 24
+        buildToolsVersion "25.0.0"
+
+        defaultConfig {
+            minSdkVersion.apiLevel 16
+            targetSdkVersion.apiLevel 24
+        }
+    }
+
+    android.ndk {
+        moduleName "boost-program-options"
+        platformVersion 16
+        toolchain "clang"
+        stl "c++_shared"
+        cppFlags.addAll("-std=c++11",
+                "-fcxx-exceptions",
+                "-frtti",
+                "-I" + file("${VCMI_PATH_BOOST}").absolutePath)
+        abiFilters.add("armeabi")
+    }
+
+    android.sources {
+        main {
+            jni {
+                source {
+                    srcDir "${VCMI_PATH_BOOST}/libs/program_options/src"
+                }
+            }
+        }
+    }
+}

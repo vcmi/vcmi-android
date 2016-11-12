@@ -1,0 +1,78 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle-experimental:0.9.0-alpha1"
+    }
+}
+
+
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+    ext {
+        PROJECT_PATH_BASE = "Q:/Dev/VCMI/vcmi-android"
+        VCMI_PATH_PREBUILT = "${PROJECT_PATH_BASE}/prebuilt-include"
+        VCMI_PATH_EXT = "${PROJECT_PATH_BASE}/ext"
+        VCMI_PATH_MAIN = "${PROJECT_PATH_BASE}/project"
+
+        VCMI_PATH_SDL = "${VCMI_PATH_EXT}/SDL2"
+        VCMI_PATH_FFMPEG = "${PROJECT_PATH_BASE}/../ffmpeg-ext/ffmpeg"
+        VCMI_PATH_BOOST = "${VCMI_PATH_EXT}/boost/boost_1_61_0"
+        VCMI_PATH_VCMI = "${VCMI_PATH_MAIN}/jni/vcmi-app/vcmi-app"
+
+        VCMI_INCL_VCMI = "${VCMI_PATH_VCMI} ${VCMI_PATH_VCMI}/include"
+        VCMI_INCL_BOOST = "${VCMI_PATH_BOOST}"
+        VCMI_INCL_FFMPEG = "${VCMI_PATH_FFMPEG}/android/armeabi/include"
+        VCMI_INCL_SDL = "${VCMI_PATH_SDL}/core/include"
+        VCMI_INCL_SDL_IMAGE = "${VCMI_PATH_SDL}/SDL2-image/include"
+        VCMI_INCL_SDL_MIXER = "${VCMI_PATH_SDL}/SDL2-mixer/include"
+        VCMI_INCL_SDL_TTF = "${VCMI_PATH_SDL}/SDL2-ttf/include"
+        TMP_ARCH = "armeabi"
+
+        LIBS_DEF = [
+                ["prebuiltSDL", ["libSDL2-core.so"], "${VCMI_INCL_SDL}"],
+                ["prebuiltSDLImage", ["libSDL2-image.so"], "${VCMI_INCL_SDL_IMAGE}"],
+                ["prebuiltSDLMixer", ["libSDL2-mixer.so"], "${VCMI_INCL_SDL_MIXER}"],
+                ["prebuiltSDLTTF", ["libSDL2-ttf.so"], "${VCMI_INCL_SDL_TTF}"],
+                ["prebuiltFFcodec", ["libavcodec.so"], "${VCMI_INCL_FFMPEG}"],
+                ["prebuiltFFdevice", ["libavdevice.so"], ""],
+                ["prebuiltFFfilter", ["libavfilter.so"], ""],
+                ["prebuiltFFformat", ["libavformat.so"], ""],
+                ["prebuiltFFutil", ["libavutil.so"], ""],
+                ["prebuiltFFpostproc", ["libpostproc.so"], ""],
+                ["prebuiltFFswresample", ["libswresample.so"], ""],
+                ["prebuiltFFswscale", ["libswscale.so"], ""]
+//                ["prebuiltFFMPEG", ["libavcodec.so",
+//                                    "libavdevice.so",
+//                                    "libavfilter.so",
+//                                    "libavformat.so",
+//                                    "libavutil.so",
+//                                    "libpostproc.so",
+//                                    "libswresample.so",
+//                                    "libswscale.so",
+//                                    "libavcodec-57.so",
+//                                    "libavdevice-57.so",
+//                                    "libavfilter-6.so",
+//                                    "libavformat-57.so",
+//                                    "libavutil-55.so",
+//                                    "libpostproc-54.so",
+//                                    "libswresample-2.so",
+//                                    "libswscale-4.so"
+//                ], "${VCMI_INCL_FFMPEG}"]
+        ]
+    }
+}
+
+//subprojects {
+//    model {
+//        repositories {
+//
+//        }
+//    }
+//}

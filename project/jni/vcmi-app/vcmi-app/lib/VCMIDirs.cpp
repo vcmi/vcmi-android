@@ -10,6 +10,7 @@
 
 #include "StdInc.h"
 #include "VCMIDirs.h"
+#include <android/log.h>
 
 namespace bfs = boost::filesystem;
 
@@ -18,7 +19,9 @@ bfs::path IVCMIDirs::userSavePath() const { return userDataPath() / "Saves"; }
 void IVCMIDirs::init()
 {
 	// TODO: Log errors
-	bfs::create_directories(userDataPath());
+	auto p1 = userDataPath();
+	__android_log_write(ANDROID_LOG_ERROR, "xx#1", p1.c_str());
+	bfs::create_directories(p1);
 	bfs::create_directories(userCachePath());
 	bfs::create_directories(userConfigPath());
 	bfs::create_directories(userSavePath());
@@ -544,7 +547,7 @@ public:
 };
 
 // on Android HOME will be set to something like /sdcard/data/Android/is.xyz.vcmi/files/
-bfs::path VCMIDirsAndroid::userDataPath() const { return getenv("HOME"); }
+bfs::path VCMIDirsAndroid::userDataPath() const { return getenv("VCMI_DATA_ROOT"); }
 bfs::path VCMIDirsAndroid::userCachePath() const { return userDataPath() / "cache"; }
 bfs::path VCMIDirsAndroid::userConfigPath() const { return userDataPath() / "config"; }
 

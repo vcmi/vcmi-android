@@ -35,9 +35,11 @@ def writePrebuiltInclude(name, isStatic):
 		prebuiltName = "lib" + name + ".so"
 	prebuiltInc = open(pathProjBase + "/prebuilt-include/" + name + ".mk", "w")
 	prebuiltInc.write("LOCAL_MODULE := " + name + "-prebuilt\n"
+		"ifeq ($(filter $(modules-get-list),$(LOCAL_MODULE)),)"
 		"LOCAL_SRC_FILES := $(PROJECT_PATH_BASE)/obj/local/$(TARGET_ARCH_ABI)/" + prebuiltName + "\n"
 		"include $(PREBUILT_" + prebuiltType + "_LIBRARY)\n"
-		"include $(CLEAR_VARS)\n")
+		"include $(CLEAR_VARS)\n"
+		"endif")
 	prebuiltInc.close()
 	
 def writePrebuiltIncludes(modulesShared, modulesStatic):
@@ -78,8 +80,9 @@ def buildMain():
 	#callBuild("project/jni/vcmi-app", "-extras", "vcmi-minizip vcmi-fuzzylite", "", True)
 	#callBuild("project/jni/vcmi-app", "-lib", "vcmi-lib", "", True)
 	#callBuild("project/jni/vcmi-app", "-ai", "vcmi-ai-battle vcmi-ai-empty vcmi-ai-stupid vcmi-ai-vcai", "", True)
-	callBuild("project/jni/vcmi-app", "-server", "vcmi-server", "", True)
-	#callBuild("project/jni/vcmi-app", "-client", "vcmi-client", "", True)
+	#callBuild("project/jni/vcmi-app", "-server", "vcmi-server", "", True)
+	callBuild("project/jni/vcmi-app", "-client", "vcmi-client", "", True)
+	#callBuild("project/jni/app", "", "vcmi-main", "", True)
 	
 	
 #buildSDL()

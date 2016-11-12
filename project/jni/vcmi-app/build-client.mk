@@ -33,17 +33,19 @@ LOCAL_MODULE := vcmi-client
 
 VCMI_ALLFILES = $(call vcmiwalk, $(LOCAL_PATH))
 VCMI_FILE_LIST := $(filter %.c %.cpp, $(VCMI_ALLFILES))
-$(warning $(LOCAL_PATH))
-LOCAL_SRC_FILES := $(VCMI_FILE_LIST:$(LOCAL_PATH)/%=%)
+
+LOCAL_SRC_FILES := $(VCMI_PATH_SDL)/core/src/main/android/SDL_android_main.c
+LOCAL_SRC_FILES += $(VCMI_FILE_LIST:$(LOCAL_PATH)/%=%)
 LOCAL_SRC_FILES += $(LOCAL_PATH)/../CCallback.cpp
 LOCAL_C_INCLUDES += $(VCMI_INCL_BOOST)
 LOCAL_C_INCLUDES += $(VCMI_INCL_SDL) $(VCMI_INCL_SDL_IMAGE) $(VCMI_INCL_SDL_MIXER) $(VCMI_INCL_SDL_TTF)
 LOCAL_C_INCLUDES += $(VCMI_INCL_FFMPEG)
 LOCAL_C_INCLUDES += $(VCMI_PATH_VCMI)/include
-LOCAL_CFLAGS := -DIOAPI_NO_64
+LOCAL_CFLAGS := -DIOAPI_NO_64 -g
 LOCAL_STATIC_LIBRARIES := boost-datetime-prebuilt boost-filesystem-prebuilt boost-system-prebuilt boost-smartptr-prebuilt boost-thread-prebuilt boost-locale-prebuilt boost-program-options-prebuilt
 LOCAL_SHARED_LIBRARIES += SDL2-core-prebuilt SDL2-image-prebuilt SDL2-mixer-prebuilt SDL2-ttf-prebuilt
 LOCAL_SHARED_LIBRARIES += avutil-prebuilt avcodec-prebuilt avformat-prebuilt swresample-prebuilt swscale-prebuilt
 LOCAL_SHARED_LIBRARIES += vcmi-lib-prebuilt vcmi-ai-stupid-prebuilt vcmi-ai-battle-prebuilt vcmi-ai-vcai-prebuilt
+LOCAL_LDFLAGS += -llog
 
 include $(BUILD_SHARED_LIBRARY)

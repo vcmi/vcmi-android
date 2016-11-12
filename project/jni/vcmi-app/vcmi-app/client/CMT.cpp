@@ -198,9 +198,10 @@ static void SDLLogCallback(void*           userdata,
 void OSX_checkForUpdates();
 #endif
 
+#include <android/log.h>
 #if defined(VCMI_WINDOWS) && !defined (__GNUC__)
 int wmain(int argc, wchar_t* argv[])
-#elif defined(VCMI_APPLE)
+#elif defined(VCMI_APPLE) || defined(VCMI_ANDROID)
 int SDL_main(int argc, char *argv[])
 #else
 int main(int argc, char** argv)
@@ -227,6 +228,7 @@ int main(int argc, char** argv)
     }
     fclose(check);
 #endif
+	__android_log_write(ANDROID_LOG_ERROR, "xx#", "start 1");
     std::cout << "Starting... " << std::endl;
 	po::options_description opts("Allowed options");
 	opts.add_options()
@@ -264,6 +266,7 @@ int main(int argc, char** argv)
 		}
 	}
 
+	__android_log_write(ANDROID_LOG_ERROR, "xx#", "start 3");
 	po::notify(vm);
 	if(vm.count("help"))
 	{
@@ -285,6 +288,7 @@ int main(int argc, char** argv)
 		CServerHandler::DO_NOT_START_SERVER = true;
 	}
 
+	__android_log_write(ANDROID_LOG_ERROR, "xx#", "start 4");
 	// Have effect on X11 system only (Linux).
 	// For whatever reason in fullscreen mode SDL takes "raw" mouse input from DGA X11 extension
 	// (DGA = Direct graphics access). Because this is raw input (before any speed\acceleration proceesing)
@@ -298,6 +302,7 @@ int main(int argc, char** argv)
 	*console->cb = processCommand;
 	console->start();
 
+	__android_log_write(ANDROID_LOG_ERROR, "xx#", "start 5");
 	const bfs::path logPath = VCMIDirs::get().userCachePath() / "VCMI_Client_log.txt";
 	CBasicLogConfigurator logConfig(logPath, console);
 	logConfig.configureDefault();
@@ -305,6 +310,7 @@ int main(int argc, char** argv)
 	logGlobal->infoStream() << "Creating console and configuring logger: " << pomtime.getDiff();
 	logGlobal->infoStream() << "The log file will be saved to " << logPath;
 
+	__android_log_write(ANDROID_LOG_ERROR, "xx#", "start 6");
 	// Init filesystem and settings
 	preinitDLL(::console);
 	settings.init();
@@ -319,9 +325,11 @@ int main(int argc, char** argv)
 		testingSettings["savefrequency"].Float() = vm.count("testingsavefrequency") ? vm["testingsavefrequency"].as<int>() : 1;
 	}
 
+	__android_log_write(ANDROID_LOG_ERROR, "xx#", "start 7");
 	// Initialize logging based on settings
 	logConfig.configure();
 
+	__android_log_write(ANDROID_LOG_ERROR, "xx#", "start 8");
 	// Some basic data validation to produce better error messages in cases of incorrect install
 	auto testFile = [](std::string filename, std::string message) -> bool
 	{
@@ -335,9 +343,10 @@ int main(int argc, char** argv)
 	if (!testFile("DATA/HELP.TXT", "Heroes III data") ||
 		!testFile("MODS/VCMI/MOD.JSON", "VCMI data"))
 	{
-		exit(1); // These are unrecoverable errors
+		exit(17); // These are unrecoverable errors
 	}
 
+	__android_log_write(ANDROID_LOG_ERROR, "xx#", "start 9");
 	// these two are optional + some installs have them on CD and not in data directory
 	testFile("VIDEO/GOOD1A.SMK", "campaign movies");
 	testFile("SOUNDS/G1A.WAV", "campaign music"); //technically not a music but voiced intro sounds
