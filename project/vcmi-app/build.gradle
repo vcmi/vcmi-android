@@ -15,7 +15,11 @@ model {
         main {
             jniLibs {
                 dependencies {
+                    project ":vcmi-ai-battle"
+                    project ":vcmi-ai-stupid"
+                    project ":vcmi-ai-vcai"
                     project ":vcmi-client2"
+                    project ":vcmi-server"
                 }
             }
         }

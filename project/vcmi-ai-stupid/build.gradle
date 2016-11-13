@@ -1,24 +1,6 @@
 apply plugin: 'com.android.model.native'
 
 model {
-    repositories {
-
-        libs(PrebuiltLibraries) { libs ->
-            LIBS_DEF.each { entry ->
-                libs.create(entry[0]) {
-                    if (entry[2] != "") {
-                        headers.srcDir entry[2]
-                    }
-                    entry[1].each { binEntry ->
-                        binaries.withType(SharedLibraryBinary) {
-                            sharedLibraryFile = file("${PROJECT_PATH_BASE}/obj/local/${TMP_ARCH}/${binEntry}")
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     android {
         compileSdkVersion 24
         buildToolsVersion "25.0.0"
@@ -30,7 +12,7 @@ model {
     }
 
     android.ndk {
-        moduleName "vcmi-lib"
+        moduleName "StupidAI"
         debuggable true
         platformVersion 16
         toolchain "clang"
@@ -39,15 +21,12 @@ model {
                 "-fcxx-exceptions",
                 "-frtti",
                 "-g",
-                "-DM_DATA_DIR=\"\\\"none\\\"\"",
-                "-DM_BIN_DIR=\"\\\"none\\\"\"",
-                "-DM_LIB_DIR=\"\\\"none\\\"\"",
                 "-I" + file("${VCMI_PATH_VCMI}/include").absolutePath,
                 "-I" + file("${VCMI_PATH_VCMI}/lib").absolutePath,
                 "-I" + file("${VCMI_PATH_VCMI}").absolutePath,
                 "-I" + file("${VCMI_INCL_BOOST}").absolutePath,
-                "-DIOAPI_NO_64")
-        ldLibs.addAll("z", "log", "atomic")
+        )
+        ldLibs.addAll("z", "log")
         abiFilters.add("armeabi")
     }
 
@@ -55,13 +34,14 @@ model {
         main {
             jni {
                 source {
-                    srcDir "../jni/vcmi-app/generated-version-dir"
-                    srcDir "../jni/vcmi-app/vcmi-app/lib"
-                    exclude "**/minizip/*"
+                    srcDir "../jni/vcmi-app/vcmi-app/AI/StupidAI"
+//                    srcDir "src/main/jni"
+//                    exclude "main.cpp" // main is included directly through jni bindings (to allow access to dll-exported functions without messing with the main project)
                 }
                 dependencies {
-                    library "prebuiltSDL" linkage "shared"
                     project ":minizip"
+                    project ":fuzzylite"
+                    project ":vcmi-lib"
                     project ":boost-datetime"
                     project ":boost-locale"
                     project ":boost-system"

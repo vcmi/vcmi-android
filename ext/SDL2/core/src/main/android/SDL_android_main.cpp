@@ -1,42 +1,46 @@
 /*
     SDL_android_main.c, placed in the public domain by Sam Lantinga  3/13/14
 */
+extern "C" {
 #include "../../SDL_internal.h"
-
+}
 #ifdef __ANDROID__
 #include <android/log.h>
 
 /* Include the SDL main definition header */
+extern "C" {
 #include "SDL_main.h"
+}
+#include "../../../../../../project/jni/vcmi-app/vcmi-app/lib/AndroidVMHelper.h"
 
 /*******************************************************************************
                  Functions called by JNI
 *******************************************************************************/
 #include <jni.h>
+//#include <AndroidVMHelper.h>
 
+extern "C" {
 /* Called before SDL_main() to initialize JNI bindings in SDL library */
-extern void SDL_Android_Init(JNIEnv* env, jclass cls);
+extern void SDL_Android_Init(JNIEnv *env, jclass cls);
 
 /* This prototype is needed to prevent a warning about the missing prototype for global function below */
-JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv* env, jclass cls, jobject array, jstring dataPath);
-
+JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv *env, jclass cls,
+                                                                 jobjectArray array);
+}
 JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeQuit(JNIEnv* env, jclass cls)
 {
 	return 0;
 }
 /* Start up the SDL app */
-JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv* env, jclass cls, jobject array, jstring dataPath)
+JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv* env, jclass cls, jobjectArray array)
 {
     int i;
     int argc;
     int status;
     int len;
     char** argv;
-	
-	const char *nativeDataPath = (*env)->GetStringUTFChars(env, dataPath, 0);
-	setenv("VCMI_DATA_ROOT", dataPath, 1);
-	__android_log_write(ANDROID_LOG_ERROR, "xx#", dataPath);
-	(*env)->ReleaseStringUTFChars(env, dataPath, nativeDataPath);
+
+    AndroidVMHelper::cacheVM(env);
 
     /* This interface could expand with ABI negotiation, callbacks, etc. */
     SDL_Android_Init(env, cls);
@@ -45,7 +49,7 @@ JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv* env, jc
 
     /* Prepare the arguments. */
 
-    len = (*env)->GetArrayLength(env, array);
+    len = env->GetArrayLength(array);
     argv = SDL_stack_alloc(char*, 1 + len + 1);
     argc = 0;
     /* Use the name "app_process" so PHYSFS_platformCalcBaseDir() works.
@@ -55,14 +59,14 @@ JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv* env, jc
     for (i = 0; i < len; ++i) {
         const char* utf;
         char* arg = NULL;
-        jstring string = (*env)->GetObjectArrayElement(env, array, i);
+        jstring string = (jstring) env->GetObjectArrayElement(array, i);
         if (string) {
-            utf = (*env)->GetStringUTFChars(env, string, 0);
+            utf = env->GetStringUTFChars(string, 0);
             if (utf) {
                 arg = SDL_strdup(utf);
-                (*env)->ReleaseStringUTFChars(env, string, utf);
+                env->ReleaseStringUTFChars(string, utf);
             }
-            (*env)->DeleteLocalRef(env, string);
+            env->DeleteLocalRef(string);
         }
         if (!arg) {
             arg = SDL_strdup("");

@@ -1,16 +1,22 @@
 package org.libsdl.app;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.lang.reflect.Method;
+import java.util.Set;
 
 import android.app.*;
 import android.content.*;
+import android.os.Process;
 import android.text.InputType;
 import android.view.*;
 import android.view.inputmethod.BaseInputConnection;
@@ -74,15 +80,19 @@ public class SDLActivity extends Activity {
             "SDL2-core",
              "SDL2-image",
              "SDL2-mixer",
-            // "SDL2_net",
              "SDL2-ttf",
-            "vcmi-client2"
+             "vcmi-fuzzylite",
+//            "vcmiaibattle",
+//            "vcmi-server",
+            "vcmi-client2",
+//                "vcmiaivcai",
         };
     }
 
     // Load the .so
     public void loadLibraries() {
        for (String lib : getLibraries()) {
+           Log.v(TAG, "Loading native lib: "  + lib);
           System.loadLibrary(lib);
        }
     }
@@ -124,7 +134,8 @@ public class SDLActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         // TODO handle permissions
-        if (!VCMIJavaHelpers.handleDataFoldersInitialization(this))
+        VCMIJavaHelpers.setupCtx(this);
+        if (!VCMIJavaHelpers.handleDataFoldersInitialization())
         {
             Log.e("xx#", "Exiting due to data problems");
             finish();
@@ -172,6 +183,8 @@ public class SDLActivity extends Activity {
         }
         Log.i("xx#", "not broken libs");
 
+        startService(new Intent(this, ServerService.class));
+
         // Set up the surface
         mSurface = new SDLSurface(getApplication());
 
@@ -181,17 +194,13 @@ public class SDLActivity extends Activity {
         mLayout.addView(mSurface);
 
         setContentView(mLayout);
-        
-        // Get filename from "Open with" of another application
-        Intent intent = getIntent();
+    }
 
-        if (intent != null && intent.getData() != null) {
-            String filename = intent.getData().getPath();
-            if (filename != null) {
-                Log.v(TAG, "Got filename: " + filename);
-                SDLActivity.onNativeDropFile(filename);
-            }
-        }
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+//        NativeMethods.registerVCAI();
+//        NativeMethods.registerBattleAI();
     }
 
     // Events
@@ -415,7 +424,7 @@ public class SDLActivity extends Activity {
     }
 
     // C functions we call
-    public static native int nativeInit(Object arguments, String s);
+    public static native int nativeInit(Object[] arguments);
     public static native void nativeLowMemory();
     public static native void nativeQuit();
     public static native void nativePause();
@@ -1030,7 +1039,7 @@ class SDLMain implements Runnable {
     @Override
     public void run() {
         // Runs SDL_main()
-        SDLActivity.nativeInit(SDLActivity.mSingleton.getArguments(), VCMIJavaHelpers.dataRoot());
+        SDLActivity.nativeInit(SDLActivity.mSingleton.getArguments());
 
         //Log.v("SDL", "SDL thread terminated");
     }
@@ -1306,15 +1315,13 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
 
         // !!! FIXME: dump this SDK check after 2.0.4 ships and require API14.
         if (event.getSource() == InputDevice.SOURCE_MOUSE && SDLActivity.mSeparateMouseAndTouch) {
-            if (Build.VERSION.SDK_INT < 14) {
-                mouseButton = 1; // all mouse buttons are the left button
-            } else {
+
                 try {
                     mouseButton = (Integer) event.getClass().getMethod("getButtonState").invoke(event);
                 } catch(Exception e) {
                     mouseButton = 1;    // oh well.
                 }
-            }
+
             SDLActivity.onNativeMouse(mouseButton, action, event.getX(0), event.getY(0));
         } else {
             switch(action) {
@@ -1329,6 +1336,7 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
                             // see the documentation of getPressure(i)
                             p = 1.0f;
                         }
+                        Log.i("touch move", event.getX() + ", " + event.getY() + "; " + x + "; " + y);
                         SDLActivity.onNativeTouch(touchDevId, pointerFingerId, action, x, y, p);
                     }
                     break;

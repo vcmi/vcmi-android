@@ -18,9 +18,13 @@
             <option value="$PROJECT_DIR$/boost-thread" />
             <option value="$PROJECT_DIR$/fuzzylite" />
             <option value="$PROJECT_DIR$/minizip" />
+            <option value="$PROJECT_DIR$/vcmi-ai-battle" />
+            <option value="$PROJECT_DIR$/vcmi-ai-stupid" />
+            <option value="$PROJECT_DIR$/vcmi-ai-vcai" />
             <option value="$PROJECT_DIR$/vcmi-app" />
             <option value="$PROJECT_DIR$/vcmi-client2" />
             <option value="$PROJECT_DIR$/vcmi-lib" />
+            <option value="$PROJECT_DIR$/vcmi-server" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

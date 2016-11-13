@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id=":vcmi-client2" external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$/.." external.system.id="GRADLE" type="JAVA_MODULE" version="4">
+<module external.linked.project.id=":vcmi-ai-vcai" external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$/.." external.system.id="GRADLE" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="android-gradle" name="Android-Gradle">
       <configuration>
-        <option name="GRADLE_PROJECT_PATH" value=":vcmi-client2" />
+        <option name="GRADLE_PROJECT_PATH" value=":vcmi-ai-vcai" />
       </configuration>
     </facet>
     <facet type="native-android-gradle" name="Native-Android-Gradle">
@@ -14,14 +14,10 @@
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../ext/SDL2/core/src/main/android">
-      <sourceFolder url="file://$MODULE_DIR$/../../ext/SDL2/core/src/main/android" isTestSource="false" />
-    </content>
-    <content url="file://$MODULE_DIR$/../jni/vcmi-app/vcmi-app/client">
-      <sourceFolder url="file://$MODULE_DIR$/../jni/vcmi-app/vcmi-app/client" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../jni/vcmi-app/vcmi-app/AI/VCAI">
+      <sourceFolder url="file://$MODULE_DIR$/../jni/vcmi-app/vcmi-app/AI/VCAI" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src/main/jni/gradle-hack" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/jni" isTestSource="false" />
     </content>
