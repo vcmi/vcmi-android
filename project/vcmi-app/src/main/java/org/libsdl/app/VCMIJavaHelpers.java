@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 
 /**
  * Created by F on 10.11.2016.
@@ -14,8 +15,14 @@ import java.io.File;
 public class VCMIJavaHelpers {
     private static final String VCMI_DATA_ROOT_ENV_NAME = "VCMI_DATA_ROOT";
     private static final String VCMI_DATA_ROOT_FOLDER_NAME = "vcmi-data";
-    public static boolean handleDataFoldersInitialization(final Context ctx)
+    private static WeakReference<Context> ctxRef;
+    public static void setupCtx(final Context ctx)
     {
+        ctxRef = new WeakReference<>(ctx);
+    }
+    public static boolean handleDataFoldersInitialization()
+    {
+        Context ctx = ctxRef.get();
         if (ctx == null)
         {
             return false;
@@ -51,6 +58,19 @@ public class VCMIJavaHelpers {
     }
 
     public static String dataRoot() {
-        return new File(Environment.getExternalStorageDirectory(), VCMI_DATA_ROOT_FOLDER_NAME).getAbsolutePath();
+        String root = new File(Environment.getExternalStorageDirectory(), VCMI_DATA_ROOT_FOLDER_NAME).getAbsolutePath();
+        Log.i("VCMI", "Accessing data root: " + root);
+        return root;
+    }
+
+    public static String nativePath() {
+        Context ctx = ctxRef.get();
+        if (ctx == null)
+        {
+            Log.e("", "Broken context");
+            return "";
+        }
+        Log.i("VCMI", "Accessing ndk path: " + ctx.getApplicationInfo().nativeLibraryDir);
+        return ctx.getApplicationInfo().nativeLibraryDir;
     }
 }

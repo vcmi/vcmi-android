@@ -31,12 +31,14 @@ model {
 
     android.ndk {
         moduleName "vcmi-client2"
+        debuggable true
         platformVersion 16
         toolchain "clang"
         stl "c++_shared"
         cppFlags.addAll("-std=c++11",
                 "-fcxx-exceptions",
                 "-frtti",
+                "-g",
                 "-I" + file("${VCMI_PATH_VCMI}/include").absolutePath,
                 "-I" + file("${VCMI_PATH_VCMI}/client").absolutePath,
                 "-I" + file("${VCMI_PATH_VCMI}/lib").absolutePath,
@@ -56,7 +58,7 @@ model {
             jni {
                 source {
                     srcDir "../jni/vcmi-app/vcmi-app/client"
-                    srcDir "${VCMI_PATH_SDL}/src/main/android/SDL_android.main.c"
+                    srcDir "${VCMI_PATH_SDL}/core/src/main/android"
                     srcDir "src/main/jni/gradle-hack"
                 }
                 dependencies {
@@ -74,6 +76,8 @@ model {
                     library "prebuiltFFswscale" linkage "shared"
                     project ":minizip"
                     project ":fuzzylite"
+                    project ":vcmi-ai-battle"
+//                    project ":vcmi-ai-vcai"
                     project ":vcmi-lib"
                     project ":boost-datetime"
                     project ":boost-locale"

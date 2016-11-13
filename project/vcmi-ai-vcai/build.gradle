@@ -1,0 +1,79 @@
+apply plugin: 'com.android.model.native'
+
+model {
+    repositories {
+
+        libs(PrebuiltLibraries) { libs ->
+            LIBS_DEF.each { entry ->
+                libs.create(entry[0]) {
+                    if (entry[2] != "") {
+                        headers.srcDir entry[2]
+                    }
+                    entry[1].each { binEntry ->
+                        binaries.withType(SharedLibraryBinary) {
+                            sharedLibraryFile = file("${PROJECT_PATH_BASE}/obj/local/${TMP_ARCH}/${binEntry}")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    android {
+        compileSdkVersion 24
+        buildToolsVersion "25.0.0"
+
+        defaultConfig {
+            minSdkVersion.apiLevel 16
+            targetSdkVersion.apiLevel 24
+        }
+    }
+
+    android.ndk {
+        moduleName "VCAI"
+        debuggable true
+        platformVersion 16
+        toolchain "clang"
+        stl "c++_shared"
+        cppFlags.addAll("-std=c++11",
+                "-fcxx-exceptions",
+                "-frtti",
+                "-g",
+                "-I" + file("${VCMI_PATH_VCMI}/include").absolutePath,
+                "-I" + file("${VCMI_PATH_VCMI}/lib").absolutePath,
+                "-I" + file("${VCMI_PATH_VCMI}").absolutePath,
+                "-I" + file("${VCMI_INCL_FUZZYLITE}").absolutePath,
+                "-I" + file("${VCMI_INCL_BOOST}").absolutePath,
+                "-DFL_CPP11"
+        )
+        ldLibs.addAll("z", "log", "atomic")
+        abiFilters.add("armeabi")
+    }
+
+    android.sources {
+        main {
+            jni {
+                source {
+                    srcDir "../jni/vcmi-app/vcmi-app/AI/VCAI"
+//                    srcDir "src/main/jni"
+//                    exclude "main.cpp" // main is included directly through jni bindings (to allow access to dll-exported functions without messing with the main project)
+                }
+                exportedHeaders {
+                    srcDir "src/main/jni"
+                }
+                dependencies {
+                    project ":minizip"
+                    project ":fuzzylite"
+                    project ":vcmi-lib"
+                    project ":boost-datetime"
+                    project ":boost-locale"
+                    project ":boost-system"
+                    project ":boost-filesystem"
+                    project ":boost-smartptr"
+                    project ":boost-program-options"
+                    project ":boost-thread"
+                }
+            }
+        }
+    }
+}

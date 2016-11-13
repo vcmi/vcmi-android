@@ -14,8 +14,8 @@
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../ext/SDL2/src/main/android/SDL_android.main.c">
-      <sourceFolder url="file://$MODULE_DIR$/../../ext/SDL2/src/main/android/SDL_android.main.c" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../ext/SDL2/core/src/main/android">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/SDL2/core/src/main/android" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$/../jni/vcmi-app/vcmi-app/client">
       <sourceFolder url="file://$MODULE_DIR$/../jni/vcmi-app/vcmi-app/client" isTestSource="false" />

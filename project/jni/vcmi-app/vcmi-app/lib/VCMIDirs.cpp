@@ -10,7 +10,6 @@
 
 #include "StdInc.h"
 #include "VCMIDirs.h"
-#include <android/log.h>
 
 namespace bfs = boost::filesystem;
 
@@ -19,13 +18,17 @@ bfs::path IVCMIDirs::userSavePath() const { return userDataPath() / "Saves"; }
 void IVCMIDirs::init()
 {
 	// TODO: Log errors
-	auto p1 = userDataPath();
-	__android_log_write(ANDROID_LOG_ERROR, "xx#1", p1.c_str());
-	bfs::create_directories(p1);
+	bfs::create_directories(userDataPath());
 	bfs::create_directories(userCachePath());
 	bfs::create_directories(userConfigPath());
 	bfs::create_directories(userSavePath());
 }
+
+#ifdef VCMI_ANDROID
+#include "AndroidVMHelper.h"
+#include <android/log.h>
+
+#endif
 
 #ifdef VCMI_WINDOWS
 
@@ -538,16 +541,21 @@ std::string VCMIDirsXDG::libraryName(const std::string& basename) const { return
 #ifdef VCMI_ANDROID
 class VCMIDirsAndroid : public VCMIDirsXDG
 {
+	std::string basePath;
+	std::string nativePath;
 public:
+	boost::filesystem::path libraryPath() const override;
 	boost::filesystem::path userDataPath() const override;
 	boost::filesystem::path userCachePath() const override;
 	boost::filesystem::path userConfigPath() const override;
 
 	std::vector<boost::filesystem::path> dataPaths() const override;
+
+	void init() override;
 };
 
-// on Android HOME will be set to something like /sdcard/data/Android/is.xyz.vcmi/files/
-bfs::path VCMIDirsAndroid::userDataPath() const { return getenv("VCMI_DATA_ROOT"); }
+bfs::path VCMIDirsAndroid::libraryPath() const { return nativePath; }
+bfs::path VCMIDirsAndroid::userDataPath() const { return basePath; }
 bfs::path VCMIDirsAndroid::userCachePath() const { return userDataPath() / "cache"; }
 bfs::path VCMIDirsAndroid::userConfigPath() const { return userDataPath() / "config"; }
 
@@ -555,6 +563,25 @@ std::vector<bfs::path> VCMIDirsAndroid::dataPaths() const
 {
 	return std::vector<bfs::path>(1, userDataPath());
 }
+
+void VCMIDirsAndroid::init()
+{
+	// asks java code to retrieve from system needed paths
+
+	auto env = AndroidVMHelper::attach();
+	auto javaHelper = env->FindClass("org/libsdl/app/VCMIJavaHelpers");
+	auto methodRootPath = env->GetStaticMethodID(javaHelper, "dataRoot", "()Ljava/lang/String;");
+	jstring jbasePath = static_cast<jstring>(env->CallStaticObjectMethod(javaHelper, methodRootPath));
+	basePath = std::string(env->GetStringUTFChars(jbasePath, nullptr));
+
+	auto methodLibPath = env->GetStaticMethodID(javaHelper, "nativePath", "()Ljava/lang/String;");
+	jstring jnativePath = static_cast<jstring>(env->CallStaticObjectMethod(javaHelper, methodLibPath));
+	nativePath = std::string(env->GetStringUTFChars(jnativePath, nullptr));
+
+	AndroidVMHelper::detach();
+	IVCMIDirs::init();
+}
+
 #endif // VCMI_ANDROID
 #endif // VCMI_APPLE, VCMI_XDG
 #endif // VCMI_WINDOWS, VCMI_UNIX
@@ -572,7 +599,8 @@ namespace VCMIDirs
 			static VCMIDirsXDG singleton;
 		#elif defined(VCMI_APPLE)
 			static VCMIDirsOSX singleton;
-		#endif
+        #endif
+
 		static bool initialized = false;
 		if (!initialized)
 		{
@@ -587,3 +615,4 @@ namespace VCMIDirs
 		return singleton;
 	}
 }
+

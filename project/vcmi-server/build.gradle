@@ -1,0 +1,76 @@
+apply plugin: 'com.android.model.native'
+
+model {
+    repositories {
+
+        libs(PrebuiltLibraries) { libs ->
+            LIBS_DEF.each { entry ->
+                libs.create(entry[0]) {
+                    if (entry[2] != "") {
+                        headers.srcDir entry[2]
+                    }
+                    entry[1].each { binEntry ->
+                        binaries.withType(SharedLibraryBinary) {
+                            sharedLibraryFile = file("${PROJECT_PATH_BASE}/obj/local/${TMP_ARCH}/${binEntry}")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    android {
+        compileSdkVersion 24
+        buildToolsVersion "25.0.0"
+
+        defaultConfig {
+            minSdkVersion.apiLevel 16
+            targetSdkVersion.apiLevel 24
+        }
+    }
+
+    android.ndk {
+        moduleName "vcmi-server"
+        debuggable true
+        platformVersion 16
+        toolchain "clang"
+        stl "c++_shared"
+        cppFlags.addAll("-std=c++11",
+                "-fcxx-exceptions",
+                "-frtti",
+                "-g",
+                "-I" + file("${VCMI_PATH_VCMI}/include").absolutePath,
+                "-I" + file("${VCMI_PATH_VCMI}/server").absolutePath,
+                "-I" + file("${VCMI_PATH_VCMI}/lib").absolutePath,
+                "-I" + file("${VCMI_PATH_VCMI}").absolutePath,
+                "-I" + file("${VCMI_INCL_SDL}").absolutePath,
+                "-I" + file("${VCMI_INCL_BOOST}").absolutePath)
+        ldLibs.addAll("z", "log", "atomic")
+        abiFilters.add("armeabi")
+    }
+
+    android.sources {
+        main {
+            jni {
+                source {
+                    srcDir "../jni/vcmi-app/vcmi-app/server"
+                    srcDir "src/main/jni"
+                }
+                dependencies {
+                    library "prebuiltSDL" linkage "shared"
+                    project ":minizip"
+                    project ":vcmi-lib"
+                    project ":vcmi-ai-battle"
+//                    project ":vcmi-ai-vcai"
+                    project ":boost-datetime"
+                    project ":boost-locale"
+                    project ":boost-system"
+                    project ":boost-filesystem"
+                    project ":boost-smartptr"
+                    project ":boost-program-options"
+                    project ":boost-thread"
+                }
+            }
+        }
+    }
+}

@@ -25,8 +25,10 @@ allprojects {
         VCMI_PATH_FFMPEG = "${PROJECT_PATH_BASE}/../ffmpeg-ext/ffmpeg"
         VCMI_PATH_BOOST = "${VCMI_PATH_EXT}/boost/boost_1_61_0"
         VCMI_PATH_VCMI = "${VCMI_PATH_MAIN}/jni/vcmi-app/vcmi-app"
+        VCMI_PATH_FUZZYLITE = "${VCMI_PATH_VCMI}/AI/FuzzyLite/fuzzylite"
 
         VCMI_INCL_VCMI = "${VCMI_PATH_VCMI} ${VCMI_PATH_VCMI}/include"
+        VCMI_INCL_FUZZYLITE = "${VCMI_PATH_FUZZYLITE}"
         VCMI_INCL_BOOST = "${VCMI_PATH_BOOST}"
         VCMI_INCL_FFMPEG = "${VCMI_PATH_FFMPEG}/android/armeabi/include"
         VCMI_INCL_SDL = "${VCMI_PATH_SDL}/core/include"
@@ -48,23 +50,6 @@ allprojects {
                 ["prebuiltFFpostproc", ["libpostproc.so"], ""],
                 ["prebuiltFFswresample", ["libswresample.so"], ""],
                 ["prebuiltFFswscale", ["libswscale.so"], ""]
-//                ["prebuiltFFMPEG", ["libavcodec.so",
-//                                    "libavdevice.so",
-//                                    "libavfilter.so",
-//                                    "libavformat.so",
-//                                    "libavutil.so",
-//                                    "libpostproc.so",
-//                                    "libswresample.so",
-//                                    "libswscale.so",
-//                                    "libavcodec-57.so",
-//                                    "libavdevice-57.so",
-//                                    "libavfilter-6.so",
-//                                    "libavformat-57.so",
-//                                    "libavutil-55.so",
-//                                    "libpostproc-54.so",
-//                                    "libswresample-2.so",
-//                                    "libswscale-4.so"
-//                ], "${VCMI_INCL_FFMPEG}"]
         ]
     }
 }
