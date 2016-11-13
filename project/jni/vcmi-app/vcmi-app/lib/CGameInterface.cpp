@@ -35,13 +35,12 @@ std::shared_ptr<rett> createAny(const boost::filesystem::path& libpath, const st
 	TGetNameFun getName = nullptr;
 
 #ifdef VCMI_ANDROID
-    logGlobal->warnStream() << "xx# Opening AI from " << libpath.string() << " :: " << methodName;
+    logGlobal->debugStream() << "Opening AI from " << libpath.string() << " :: " << methodName;
 	void *dll = dlopen(libpath.string().c_str(), RTLD_LOCAL | RTLD_LAZY);
 	if (dll)
 	{
 		getName = (TGetNameFun)dlsym(dll, "GetAiName");
 		getAI = (TGetAIFun)dlsym(dll, methodName.c_str());
-		logGlobal->warnStream() << "GOT AI " << (getName == nullptr ? "null" : "ok") << (getAI == nullptr ? "null" : "ok");
 	}
 	else
 		logGlobal->errorStream() << "Error: " << dlerror();
@@ -97,12 +96,7 @@ std::shared_ptr<rett> createAnyAI(std::string dllname, const std::string& method
 {
 	logGlobal->infoStream() << "Opening " << dllname;
 
-	const boost::filesystem::path filePath =
-#ifdef VCMI_ANDROID // TODO add VCMIDirs::fullLibraryPath to be able to decide if we need subfolder dynamically
-	VCMIDirs::get().libraryPath() / VCMIDirs::get().libraryName(dllname);
-#else
-	VCMIDirs::get().libraryPath() / "AI" / VCMIDirs::get().libraryName(dllname);
-#endif
+	const boost::filesystem::path filePath = VCMIDirs::get().fullLibraryPath("AI", dllname);
 	auto ret = createAny<rett>(filePath, methodName);
 	ret->dllName = std::move(dllname);
 	return ret;

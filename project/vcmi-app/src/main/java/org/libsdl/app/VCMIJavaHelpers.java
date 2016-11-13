@@ -53,6 +53,7 @@ public class VCMIJavaHelpers {
             }
         }
 
+        // TODO handle checking if user data is present
 
         return true;
     }
