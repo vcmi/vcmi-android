@@ -1,18 +1,20 @@
 package org.libsdl.app;
 
 /**
- * Created by F on 13.11.2016.
+ * @author F
  */
-
-public final class NativeMethods {
-    private NativeMethods() {
-    }
-
-    public static native void registerVCAI();
-    public static native void registerBattleAI();
-
-    public static void foo()
+public class NativeMethods
+{
+    public NativeMethods()
     {
-
     }
+
+    public static native void initClassloader();
+
+//    public static native long jniCallbackGetVCAI();
+//
+//    public static long libCallbackGetAI()
+//    {
+//        return jniCallbackGetVCAI();
+//    }
 }

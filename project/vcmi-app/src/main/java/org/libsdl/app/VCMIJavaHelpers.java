@@ -9,17 +9,20 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 
 /**
- * Created by F on 10.11.2016.
+ * @author F
  */
-
-public class VCMIJavaHelpers {
+public class VCMIJavaHelpers
+{
+    private static final String JNI_METHOD_SUPPRESS = "unused"; // jni methods are marked as unused, because IDE doesn't understand jni calls
     private static final String VCMI_DATA_ROOT_ENV_NAME = "VCMI_DATA_ROOT";
     private static final String VCMI_DATA_ROOT_FOLDER_NAME = "vcmi-data";
     private static WeakReference<Context> ctxRef;
+
     public static void setupCtx(final Context ctx)
     {
         ctxRef = new WeakReference<>(ctx);
     }
+
     public static boolean handleDataFoldersInitialization()
     {
         Context ctx = ctxRef.get();
@@ -58,13 +61,17 @@ public class VCMIJavaHelpers {
         return true;
     }
 
-    public static String dataRoot() {
+    @SuppressWarnings(JNI_METHOD_SUPPRESS)
+    public static String dataRoot()
+    {
         String root = new File(Environment.getExternalStorageDirectory(), VCMI_DATA_ROOT_FOLDER_NAME).getAbsolutePath();
         Log.i("VCMI", "Accessing data root: " + root);
         return root;
     }
 
-    public static String nativePath() {
+    @SuppressWarnings(JNI_METHOD_SUPPRESS)
+    public static String nativePath()
+    {
         Context ctx = ctxRef.get();
         if (ctx == null)
         {

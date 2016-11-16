@@ -15,7 +15,7 @@ model {
         moduleName "vcmi-fuzzylite"
         platformVersion 16
         toolchain "clang"
-        stl "c++_shared"
+        stl VCMI_STL_VERSION
         cppFlags.addAll("-std=c++11",
                 "-fcxx-exceptions",
                 "-frtti",

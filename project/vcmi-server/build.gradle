@@ -34,7 +34,7 @@ model {
         debuggable true
         platformVersion 16
         toolchain "clang"
-        stl "c++_shared"
+        stl VCMI_STL_VERSION
         cppFlags.addAll("-std=c++11",
                 "-fcxx-exceptions",
                 "-frtti",
@@ -60,8 +60,6 @@ model {
                     library "prebuiltSDL" linkage "shared"
                     project ":minizip"
                     project ":vcmi-lib"
-                    project ":vcmi-ai-battle"
-//                    project ":vcmi-ai-vcai"
                     project ":boost-datetime"
                     project ":boost-locale"
                     project ":boost-system"

@@ -34,7 +34,7 @@ model {
         debuggable true
         platformVersion 16
         toolchain "clang"
-        stl "c++_shared"
+        stl VCMI_STL_VERSION
         cppFlags.addAll("-std=c++11",
                 "-fcxx-exceptions",
                 "-frtti",
@@ -54,9 +54,7 @@ model {
         main {
             jni {
                 source {
-                    srcDir "../jni/vcmi-app/vcmi-app/AI/VCAI"
-//                    srcDir "src/main/jni"
-//                    exclude "main.cpp" // main is included directly through jni bindings (to allow access to dll-exported functions without messing with the main project)
+//                    srcDir "../jni/vcmi-app/vcmi-app/AI/VCAI" // currently library disabled and added directly to vcmi-lib
                 }
                 exportedHeaders {
                     srcDir "src/main/jni"
