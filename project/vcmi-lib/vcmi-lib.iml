@@ -17,6 +17,12 @@
     <content url="file://$MODULE_DIR$/../jni/vcmi-app/generated-version-dir">
       <sourceFolder url="file://$MODULE_DIR$/../jni/vcmi-app/generated-version-dir" isTestSource="false" />
     </content>
+    <content url="file://$MODULE_DIR$/../jni/vcmi-app/vcmi-app/AI/BattleAI">
+      <sourceFolder url="file://$MODULE_DIR$/../jni/vcmi-app/vcmi-app/AI/BattleAI" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../jni/vcmi-app/vcmi-app/AI/VCAI">
+      <sourceFolder url="file://$MODULE_DIR$/../jni/vcmi-app/vcmi-app/AI/VCAI" isTestSource="false" />
+    </content>
     <content url="file://$MODULE_DIR$/../jni/vcmi-app/vcmi-app/lib">
       <sourceFolder url="file://$MODULE_DIR$/../jni/vcmi-app/vcmi-app/lib" isTestSource="false" />
     </content>

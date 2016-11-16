@@ -183,7 +183,7 @@ void CGuiHandler::handleEvents()
 	}
 }
 #include <android/log.h>
-
+#define TMP_ANDROID_TOUCH_TESTING 0
 void CGuiHandler::handleEvent(SDL_Event *sEvent)
 {
 	current = sEvent;
@@ -215,7 +215,7 @@ void CGuiHandler::handleEvent(SDL_Event *sEvent)
 			if(vstd::contains(keyinterested,*i) && (!keysCaptured || (*i)->captureThisEvent(key)))
 				(**i).keyPressed(key);
 	}
-#ifdef VCMI_ANDROID // TODO hacks for now, just to get it working
+#if TMP_ANDROID_TOUCH_TESTING == 1 // TODO hacks for now, just to get it working
 	else if (sEvent->type == SDL_FINGERMOTION) {
 		int x = (int) (sEvent->tfinger.x * 800); // TODO access display size in runtime?
 		int y = (int) (sEvent->tfinger.y * 600);
@@ -267,6 +267,7 @@ void CGuiHandler::handleEvent(SDL_Event *sEvent)
 #else
 	else if(sEvent->type==SDL_MOUSEMOTION)
 	{
+		logGlobal->warnStream() << "rcv mouse " << sEvent->motion.x << ", " << sEvent->motion.y << " :: " << sEvent->motion.xrel << ", " << sEvent->motion.yrel;
 		CCS->curh->cursorMove(sEvent->motion.x, sEvent->motion.y);
 		handleMouseMotion(sEvent);
 	}
@@ -347,7 +348,7 @@ void CGuiHandler::handleEvent(SDL_Event *sEvent)
 		}
 	}	
 	//todo: muiltitouch
-#ifndef VCMI_ANDROID
+#if TMP_ANDROID_TOUCH_TESTING == 0
 	else if ((sEvent->type==SDL_MOUSEBUTTONUP) && (sEvent->button.button == SDL_BUTTON_LEFT))
 	{
 		std::list<CIntObject*> hlp = lclickable;

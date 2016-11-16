@@ -8,17 +8,22 @@ import android.os.IBinder;
  * Created by F on 13.11.2016.
  */
 
-public class ServerService extends Service {
+public class ServerService extends Service
+{
     @Override
-    public IBinder onBind(Intent intent) {
+    public IBinder onBind(Intent intent)
+    {
         return null;
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        new Thread() {
+    public int onStartCommand(Intent intent, int flags, int startId)
+    {
+        new Thread()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 System.loadLibrary("vcmi-server");
 //                System.loadLibrary("vcmiaibattle");
 //                System.loadLibrary("vcmiaivcai");

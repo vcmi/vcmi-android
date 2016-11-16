@@ -15,7 +15,7 @@ model {
         moduleName "boost-locale"
         platformVersion 16
         toolchain "clang"
-        stl "c++_shared"
+        stl VCMI_STL_VERSION
         cppFlags.addAll("-std=c++11",
                 "-fcxx-exceptions",
                 "-frtti",
@@ -24,6 +24,7 @@ model {
                 "-DTHOUSEP=44",
                 "-DRADIXCHAR=46",
                 "-I" + file("${VCMI_PATH_BOOST}").absolutePath)
+        ldLibs.addAll("z", "log", "atomic")
         abiFilters.add("armeabi")
     }
 

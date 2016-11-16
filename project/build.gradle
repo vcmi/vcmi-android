@@ -37,6 +37,8 @@ allprojects {
         VCMI_INCL_SDL_TTF = "${VCMI_PATH_SDL}/SDL2-ttf/include"
         TMP_ARCH = "armeabi"
 
+        VCMI_STL_VERSION = "c++_shared"
+
         LIBS_DEF = [
                 ["prebuiltSDL", ["libSDL2-core.so"], "${VCMI_INCL_SDL}"],
                 ["prebuiltSDLImage", ["libSDL2-image.so"], "${VCMI_INCL_SDL_IMAGE}"],

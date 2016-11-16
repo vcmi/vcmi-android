@@ -17,7 +17,7 @@ model {
         debuggable true
         platformVersion 16
         toolchain "clang"
-        stl "c++_shared"
+        stl VCMI_STL_VERSION
         cppFlags.addAll("-std=c++11",
                 "-fcxx-exceptions",
                 "-frtti",
@@ -27,7 +27,7 @@ model {
                 "-I" + file("${VCMI_PATH_VCMI}").absolutePath,
                 "-I" + file("${VCMI_INCL_BOOST}").absolutePath,
         )
-        ldLibs.addAll("z", "log")
+        ldLibs.addAll("z", "log", "atomic")
         abiFilters.add("armeabi")
     }
 
@@ -35,9 +35,7 @@ model {
         main {
             jni {
                 source {
-                    srcDir "../jni/vcmi-app/vcmi-app/AI/BattleAI"
-//                    srcDir "src/main/jni"
-//                    exclude "main.cpp" // main is included directly through jni bindings (to allow access to dll-exported functions without messing with the main project)
+//                    srcDir "../jni/vcmi-app/vcmi-app/AI/BattleAI" // currently library disabled and added directly to vcmi-lib
                 }
                 dependencies {
                     project ":minizip"

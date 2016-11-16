@@ -15,10 +15,10 @@ model {
         moduleName "minizip"
         platformVersion 16
         toolchain "clang"
-        stl "c++_shared"
+        stl VCMI_STL_VERSION
         CFlags.addAll("-DIOAPI_NO_64",
                 "-I" + file("${VCMI_PATH_VCMI}/lib/minizip").absolutePath)
-        ldLibs.addAll("z")
+        ldLibs.addAll("z", "atomic")
         abiFilters.add("armeabi")
     }
 
