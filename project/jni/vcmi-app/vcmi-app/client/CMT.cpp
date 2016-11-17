@@ -1025,16 +1025,17 @@ static bool recreateWindow(int w, int h, int bpp, bool fullscreen, int displayIn
 	bool bufOnScreen = (screenBuf == screen);
 
 	cleanupRenderer();
-//	if(fullscreen)
-//	{
+
+	if(fullscreen)
+	{
 		//in full-screen mode always use desktop resolution
 		mainWindow = SDL_CreateWindow(NAME.c_str(), SDL_WINDOWPOS_UNDEFINED_DISPLAY(displayIndex),SDL_WINDOWPOS_UNDEFINED_DISPLAY(displayIndex), 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP);
 		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
-//	}
-//	else
-//	{
-//		mainWindow = SDL_CreateWindow(NAME.c_str(), SDL_WINDOWPOS_CENTERED_DISPLAY(displayIndex),SDL_WINDOWPOS_CENTERED_DISPLAY(displayIndex), w, h, 0);
-//	}
+	}
+	else
+	{
+		mainWindow = SDL_CreateWindow(NAME.c_str(), SDL_WINDOWPOS_CENTERED_DISPLAY(displayIndex),SDL_WINDOWPOS_CENTERED_DISPLAY(displayIndex), w, h, 0);
+	}
 
 	if(nullptr == mainWindow)
 	{
@@ -1053,17 +1054,15 @@ static bool recreateWindow(int w, int h, int bpp, bool fullscreen, int displayIn
 	SDL_RendererInfo info;
 	SDL_GetRendererInfo(mainRenderer,&info);
 	logGlobal->infoStream() << "Created renderer " << info.name;
-logGlobal->warnStream() << "xx# " << (SDL_RenderGetIntegerScale(mainRenderer) ? "TAK " : "NIE");
+
 	SDL_RenderSetLogicalSize(mainRenderer, w, h);
 
+#ifndef VCMI_ANDROID
+    // on android this stretches the game to fit the screen, not preserving aspect and apparently this also breaks coordinates scaling in mouse events
 	SDL_RenderSetViewport(mainRenderer, nullptr);
+#endif
 
-	int testw, testh;
-	SDL_GetWindowSize(mainWindow,&testw, &testh);
-	logGlobal->warnStream() << "xx# probably scale will be " << ((float)testh / 600);
-	SDL_Rect testr;
-	SDL_RenderGetViewport(mainRenderer, &testr);
-	logGlobal->warnStream() << "xx# viewport " << testr.x << ", " << testr.y << ", " << testr.w << ", " << testr.h;
+
 
 	#if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
 		int bmask = 0xff000000;
