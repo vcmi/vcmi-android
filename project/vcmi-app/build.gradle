@@ -1,13 +1,15 @@
 apply plugin: 'com.android.model.application'
 model {
     android {
-        compileSdkVersion 25
+        compileSdkVersion 24
         buildToolsVersion "25.0.0"
 
         defaultConfig {
-            applicationId "com.testing.vcmi"
+            applicationId "eu.vcmi.vcmi"
             minSdkVersion.apiLevel 16
             targetSdkVersion.apiLevel 24
+            versionCode 1
+            versionName "1.0"
         }
     }
 
@@ -28,4 +30,5 @@ model {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:design:25.0.0'
 }

@@ -60,15 +60,12 @@ model {
                 source {
                     srcDir "../jni/vcmi-app/generated-version-dir"
                     srcDir "../jni/vcmi-app/vcmi-app/lib"
-                    exclude "**/minizip/*"
+                    excludes.add("**/minizip/*")
 
                     // currently all AI libraries are built together with lib, because using dlopen/dlsym from shared libraries breaks rtti in them
                     srcDir "../jni/vcmi-app/vcmi-app/AI/BattleAI"
-                    exclude "../jni/vcmi-app/vcmi-app/AI/BattleAI/main.cpp"
-//                    srcDir "../jni/vcmi-app/vcmi-app/AI/StupidAI"
-//                    exclude "../jni/vcmi-app/vcmi-app/AI/StupidAI/main.cpp"
                     srcDir "../jni/vcmi-app/vcmi-app/AI/VCAI"
-                    exclude "../jni/vcmi-app/vcmi-app/AI/VCAI/main.cpp"
+                    excludes.add("**/main.cpp")
                 }
                 dependencies {
                     library "prebuiltSDL" linkage "shared"

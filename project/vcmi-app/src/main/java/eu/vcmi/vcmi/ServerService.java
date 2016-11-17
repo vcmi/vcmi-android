@@ -1,4 +1,4 @@
-package org.libsdl.app;
+package eu.vcmi.vcmi;
 
 import android.app.Service;
 import android.content.Intent;
@@ -19,22 +19,16 @@ public class ServerService extends Service
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
+        NativeMethods.setupCtx(ServerService.this);
         new Thread()
         {
             @Override
             public void run()
             {
                 System.loadLibrary("vcmi-server");
-//                System.loadLibrary("vcmiaibattle");
-//                System.loadLibrary("vcmiaivcai");
-//                NativeMethods.registerVCAI();
-//                NativeMethods.registerBattleAI();
-                VCMIJavaHelpers.setupCtx(ServerService.this);
-                createServer();
+                NativeMethods.createServer();
             }
         }.start();
         return START_NOT_STICKY;
     }
-
-    public native void createServer();
 }
