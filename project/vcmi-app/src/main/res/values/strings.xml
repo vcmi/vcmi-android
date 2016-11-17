@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">VCMI</string>
+    <string name="launcher_title">VCMI Launcher</string>
 </resources>

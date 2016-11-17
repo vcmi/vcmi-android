@@ -39,6 +39,11 @@
         <option name="WRAP_COMMENTS" value="true" />
         <AndroidXmlCodeStyleSettings>
           <option name="USE_CUSTOM_SETTINGS" value="true" />
+          <option name="LAYOUT_SETTINGS">
+            <value>
+              <option name="INSERT_LINE_BREAK_BEFORE_NAMESPACE_DECLARATION" value="true" />
+            </value>
+          </option>
         </AndroidXmlCodeStyleSettings>
         <Objective-C>
           <option name="NAMESPACE_BRACE_PLACEMENT" value="2" />

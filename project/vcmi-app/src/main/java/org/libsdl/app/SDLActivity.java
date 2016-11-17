@@ -57,6 +57,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import eu.vcmi.vcmi.NativeMethods;
+import eu.vcmi.vcmi.ServerService;
+import eu.vcmi.vcmi.Const;
+
 /**
  * SDL Activity
  */
@@ -589,14 +593,7 @@ public class SDLActivity extends Activity
         Log.v(TAG, "onCreate(): " + mSingleton);
         super.onCreate(savedInstanceState);
 
-        // TODO handle permissions
-        VCMIJavaHelpers.setupCtx(this);
-        if (!VCMIJavaHelpers.handleDataFoldersInitialization())
-        {
-            Log.e("xx#", "Exiting due to data problems");
-            finish();
-            return;
-        }
+        NativeMethods.setupCtx(this);
 
         SDLActivity.initialize();
         // So we can call stuff from static callbacks

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:minHeight="80dp"
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    android:paddingLeft="@dimen/side_margin"
+    android:paddingRight="@dimen/side_margin"
+    android:paddingTop="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/inc_launcher_btn_main"
+            style="@style/VCMI.Text.LauncherEntry"
+            android:text="@string/app_name" />
+
+        <TextView
+            android:id="@+id/inc_launcher_btn_sub"
+            style="@style/VCMI.Text.LauncherEntry.Sub"
+            android:text="@string/app_name" />
+    </LinearLayout>
+</RelativeLayout>

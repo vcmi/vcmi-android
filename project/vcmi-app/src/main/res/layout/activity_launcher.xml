@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:orientation="vertical">
+
+    <include layout="@layout/inc_toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/launcher_version_info"
+                style="@style/VCMI.Text"
+                android:padding="@dimen/side_margin"
+                android:text="@string/app_name" />
+
+            <include layout="@layout/inc_separator" />
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/VCMI.Text.LauncherSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="2dp"
+                android:text="Game init"
+                app:elevation="2dp" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include
+                    android:id="@+id/launcher_btn_start"
+                    layout="@layout/inc_launcher_btn" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/launcher_error"
+                    style="@style/VCMI.Text"
+                    android:drawableLeft="@android:drawable/ic_menu_close_clear_cancel"
+                    android:gravity="center_vertical"
+                    android:minHeight="80dp"
+                    android:padding="@dimen/side_margin"
+                    android:text="ERROR TEXT" />
+
+                <ProgressBar
+                    android:id="@+id/launcher_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+            </FrameLayout>
+
+            <include layout="@layout/inc_separator" />
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/VCMI.Text.LauncherSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Settings" />
+
+            <include
+                android:id="@+id/launcher_btn_mods"
+                layout="@layout/inc_launcher_btn" />
+
+            <include
+                android:id="@+id/launcher_btn_res"
+                layout="@layout/inc_launcher_btn" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
