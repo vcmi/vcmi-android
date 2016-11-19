@@ -1,3 +1,9 @@
 [submodule "ext/vcmi"]
 	path = ext/vcmi
 	url = https://github.com/vcmi/vcmi.git
+[submodule "ext/ff/ffmpeg"]
+	path = ext/ff/ffmpeg
+	url = https://git.ffmpeg.org/ffmpeg.git
+[submodule "ext/ff/x264"]
+	path = ext/ff/x264
+	url = https://github.com/mirror/x264.git

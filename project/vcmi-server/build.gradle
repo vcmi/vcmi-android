@@ -11,7 +11,7 @@ model {
                     }
                     entry[1].each { binEntry ->
                         binaries.withType(SharedLibraryBinary) {
-                            sharedLibraryFile = file("${PROJECT_PATH_BASE}/obj/local/${TMP_ARCH}/${binEntry}")
+                            sharedLibraryFile = file("${PROJECT_PATH_BASE}/obj/local/${targetPlatform.getName()}/${binEntry}")
                         }
                     }
                 }
@@ -46,7 +46,7 @@ model {
                 "-I" + file("${VCMI_INCL_SDL}").absolutePath,
                 "-I" + file("${VCMI_INCL_BOOST}").absolutePath)
         ldLibs.addAll("z", "log", "atomic")
-        abiFilters.add("armeabi")
+        abiFilters.addAll(VCMI_ABIS)
     }
 
     android.sources {

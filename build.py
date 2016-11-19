@@ -5,7 +5,7 @@ os.environ["PATH"] = os.environ["PATH"] + ";Q:/P/Android/android-ndk-r13b;Q:/P/a
 os.environ["JAVA_HOME"] = "Q:/p/java/8"
 
 pathProjBase = os.getcwd()
-targetAbis = "armeabi"
+targetAbis = "armeabi armeabi-v7a arm64-v8a"
 targetPlatform = "android-16"
 
 def assertZero(code, cmd):
@@ -35,8 +35,8 @@ def writePrebuiltInclude(name, isStatic):
 		prebuiltName = "lib" + name + ".so"
 	prebuiltInc = open(pathProjBase + "/prebuilt-include/" + name + ".mk", "w")
 	prebuiltInc.write("LOCAL_MODULE := " + name + "-prebuilt\n"
-		"ifeq ($(filter $(modules-get-list),$(LOCAL_MODULE)),)"
-		"LOCAL_SRC_FILES := $(PROJECT_PATH_BASE)/obj/local/$(TARGET_ARCH_ABI)/" + prebuiltName + "\n"
+		"ifeq ($(filter $(modules-get-list),$(LOCAL_MODULE)),)\n"
+		"\tLOCAL_SRC_FILES := $(PROJECT_PATH_BASE)/obj/local/$(TARGET_ARCH_ABI)/" + prebuiltName + "\n"
 		"include $(PREBUILT_" + prebuiltType + "_LIBRARY)\n"
 		"include $(CLEAR_VARS)\n"
 		"endif")
@@ -63,8 +63,8 @@ def addVersionSuffix():
 	add_version_suffix.add()
 
 def buildSDL():
-	callBuild("ext/SDL2/core", "", "SDL2-core", "", False)
-	callBuild("ext/SDL2/SDL2-mixer-external", "", "smpeg2", "", False)
+	#callBuild("ext/SDL2/core", "", "SDL2-core", "", False)
+	#callBuild("ext/SDL2/SDL2-mixer-external", "", "smpeg2", "", False)
 	callBuild("ext/SDL2/SDL2-mixer", "", "SDL2-mixer", "", False)
 	callBuild("ext/SDL2/SDL2-image", "", "SDL2-image", "", False)
 	callBuild("ext/SDL2/SDL2-ttf", "", "SDL2-ttf", "", False)
@@ -85,8 +85,8 @@ def buildMain():
 	#callBuild("project/jni/app", "", "vcmi-main", "", True)
 	
 	
-#buildSDL()
+buildSDL()
 #addVersionSuffix()
 #buildBoost()
 #ffmpegHelper()
-buildMain()
+#buildMain()

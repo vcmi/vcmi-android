@@ -579,16 +579,8 @@ void VCMIDirsAndroid::init()
 {
 	// asks java code to retrieve needed paths from environment
 	AndroidVMHelper envHelper;
-	auto env = envHelper.get();
-	auto javaHelper = env->FindClass("eu/vcmi/vcmi/NativeMethods");
-	auto methodRootPath = env->GetStaticMethodID(javaHelper, "dataRoot", "()Ljava/lang/String;");
-	jstring jbasePath = static_cast<jstring>(env->CallStaticObjectMethod(javaHelper, methodRootPath));
-	basePath = std::string(env->GetStringUTFChars(jbasePath, nullptr));
-
-	auto methodLibPath = env->GetStaticMethodID(javaHelper, "nativePath", "()Ljava/lang/String;");
-	jstring jnativePath = static_cast<jstring>(env->CallStaticObjectMethod(javaHelper, methodLibPath));
-	nativePath = std::string(env->GetStringUTFChars(jnativePath, nullptr));
-
+	basePath = envHelper.callStaticStringMethod(AndroidVMHelper::NATIVE_METHODS_DEFAULT_CLASS, "dataRoot");
+	nativePath = envHelper.callStaticStringMethod(AndroidVMHelper::NATIVE_METHODS_DEFAULT_CLASS, "nativePath");
 	IVCMIDirs::init();
 }
 
