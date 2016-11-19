@@ -35,7 +35,8 @@ allprojects {
         VCMI_INCL_SDL_IMAGE = "${VCMI_PATH_SDL}/SDL2-image/include"
         VCMI_INCL_SDL_MIXER = "${VCMI_PATH_SDL}/SDL2-mixer/include"
         VCMI_INCL_SDL_TTF = "${VCMI_PATH_SDL}/SDL2-ttf/include"
-        TMP_ARCH = "armeabi"
+
+        VCMI_ABIS = ["armeabi"]
 
         VCMI_STL_VERSION = "c++_shared"
 
@@ -43,23 +44,26 @@ allprojects {
                 ["prebuiltSDL", ["libSDL2-core.so"], "${VCMI_INCL_SDL}"],
                 ["prebuiltSDLImage", ["libSDL2-image.so"], "${VCMI_INCL_SDL_IMAGE}"],
                 ["prebuiltSDLMixer", ["libSDL2-mixer.so"], "${VCMI_INCL_SDL_MIXER}"],
+                ["prebuiltsmpeg2", ["libsmpeg2.so"], ""],
                 ["prebuiltSDLTTF", ["libSDL2-ttf.so"], "${VCMI_INCL_SDL_TTF}"],
                 ["prebuiltFFcodec", ["libavcodec.so"], "${VCMI_INCL_FFMPEG}"],
+                ["prebuiltFFcodec57", ["libavcodec-57.so"], ""],
                 ["prebuiltFFdevice", ["libavdevice.so"], ""],
+                ["prebuiltFFdevice57", ["libavdevice-57.so"], ""],
                 ["prebuiltFFfilter", ["libavfilter.so"], ""],
+                ["prebuiltFFfilter6", ["libavfilter-6.so"], ""],
                 ["prebuiltFFformat", ["libavformat.so"], ""],
+                ["prebuiltFFformat57", ["libavformat-57.so"], ""],
                 ["prebuiltFFutil", ["libavutil.so"], ""],
+                ["prebuiltFFutil55", ["libavutil-55.so"], ""],
                 ["prebuiltFFpostproc", ["libpostproc.so"], ""],
+                ["prebuiltFFpostproc54", ["libpostproc-54.so"], ""],
                 ["prebuiltFFswresample", ["libswresample.so"], ""],
-                ["prebuiltFFswscale", ["libswscale.so"], ""]
+                ["prebuiltFFswresample2", ["libswresample-2.so"], ""],
+                ["prebuiltFFswscale", ["libswscale.so"], ""],
+                ["prebuiltFFswscale4", ["libswscale-4.so"], ""],
+                ["prebuiltx264", ["libx264.so"], ""],
+                ["prebuiltx264148", ["libx264-148.so"], ""]
         ]
     }
 }
-
-//subprojects {
-//    model {
-//        repositories {
-//
-//        }
-//    }
-//}

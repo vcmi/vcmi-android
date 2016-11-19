@@ -22,7 +22,7 @@ model {
                 "-I" + file("${VCMI_INCL_FUZZYLITE}").absolutePath,
                 "-DFL_CPP11")
         ldLibs.addAll("atomic")
-        abiFilters.add("armeabi")
+        abiFilters.addAll(VCMI_ABIS)
     }
 
     android.sources {

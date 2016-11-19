@@ -28,7 +28,7 @@ model {
                 "-I" + file("${VCMI_INCL_BOOST}").absolutePath,
         )
         ldLibs.addAll("z", "log", "atomic")
-        abiFilters.add("armeabi")
+        abiFilters.addAll(VCMI_ABIS)
     }
 
     android.sources {

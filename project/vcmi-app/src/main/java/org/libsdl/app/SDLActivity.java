@@ -3,9 +3,11 @@ package org.libsdl.app;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -23,7 +25,10 @@ import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.text.InputType;
 import android.util.Log;
 import android.util.SparseArray;
@@ -59,13 +64,15 @@ import java.util.List;
 
 import eu.vcmi.vcmi.NativeMethods;
 import eu.vcmi.vcmi.ServerService;
-import eu.vcmi.vcmi.Const;
 
 /**
  * SDL Activity
  */
 public class SDLActivity extends Activity
 {
+    public static final int SERVER_MESSAGE_SERVER_READY = 1000;
+    public static final int SERVER_MESSAGE_SERVER_KILLED = 1001;
+    public static final String NATIVE_ACTION_CREATE_SERVER = "SDLActivity.Action.CreateServer";
     protected static final int COMMAND_USER = 0x8000;
     // Messages from the SDLMain thread
     static final int COMMAND_CHANGE_TITLE = 1;
@@ -98,12 +105,15 @@ public class SDLActivity extends Activity
      * Result of current messagebox. Also used for blocking the calling thread.
      */
     protected final int[] messageboxSelection = new int[1];
+    final Messenger mClientMessenger = new Messenger(new IncomingServerMessageHandler());
     /**
      * Id of current dialog.
      */
     protected int dialogs = 0;
     // Handler for the messages
     Handler commandHandler = new SDLCommandHandler();
+    Messenger mServiceMessenger = null;
+    boolean mIsServerServiceBound;
     /**
      * com.android.vending.expansion.zipfile.ZipResourceFile object or null.
      */
@@ -112,6 +122,31 @@ public class SDLActivity extends Activity
      * com.android.vending.expansion.zipfile.ZipResourceFile's getInputStream() or null.
      */
     private Method expansionFileMethod;
+    private ServiceConnection mServerServiceConnection = new ServiceConnection()
+    {
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service)
+        {
+            Log.i("VCMI", "Service connection");
+            mServiceMessenger = new Messenger(service);
+
+            try
+            {
+                Message msg = Message.obtain(null, ServerService.CLIENT_MESSAGE_CLIENT_REGISTERED);
+                msg.replyTo = mClientMessenger;
+                mServiceMessenger.send(msg);
+            }
+            catch (RemoteException ignored)
+            {
+            }
+        }
+
+        public void onServiceDisconnected(ComponentName className)
+        {
+            Log.i("VCMI", "Service disconnection");
+            mServiceMessenger = null;
+        }
+    };
 
     public static void initialize()
     {
@@ -163,7 +198,6 @@ public class SDLActivity extends Activity
     /* The native thread has finished */
     public static void handleNativeExit()
     {
-        Log.i("xx#", "native exit");
         SDLActivity.mSDLThread = null;
         mSingleton.finish();
     }
@@ -542,8 +576,6 @@ public class SDLActivity extends Activity
         );
     }
 
-    // Audio
-
     /**
      * This method is called by SDL before loading the native shared libraries. It can be overridden to provide names of shared libraries to be
      * loaded. The default implementation returns the defaults. It never returns null. An array returned by a new implementation must at least contain
@@ -562,6 +594,8 @@ public class SDLActivity extends Activity
             "vcmi-client2",
         };
     }
+
+    // Audio
 
     // Load the .so
     public void loadLibraries()
@@ -644,7 +678,7 @@ public class SDLActivity extends Activity
         Log.i("xx#", "not broken libs");
 
         NativeMethods.initClassloader();
-        startService(new Intent(this, ServerService.class));
+//        initService();
 
         // Set up the surface
         mSurface = new SDLSurface(getApplication());
@@ -657,12 +691,22 @@ public class SDLActivity extends Activity
         setContentView(mLayout);
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState)
+    private void initService()
     {
-        super.onPostCreate(savedInstanceState);
-//        NativeMethods.registerVCAI();
-//        NativeMethods.registerBattleAI();
+        startService(new Intent(this, ServerService.class));
+        bindService(new Intent(SDLActivity.this,
+            ServerService.class), mServerServiceConnection, Context.BIND_AUTO_CREATE);
+        mIsServerServiceBound = true;
+    }
+
+    @Override
+    protected void onNewIntent(final Intent intent)
+    {
+        Log.i("VCMI", "Got new intent with action " + intent.getAction());
+        if (NATIVE_ACTION_CREATE_SERVER.equals(intent.getAction()))
+        {
+            initService();
+        }
     }
 
     // Events
@@ -712,9 +756,6 @@ public class SDLActivity extends Activity
         }
     }
 
-
-    // Input
-
     @Override
     public void onLowMemory()
     {
@@ -728,6 +769,9 @@ public class SDLActivity extends Activity
 
         SDLActivity.nativeLowMemory();
     }
+
+
+    // Input
 
     @Override
     protected void onDestroy()
@@ -743,6 +787,7 @@ public class SDLActivity extends Activity
         }
 
         stopService(new Intent(this, ServerService.class));
+        unbindServer();
 
         // Send a quit message to the application
         SDLActivity.mExitCalledFromJava = true;
@@ -767,6 +812,16 @@ public class SDLActivity extends Activity
         super.onDestroy();
         // Reset everything in case the user re opens the app
         SDLActivity.initialize();
+    }
+
+    private void unbindServer()
+    {
+        Log.d("VCMI", "Unbinding server " + mIsServerServiceBound);
+        if (mIsServerServiceBound)
+        {
+            unbindService(mServerServiceConnection);
+            mIsServerServiceBound = false;
+        }
     }
 
     @Override
@@ -807,8 +862,6 @@ public class SDLActivity extends Activity
         return false;
     }
 
-    // APK expansion files support
-
     // Send a message from the SDLMain thread
     boolean sendCommand(int command, Object data)
     {
@@ -817,6 +870,8 @@ public class SDLActivity extends Activity
         msg.obj = data;
         return commandHandler.sendMessage(msg);
     }
+
+    // APK expansion files support
 
     /**
      * This method is called by SDL using JNI.
@@ -935,8 +990,6 @@ public class SDLActivity extends Activity
         return fileStream;
     }
 
-    // Messagebox
-
     /**
      * This method is called by SDL using JNI. Shows the messagebox from UI thread and block calling thread. buttonFlags, buttonIds and buttonTexts
      * must have same length.
@@ -1011,6 +1064,8 @@ public class SDLActivity extends Activity
 
         return messageboxSelection[0];
     }
+
+    // Messagebox
 
     @Override
     protected Dialog onCreateDialog(int ignore, Bundle args)
@@ -1278,6 +1333,25 @@ public class SDLActivity extends Activity
 
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(mTextEdit, 0);
+        }
+    }
+
+    class IncomingServerMessageHandler extends Handler
+    {
+        @Override
+        public void handleMessage(Message msg)
+        {
+            Log.i("VCMI", "Got server msg " + msg);
+            switch (msg.what)
+            {
+                case SERVER_MESSAGE_SERVER_READY:
+                    NativeMethods.notifyServerReady();
+                    break;
+                case SERVER_MESSAGE_SERVER_KILLED:
+                    unbindServer();
+                default:
+                    super.handleMessage(msg);
+            }
         }
     }
 }
