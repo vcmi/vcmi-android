@@ -1,0 +1,49 @@
+ext {
+    VCMI_PATH_PREBUILT = "${PROJECT_PATH_BASE}/prebuilt-include"
+    VCMI_PATH_EXT = "${PROJECT_PATH_BASE}/ext"
+    VCMI_PATH_MAIN = "${PROJECT_PATH_BASE}/project"
+
+    VCMI_PATH_SDL = "${VCMI_PATH_EXT}/SDL2"
+    VCMI_PATH_FFMPEG = "${PROJECT_PATH_BASE}/ext/ff/ffmpeg"
+    VCMI_PATH_BOOST = "${VCMI_PATH_EXT}/boost/boost_1_61_0"
+    VCMI_PATH_VCMI = "${VCMI_PATH_MAIN}/jni/vcmi-app/vcmi-app"
+    VCMI_PATH_FUZZYLITE = "${VCMI_PATH_VCMI}/AI/FuzzyLite/fuzzylite"
+
+    VCMI_INCL_VCMI = "${VCMI_PATH_VCMI} ${VCMI_PATH_VCMI}/include"
+    VCMI_INCL_FUZZYLITE = "${VCMI_PATH_FUZZYLITE}"
+    VCMI_INCL_BOOST = "${VCMI_PATH_BOOST}"
+    VCMI_INCL_FFMPEG = "${VCMI_PATH_FFMPEG}/android/armeabi/include" // maybe it should depend on ABI, but currently headers all the same for each ABI
+    VCMI_INCL_SDL = "${VCMI_PATH_SDL}/core/include"
+    VCMI_INCL_SDL_IMAGE = "${VCMI_PATH_SDL}/SDL2-image/include"
+    VCMI_INCL_SDL_MIXER = "${VCMI_PATH_SDL}/SDL2-mixer/include"
+    VCMI_INCL_SDL_TTF = "${VCMI_PATH_SDL}/SDL2-ttf/include"
+
+    VCMI_ABIS = ["armeabi"]
+
+    VCMI_STL_VERSION = "c++_shared"
+
+    LIBS_DEF = [
+            ["prebuiltSDL", ["libSDL2-core.so"], "${VCMI_INCL_SDL}"],
+            ["prebuiltSDLImage", ["libSDL2-image.so"], "${VCMI_INCL_SDL_IMAGE}"],
+            ["prebuiltSDLMixer", ["libSDL2-mixer.so"], "${VCMI_INCL_SDL_MIXER}"],
+            ["prebuiltsmpeg2", ["libsmpeg2.so"], ""],
+            ["prebuiltSDLTTF", ["libSDL2-ttf.so"], "${VCMI_INCL_SDL_TTF}"],
+            ["prebuiltFFcodec", ["libavcodec.so"], "${VCMI_INCL_FFMPEG}"],
+            ["prebuiltFFcodec57", ["libavcodec-57.so"], ""],
+            ["prebuiltFFdevice", ["libavdevice.so"], ""],
+            ["prebuiltFFdevice57", ["libavdevice-57.so"], ""],
+            ["prebuiltFFfilter", ["libavfilter.so"], ""],
+            ["prebuiltFFfilter6", ["libavfilter-6.so"], ""],
+            ["prebuiltFFformat", ["libavformat.so"], ""],
+            ["prebuiltFFformat57", ["libavformat-57.so"], ""],
+            ["prebuiltFFutil", ["libavutil.so"], ""],
+            ["prebuiltFFutil55", ["libavutil-55.so"], ""],
+            ["prebuiltFFpostproc", ["libpostproc.so"], ""],
+            ["prebuiltFFpostproc54", ["libpostproc-54.so"], ""],
+            ["prebuiltFFswresample", ["libswresample.so"], ""],
+            ["prebuiltFFswresample2", ["libswresample-2.so"], ""],
+            ["prebuiltFFswscale", ["libswscale.so"], ""],
+            ["prebuiltFFswscale4", ["libswscale-4.so"], ""],
+            ["prebuiltx264", ["libx264.so"], ""],
+            ["prebuiltx264148", ["libx264-148.so"], ""]]
+}

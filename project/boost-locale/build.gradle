@@ -33,6 +33,8 @@ model {
             jni {
                 source {
                     srcDir "${VCMI_PATH_BOOST}/libs/locale/src"
+                    exclude "**/win32/*"
+                    exclude "**/icu/*"
                 }
                 dependencies {
                     project ":boost-system"
