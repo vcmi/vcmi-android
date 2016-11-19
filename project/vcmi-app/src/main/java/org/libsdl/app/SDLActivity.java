@@ -675,7 +675,6 @@ public class SDLActivity extends Activity
 
             return;
         }
-        Log.i("xx#", "not broken libs");
 
         NativeMethods.initClassloader();
 //        initService();

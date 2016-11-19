@@ -82,9 +82,7 @@ JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv *env, jc
 
 
     /* Run the application. */
-    __android_log_write(ANDROID_LOG_ERROR, "xx#", "CALLING main");
     status = SDL_main(argc, argv);
-    __android_log_write(ANDROID_LOG_ERROR, "xx#", "AFTER main");
     /* Release the arguments. */
 
     for (i = 0; i < argc; ++i)
