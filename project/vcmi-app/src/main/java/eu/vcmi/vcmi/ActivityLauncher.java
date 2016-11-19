@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.libsdl.app.SDLActivity;
 
@@ -45,25 +44,29 @@ public class ActivityLauncher extends AppCompatActivity
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ((TextView) findViewById(R.id.launcher_version_info)).setText("Current launcher version: " + BuildConfig.VERSION_NAME);
+        ((TextView) findViewById(R.id.launcher_version_info)).setText(getString(R.string.launcher_version, BuildConfig.VERSION_NAME));
 
-        mBtnStart = findViewById(R.id.launcher_btn_start);
+        mBtnStart = initLauncherBtn(R.id.launcher_btn_start, new OnLauncherStartPressed(), getString(R.string.launcher_btn_start_title),
+            getString(R.string.launcher_btn_start_subtitle));
+        initLauncherBtn(R.id.launcher_btn_res, new OnLauncherResPressed(), getString(R.string.launcher_btn_res_title),
+            getString(R.string.launcher_btn_res_subtitle));
+        initLauncherBtn(R.id.launcher_btn_mods, new OnLauncherModsPressed(), getString(R.string.launcher_btn_mods_title),
+            getString(R.string.launcher_btn_mods_subtitle));
+        initLauncherBtn(R.id.launcher_btn_cp, new OnLauncherCodepagePressed(), getString(R.string.launcher_btn_cp_title),
+            getString(R.string.launcher_btn_cp_subtitle));
+
         mBtnStart.setVisibility(View.GONE);
-        mBtnStart.setOnClickListener(new OnLauncherStartPressed());
-        ((TextView) mBtnStart.findViewById(R.id.inc_launcher_btn_main)).setText("Start VCMI");
-        ((TextView) mBtnStart.findViewById(R.id.inc_launcher_btn_sub)).setText("Current VCMI version: xyz");
 
-        View btnMods = findViewById(R.id.launcher_btn_mods);
-        btnMods.setOnClickListener(new OnLauncherModsPressed());
-        ((TextView) btnMods.findViewById(R.id.inc_launcher_btn_main)).setText("Mods");
-        ((TextView) btnMods.findViewById(R.id.inc_launcher_btn_sub)).setText("Currently active: X, available: Y");
+        init(); // TODO move to async task (will definitely be needed to be on worker thread when unpacking vcmi-data to external storage is added)
+    }
 
-        View btnRes = findViewById(R.id.launcher_btn_res);
-        btnRes.setOnClickListener(new OnLauncherResPressed());
-        ((TextView) btnRes.findViewById(R.id.inc_launcher_btn_main)).setText("Change game native resolution");
-        ((TextView) btnRes.findViewById(R.id.inc_launcher_btn_sub)).setText("Currently: 800x600");
-
-        init();
+    private View initLauncherBtn(final int btnId, final View.OnClickListener clickListener, final String title, final String subtitle)
+    {
+        View btn = findViewById(btnId);
+        btn.setOnClickListener(clickListener);
+        ((TextView) btn.findViewById(R.id.inc_launcher_btn_main)).setText(title);
+        ((TextView) btn.findViewById(R.id.inc_launcher_btn_sub)).setText(subtitle);
+        return btn;
     }
 
     private void init()
@@ -102,7 +105,7 @@ public class ActivityLauncher extends AppCompatActivity
         }
         catch (RuntimeException ignored)
         {
-            return new InitResult(Build.VERSION.SDK_INT < Build.VERSION_CODES.M, "Could not resolve permissions correctly");
+            return new InitResult(Build.VERSION.SDK_INT < Build.VERSION_CODES.M, getString(R.string.launcher_error_permission_broken));
         }
 
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQ_CODE);
@@ -125,7 +128,7 @@ public class ActivityLauncher extends AppCompatActivity
             }
             else
             {
-                onInitError(new InitResult(false, "This application needs write permissions to use the content stored in external storage"), true);
+                onInitError(new InitResult(false, getString(R.string.launcher_error_permissions)), true);
             }
             return;
         }
@@ -164,25 +167,29 @@ public class ActivityLauncher extends AppCompatActivity
         if (!vcmiDir.exists()) // we don't have root folder == new install (or deleted)
         {
             boolean allCreated = vcmiDir.mkdir();
-//            if (allCreated)
-//            {
-//                allCreated = new File(vcmiDir, "DATA").mkdir();
-//                allCreated &= new File(vcmiDir, "SOMETHING").mkdir();
-//            }
 
             if (allCreated)
             {
-                Toast.makeText(this, "TMP : initial start -- created dirs -- waiting for data", Toast.LENGTH_LONG).show();
-                return new InitResult(false, "");
+                return new InitResult(false, getString(R.string.launcher_error_vcmi_data_root_created,
+                    Const.VCMI_DATA_ROOT_FOLDER_NAME, vcmiDir.getAbsolutePath()));
             }
             else
             {
-                Toast.makeText(this, "TMP : initial start -- could not create data folders", Toast.LENGTH_LONG).show();
-                return new InitResult(false, "");
+                return new InitResult(false, getString(R.string.launcher_error_vcmi_data_root_failed, vcmiDir.getAbsolutePath()));
             }
         }
 
-        // TODO handle checking if user data is present
+        final File testH3Data = new File(vcmiDir, "Data");
+        if (!testH3Data.exists())
+        {
+            return new InitResult(false, getString(R.string.launcher_error_h3_data_missing, testH3Data.getAbsolutePath()));
+        }
+
+        final File testVcmiData = new File(vcmiDir, "Mods/vcmi/mod.json");
+        if (!testVcmiData.exists())
+        {
+            return new InitResult(false, getString(R.string.launcher_error_vcmi_data_missing, vcmiDir.getAbsolutePath()));
+        }
 
         return new InitResult(true, "");
     }
@@ -232,6 +239,15 @@ public class ActivityLauncher extends AppCompatActivity
         public void onClick(final View view)
         {
             Log.i(this, "Showing resolution dialog");
+        }
+    }
+
+    private class OnLauncherCodepagePressed implements View.OnClickListener
+    {
+        @Override
+        public void onClick(final View view)
+        {
+            Log.i(this, "Showing codepage dialog");
         }
     }
 }
