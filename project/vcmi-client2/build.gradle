@@ -51,7 +51,6 @@ model {
         ldLibs.addAll("z", "log", "atomic")
         abiFilters.addAll(VCMI_ABIS)
     }
-
     android.sources {
         main {
             jni {

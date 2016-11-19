@@ -35,6 +35,7 @@ model {
             jni {
                 source {
                     srcDir "${VCMI_PATH_BOOST}/libs/thread/src"
+                    exclude "**/win32/*"
                 }
                 dependencies {
                     project ":boost-system"
