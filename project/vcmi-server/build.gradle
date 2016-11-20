@@ -11,7 +11,7 @@ model {
                     }
                     entry[1].each { binEntry ->
                         binaries.withType(SharedLibraryBinary) {
-                            sharedLibraryFile = file("${PROJECT_PATH_BASE}/obj/local/${targetPlatform.getName()}/${binEntry}")
+                            sharedLibraryFile = file("${PROJECT_PATH_BASE}/ext-output/${targetPlatform.getName()}/${binEntry}")
                         }
                     }
                 }
@@ -32,7 +32,7 @@ model {
     android.ndk {
         moduleName "vcmi-server"
         debuggable true
-        platformVersion 16
+        platformVersion VCMI_PLATFORM
         toolchain "clang"
         stl VCMI_STL_VERSION
         cppFlags.addAll("-std=c++11",

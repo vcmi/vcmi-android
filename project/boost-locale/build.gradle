@@ -1,6 +1,23 @@
 apply plugin: 'com.android.model.native'
 
 model {
+    repositories {
+        libs(PrebuiltLibraries) { libs ->
+            LIBS_DEF.each { entry ->
+                libs.create(entry[0]) {
+                    if (entry[2] != "") {
+                        headers.srcDir entry[2]
+                    }
+                    entry[1].each { binEntry ->
+                        binaries.withType(SharedLibraryBinary) {
+                            sharedLibraryFile = file("${PROJECT_PATH_BASE}/ext-output/${targetPlatform.getName()}/${binEntry}")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     android {
         compileSdkVersion 24
         buildToolsVersion "25.0.0"
@@ -13,17 +30,19 @@ model {
 
     android.ndk {
         moduleName "boost-locale"
-        platformVersion 16
+        platformVersion VCMI_PLATFORM
         toolchain "clang"
         stl VCMI_STL_VERSION
         cppFlags.addAll("-std=c++11",
                 "-fcxx-exceptions",
                 "-frtti",
                 "-DBOOST_LOCALE_NO_WINAPI_BACKEND",
+                "-DBOOST_LOCALE_NO_POSIX_BACKEND",
                 "-DBOOST_LOCALE_WITH_ICONV",
                 "-DTHOUSEP=44",
                 "-DRADIXCHAR=46",
-                "-I" + file("${VCMI_PATH_BOOST}").absolutePath)
+                "-I" + file("${VCMI_INCL_ICONV}").absolutePath,
+                "-I" + file("${VCMI_INCL_BOOST}").absolutePath)
         ldLibs.addAll("z", "log", "atomic")
         abiFilters.addAll(VCMI_ABIS)
     }
@@ -35,9 +54,11 @@ model {
                     srcDir "${VCMI_PATH_BOOST}/libs/locale/src"
                     exclude "**/win32/*"
                     exclude "**/icu/*"
+                    exclude "**/posix/*"
                 }
                 dependencies {
                     project ":boost-system"
+                    library "prebuiltIconv" linkage "shared"
                 }
             }
         }

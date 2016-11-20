@@ -13,21 +13,20 @@ GENERAL="\
 --nm=$PREBUILT/bin/arm-linux-androideabi-nm \
 --extra-cflags="-I../x264/android/arm/include" \
 --extra-ldflags="-L../x264/android/arm/lib" "
-
 MODULES="\
 --enable-gpl \
 --enable-libx264"
 
 cd $FFDIR/ffmpeg
- ./configure \
+./configure \
 --target-os=linux \
---prefix=./android/armeabi \
+--prefix=./android/armeabi-v7a \
 ${GENERAL} \
 --sysroot=$PLATFORM \
 --enable-shared \
 --disable-static \
---extra-cflags=" -O3 -fpic -fasm -Wno-psabi -fno-short-enums -fno-strict-aliasing -finline-limit=300 -mfloat-abi=softfp -mfpu=vfp -marm -march=armv6" \
---extra-ldflags="-lx264 -Wl,-rpath-link=$PLATFORM/usr/lib -L$PLATFORM/usr/lib -nostdlib -lc -lm -ldl -llog" \
+--extra-cflags="-DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" \
+--extra-ldflags="-Wl,-rpath-link=$PLATFORM/usr/lib -L$PLATFORM/usr/lib -nostdlib -lc -lm -ldl -llog" \
 --enable-zlib \
 ${MODULES} \
 --disable-doc \

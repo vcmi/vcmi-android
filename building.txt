@@ -1,0 +1,24 @@
+needed: python3, android studio + ndk
+
+* git update submodules (vcmi definitely needed, ffmpeg/x264 only if you want to build them)
+* place boost into ./ext/boost/ (so that ./ext/boost/boost_X_YY_Z/b2.exe exists)
+* open ./vcmiconf.in and enter the correct paths (paths with *_BASH are needed only for ffmpeg build; on linux they'll probably be the same as normal paths)
+	* for testing, you might want to set only one abi in ABIS field (builds will be much faster and armeabi should work on most devices)
+
+if you want to build SDL, ffmpeg and iconv manually
+{
+	also needed: bash (I used win10 built-in bash for windows), android ndk for linux
+	* place SDL sources into folders in ./ext/SDL2 (so that ./ext/SDL2/core/code/configure, ./ext/SDL2/SDL2-image/code/configure , ./ext/SDL2/SDL2-mixer/code/configure , ./ext/SDL2/SDL2-ttf/code/configure all exist)
+	* file ./ext/SDL2/SDL2-mixer/build.mk has hardcoded path to "smpeg2-2.0.0", so if there's some newer version, you might need to change it
+	* try to enter bash and check if "make" and "yasm" work (install them if not (sudo apt-get install or something like that))
+	* run in main folder: python build.py all
+	* if it eventually finishes without errors, there should be libs in ./ext-output/(ARCH)
+		* iconv and SDL are build only in configurations declared in vcmiconf.in
+		* ffmpeg is built in all possible configurations; if you don't like that, you can comment the lines in ./ext/ff/all.sh
+}
+else
+{
+	* run in main folder: python build.py fixpaths
+}
+
+* start android studio project (in ./project) and try to build it
