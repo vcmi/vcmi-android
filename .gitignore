@@ -5,13 +5,9 @@
 /ext/SDL2/SDL2-image/code/
 /ext/SDL2/SDL2-mixer/code/
 /ext/SDL2/SDL2-ttf/code/
-/ext/iconv/code/
 /obj
 /libs
-/project/jni/vcmi-app/vcmi-app/Version.cpp
-/project/jni/vcmi-app/vcmi-app/Data/
-/project/jni/vcmi-app/vcmi-app/Mp3/
-/project/jni/vcmi-app/vcmi-app/**/RD/
+/project/jni/vcmi-app/
 /**/jniLibs/
 /project/build
 /project/**/build
