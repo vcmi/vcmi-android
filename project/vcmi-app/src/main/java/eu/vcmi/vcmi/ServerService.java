@@ -10,9 +10,8 @@ import android.os.Messenger;
 import eu.vcmi.vcmi.util.Log;
 
 /**
- * Created by F on 13.11.2016.
+ * @author F
  */
-
 public class ServerService extends Service
 {
     public static final int CLIENT_MESSAGE_CLIENT_REGISTERED = 1;
