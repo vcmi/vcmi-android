@@ -1,6 +1,6 @@
 needed: python3, android studio + ndk
 
-* git update submodules (vcmi definitely needed, ffmpeg/x264 only if you want to build them)
+* git update submodules (vcmi definitely needed, ffmpeg/x264/iconv only if you want to build them)
 * place boost into ./ext/boost/ (so that ./ext/boost/boost_X_YY_Z/b2.exe exists)
 * open ./vcmiconf.in and enter the correct paths (paths with *_BASH are needed only for ffmpeg build; on linux they'll probably be the same as normal paths)
 	* for testing, you might want to set only one abi in ABIS field (builds will be much faster and armeabi should work on most devices)

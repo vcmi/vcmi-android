@@ -7,3 +7,6 @@
 [submodule "ext/ff/x264"]
 	path = ext/ff/x264
 	url = https://github.com/mirror/x264.git
+[submodule "ext/iconv/code"]
+	path = ext/iconv/code
+	url = https://github.com/ironsteel/iconv-android.git

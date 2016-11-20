@@ -1,24 +1,24 @@
 #include "StdInc.h"
-#include <CCallback.h>
+#include "CCallback.h"
 
-#include <lib/CCreatureHandler.h>
-#include <client/CGameInfo.h>
-#include <lib/CGameState.h>
-#include <lib/BattleState.h>
-#include <client/CPlayerInterface.h>
-#include <client/Client.h>
-#include <lib/mapping/CMap.h>
-#include <lib/CBuildingHandler.h>
-#include <lib/mapObjects/CObjectClassesHandler.h>
-#include <lib/CGeneralTextHandler.h>
-#include <lib/CHeroHandler.h>
-#include <lib/NetPacks.h>
-#include <client/mapHandler.h>
-#include <lib/spells/CSpellHandler.h>
-#include <lib/CArtHandler.h>
-#include <lib/GameConstants.h>
-#include <lib/CPlayerState.h>
-#include <lib/UnlockGuard.h>
+#include "lib/CCreatureHandler.h"
+#include "client/CGameInfo.h"
+#include "lib/CGameState.h"
+#include "lib/BattleState.h"
+#include "client/CPlayerInterface.h"
+#include "client/Client.h"
+#include "lib/mapping/CMap.h"
+#include "lib/CBuildingHandler.h"
+#include "lib/mapObjects/CObjectClassesHandler.h"
+#include "lib/CGeneralTextHandler.h"
+#include "lib/CHeroHandler.h"
+#include "lib/NetPacks.h"
+#include "client/mapHandler.h"
+#include "lib/spells/CSpellHandler.h"
+#include "lib/CArtHandler.h"
+#include "lib/GameConstants.h"
+#include "lib/CPlayerState.h"
+#include "lib/UnlockGuard.h"
 
 /*
  * CCallback.cpp, part of VCMI engine
@@ -29,11 +29,6 @@
  * Full text of license available in license.txt file, in main folder
  *
  */
-
-template <ui16 N> bool isType(CPack *pack)
-{
-	return pack->getType() == N;
-}
 
 bool CCallback::teleportHero(const CGHeroInstance *who, const CGTownInstance *where)
 {
