@@ -13,7 +13,7 @@ model {
 
     android.ndk {
         moduleName "minizip"
-        platformVersion 16
+        platformVersion VCMI_PLATFORM
         toolchain "clang"
         stl VCMI_STL_VERSION
         CFlags.addAll("-DIOAPI_NO_64",

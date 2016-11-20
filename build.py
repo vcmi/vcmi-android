@@ -1,13 +1,33 @@
 import os
+import shutil
 import sys
+import subprocess
 
-os.environ["PATH"] = os.environ["PATH"] + ";Q:/P/Android/android-ndk-r13b;Q:/P/ant/bin;Q:/P/Android/android-sdk/platform-tools"
-os.environ["JAVA_HOME"] = "Q:/p/java/8"
+#os.environ["PATH"] = os.environ["PATH"] + ";Q:/P/Android/android-ndk-r13b;Q:/P/Android/android-sdk/platform-tools"
+#os.environ["JAVA_HOME"] = "Q:/p/java/8"
 
-pathProjBase = os.getcwd()
-targetAbis = "armeabi armeabi-v7a arm64-v8a"
+import vcmiconf
+
+pathExtOutput = vcmiconf.pathProjRoot + "/ext-output/"
+pathExtOutputForBash = vcmiconf.pathProjRootBash + "/ext-output/"
+targetAbis = "armeabi armeabi-v7a arm64-v8a x86 x86_64"
 targetPlatform = "android-16"
 
+def copytree(src, dst, symlinks=False, ignore=None):
+    if not os.path.exists(dst):
+        os.makedirs(dst)
+    for item in os.listdir(src):
+        s = os.path.join(src, item)
+        d = os.path.join(dst, item)
+        if os.path.isdir(s):
+            copytree(s, d, symlinks, ignore)
+        else:
+            if not os.path.exists(d) or os.stat(s).st_mtime - os.stat(d).st_mtime > 1:
+                shutil.copy2(s, d)
+
+def copyLibs():
+	copytree("./libs/", pathExtOutput)
+	
 def assertZero(code, cmd):
 	if code != 0:
 		sys.exit("\033[93mError code " + str(code) + "\033[0m during build on command: " + cmd)
@@ -17,7 +37,7 @@ def writeApplicationMk(path, modules, isCpp11):
 	appFile.write("APP_MODULES := " + modules + "\n")
 	appFile.write("APP_ABI := " + targetAbis + "\n")
 	appFile.write("APP_PLATFORM := " + targetPlatform + "\n")
-	appFile.write("PROJECT_PATH_BASE := " + pathProjBase + "\n")
+	appFile.write("PROJECT_PATH_BASE := " + vcmiconf.pathProjRoot + "\n")
 	appFile.write("include $(PROJECT_PATH_BASE)/build-hardcoded.mk\n")
 	if isCpp11:
 		appFile.write("APP_STL := c++_shared\n")
@@ -33,12 +53,12 @@ def writePrebuiltInclude(name, isStatic):
 	else:
 		prebuiltType = "SHARED"
 		prebuiltName = "lib" + name + ".so"
-	prebuiltInc = open(pathProjBase + "/prebuilt-include/" + name + ".mk", "w")
+	prebuiltInc = open(vcmiconf.pathProjRoot + "/prebuilt-include/" + name + ".mk", "w")
 	prebuiltInc.write("LOCAL_MODULE := " + name + "-prebuilt\n"
 		"ifeq ($(filter $(modules-get-list),$(LOCAL_MODULE)),)\n"
 		"\tLOCAL_SRC_FILES := $(PROJECT_PATH_BASE)/obj/local/$(TARGET_ARCH_ABI)/" + prebuiltName + "\n"
-		"include $(PREBUILT_" + prebuiltType + "_LIBRARY)\n"
-		"include $(CLEAR_VARS)\n"
+		"\tinclude $(PREBUILT_" + prebuiltType + "_LIBRARY)\n"
+		"\tinclude $(CLEAR_VARS)\n"
 		"endif")
 	prebuiltInc.close()
 	
@@ -53,40 +73,56 @@ def callBuild(path, mkSuffix, modulesShared, modulesStatic, isCpp11):
 	buildMkPath = path + "/build" + mkSuffix + ".mk"
 	writeApplicationMk(applicationMkPath, modulesShared + " " + modulesStatic, isCpp11)
 	
-	cmd = "ndk-build NDK_APPLICATION_MK=" + applicationMkPath + " APP_BUILD_SCRIPT=" + buildMkPath + " NDK_PROJECT_PATH=" + pathProjBase
+	cmd = vcmiconf.ndkRoot + "/ndk-build NDK_APPLICATION_MK=" + applicationMkPath + " APP_BUILD_SCRIPT=" + buildMkPath + " NDK_PROJECT_PATH=" + vcmiconf.pathProjRoot
 	assertZero(os.system(cmd), cmd)
 	
 	writePrebuiltIncludes(modulesShared, modulesStatic)
+	copyLibs()
 	
+def fixLibsFiles():
+	vcmiconf.updateProjectProps()
+	import fix_boost_files
+	import fix_sdl_makefiles
+
 def addVersionSuffix():
 	import add_version_suffix
 	add_version_suffix.add()
 
+def buildIconv():
+	callBuild("ext/iconv", "", "iconv", "", False)
+	
 def buildSDL():
-	#callBuild("ext/SDL2/core", "", "SDL2-core", "", False)
-	#callBuild("ext/SDL2/SDL2-mixer-external", "", "smpeg2", "", False)
-	callBuild("ext/SDL2/SDL2-mixer", "", "SDL2-mixer", "", False)
-	callBuild("ext/SDL2/SDL2-image", "", "SDL2-image", "", False)
-	callBuild("ext/SDL2/SDL2-ttf", "", "SDL2-ttf", "", False)
+	callBuild("ext/SDL2/core", "", "SDL2", "", False)
+	callBuild("ext/SDL2/SDL2-mixer", "", "SDL2_mixer", "", False)
+	callBuild("ext/SDL2/SDL2-image", "", "SDL2_image", "", False)
+	callBuild("ext/SDL2/SDL2-ttf", "", "SDL2_ttf", "", False)
+	
+def buildFFMPEG():
+	subprocess.call(["bash", vcmiconf.pathProjRootBash + "/ext/ff/all.sh", vcmiconf.ndkRootBash, pathExtOutputForBash])
+		
+args = len(sys.argv)
+if args != 2:
+	print("run with any of these: all, build, fixpaths")
+	sys.exit(1)
+	
+flagBuild = False
+flagPaths = False
+if sys.argv[1] == "all":
+	flagBuild = True
+	flagPaths = True
+elif sys.argv[1] == "build":
+	flagBuild = True
+elif sys.argv[1] == "fixpaths":
+	flagPaths = True
+else:
+	print("run with any of these: all, build, fixpaths")
+	sys.exit(1)
 
-def buildBoost():
-	#TODO fix boost files here
-	callBuild("ext/boost", "", "boost-shared", "boost-datetime boost-filesystem boost-system boost-smartptr boost-thread boost-locale boost-program-options", True)
+if flagPaths:
+	fixLibsFiles()
+	addVersionSuffix()
 	
-def ffmpegHelper():
-	writePrebuiltIncludes("avcodec avformat avutil swresample swscale", "")
-	
-def buildMain():
-	#callBuild("project/jni/vcmi-app", "-extras", "vcmi-minizip vcmi-fuzzylite", "", True)
-	#callBuild("project/jni/vcmi-app", "-lib", "vcmi-lib", "", True)
-	#callBuild("project/jni/vcmi-app", "-ai", "vcmi-ai-battle vcmi-ai-empty vcmi-ai-stupid vcmi-ai-vcai", "", True)
-	#callBuild("project/jni/vcmi-app", "-server", "vcmi-server", "", True)
-	callBuild("project/jni/vcmi-app", "-client", "vcmi-client", "", True)
-	#callBuild("project/jni/app", "", "vcmi-main", "", True)
-	
-	
-buildSDL()
-#addVersionSuffix()
-#buildBoost()
-#ffmpegHelper()
-#buildMain()
+if flagBuild:
+	buildIconv()
+	buildSDL()
+	buildFFMPEG()

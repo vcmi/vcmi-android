@@ -1,6 +1,6 @@
 #!/bin/bash
-#Change NDK to your Android NDK location
-NDK=/mnt/q/P/Android/android-ndk-r13b-linux
+FFDIR=`dirname $0`
+NDK=$1
 PREBUILT=$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64
 PLATFORM=$NDK/platforms/android-16/arch-arm/
 GENERAL="\
@@ -18,9 +18,7 @@ MODULES="\
 --enable-gpl \
 --enable-libx264"
 
-build_ARMv6()
-{
-cd ./ffmpeg
+cd $FFDIR/ffmpeg
  ./configure \
 --target-os=linux \
 --prefix=./android/armeabi \
@@ -34,9 +32,6 @@ ${GENERAL} \
 ${MODULES} \
 --disable-doc \
 --enable-neon
-make clean
+
 make
 make install
-}
-build_ARMv6
-echo Android ARMEABI builds finished

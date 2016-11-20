@@ -586,10 +586,10 @@ public class SDLActivity extends Activity
     protected static String[] getLibraries()
     {
         return new String[] {
-            "SDL2-core",
-            "SDL2-image",
-            "SDL2-mixer",
-            "SDL2-ttf",
+            "SDL2",
+            "SDL2_image",
+            "SDL2_mixer",
+            "SDL2_ttf",
             "vcmi-fuzzylite",
             "vcmi-client2",
         };

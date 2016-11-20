@@ -1,0 +1,7 @@
+PROJECT_ROOT=q:/Dev/VCMI/vcmi-android
+PROJECT_ROOT_BASH=/mnt/q/Dev/VCMI/vcmi-android
+NDK_ROOT=Q:/P/Android/android-ndk-r13b
+NDK_ROOT_BASH=/mnt/q/P/Android/android-ndk-r13b-linux
+SDK_ROOT=Q:/P/Android/android-sdk
+ABIS=armeabi armeabi-v7a arm64-v8a x86 x86_64
+BOOST_FOLDER_NAME=boost_1_61_0

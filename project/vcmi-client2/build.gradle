@@ -10,7 +10,7 @@ model {
                     }
                     entry[1].each { binEntry ->
                         binaries.withType(SharedLibraryBinary) {
-                            sharedLibraryFile = file("${PROJECT_PATH_BASE}/obj/local/${targetPlatform.getName()}/${binEntry}")
+                            sharedLibraryFile = file("${PROJECT_PATH_BASE}/ext-output/${targetPlatform.getName()}/${binEntry}")
                         }
                     }
                 }
@@ -23,7 +23,7 @@ model {
         buildToolsVersion "25.0.0"
 
         defaultConfig {
-            minSdkVersion.apiLevel 16
+            minSdkVersion.apiLevel VCMI_PLATFORM
             targetSdkVersion.apiLevel 24
         }
     }
@@ -31,7 +31,7 @@ model {
     android.ndk {
         moduleName "vcmi-client2"
         debuggable true
-        platformVersion 16
+        platformVersion VCMI_PLATFORM
         toolchain "clang"
         stl VCMI_STL_VERSION
         cppFlags.addAll("-std=c++11",
@@ -56,10 +56,10 @@ model {
             jni {
                 source {
                     srcDir "../jni/vcmi-app/vcmi-app/client"
-                    srcDir "${VCMI_PATH_SDL}/core/src/main/android"
+                    srcDir "${VCMI_PATH_SDL}/core/code/src/main/android"
                     srcDir "src/main/jni/gradle-hack"
                 }
-                dependencies {
+                dependencies { // sdl
                     library "prebuiltSDL" linkage "shared"
                     library "prebuiltSDLImage" linkage "shared"
                     library "prebuiltSDLMixer" linkage "shared"
@@ -67,25 +67,16 @@ model {
                     library "prebuiltSDLTTF" linkage "shared"
                 }
 
-                dependencies {
+                dependencies { // ffmpeg
                     library "prebuiltFFcodec" linkage "shared"
-                    library "prebuiltFFcodec57" linkage "shared"
                     library "prebuiltFFdevice" linkage "shared"
-                    library "prebuiltFFdevice57" linkage "shared"
                     library "prebuiltFFfilter" linkage "shared"
-                    library "prebuiltFFfilter6" linkage "shared"
                     library "prebuiltFFformat" linkage "shared"
-                    library "prebuiltFFformat57" linkage "shared"
                     library "prebuiltFFutil" linkage "shared"
-                    library "prebuiltFFutil55" linkage "shared"
                     library "prebuiltFFpostproc" linkage "shared"
-                    library "prebuiltFFpostproc54" linkage "shared"
                     library "prebuiltFFswresample" linkage "shared"
-                    library "prebuiltFFswresample2" linkage "shared"
                     library "prebuiltFFswscale" linkage "shared"
-                    library "prebuiltFFswscale4" linkage "shared"
                     library "prebuiltx264" linkage "shared"
-                    library "prebuiltx264148" linkage "shared"
                 }
 
                 dependencies {

@@ -13,7 +13,7 @@ model {
 
     android.ndk {
         moduleName "vcmi-fuzzylite"
-        platformVersion 16
+        platformVersion VCMI_PLATFORM
         toolchain "clang"
         stl VCMI_STL_VERSION
         cppFlags.addAll("-std=c++11",

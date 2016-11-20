@@ -13,7 +13,7 @@ model {
 
     android.ndk {
         moduleName "boost-system"
-        platformVersion 16
+        platformVersion VCMI_PLATFORM
         toolchain "clang"
         stl VCMI_STL_VERSION
         cppFlags.addAll("-std=c++11",
@@ -22,6 +22,7 @@ model {
                 "-I" + file("${VCMI_PATH_BOOST}").absolutePath)
         ldLibs.addAll("atomic")
         abiFilters.addAll(VCMI_ABIS)
+        print(VCMI_ABIS)
     }
 
     android.sources {

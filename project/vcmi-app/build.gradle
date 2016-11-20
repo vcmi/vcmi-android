@@ -8,14 +8,22 @@ model {
             applicationId "eu.vcmi.vcmi"
             minSdkVersion.apiLevel 16
             targetSdkVersion.apiLevel 24
-            versionCode 1
-            versionName "1.0"
+            versionCode APP_VERSION_CODE
+            versionName APP_VERSION
         }
+    }
+
+    android.ndk {
+        abiFilters.addAll(VCMI_ABIS)
     }
 
     android.sources {
         main {
             jniLibs {
+                source {
+                    srcDir "${PROJECT_PATH_BASE}/ext-output"
+                    srcDir "src/main/jniLibs"
+                }
                 dependencies {
 //                    project ":vcmi-ai-battle"
 //                    project ":vcmi-ai-stupid"
