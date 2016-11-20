@@ -83,6 +83,7 @@ def fixLibsFiles():
 	vcmiconf.updateProjectProps()
 	import fix_boost_files
 	import fix_sdl_makefiles
+	import fix_ffmpeg_confs
 
 def addVersionSuffix():
 	import add_version_suffix

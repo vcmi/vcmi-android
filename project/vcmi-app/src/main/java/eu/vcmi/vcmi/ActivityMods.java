@@ -9,7 +9,6 @@ import android.view.MenuItem;
 /**
  * @author F
  */
-
 public class ActivityMods extends AppCompatActivity
 {
     private static final String REPO_URL = "http://download.vcmi.eu/mods/repository/repository.json";

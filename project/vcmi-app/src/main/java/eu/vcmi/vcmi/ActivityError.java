@@ -10,7 +10,6 @@ import android.widget.TextView;
 /**
  * @author F
  */
-
 public class ActivityError extends AppCompatActivity
 {
     public static final String ARG_ERROR_MSG = "ActivityError.msg";
