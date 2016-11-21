@@ -49,6 +49,16 @@ public class NativeMethods
         return root;
     }
 
+    // this path is visible only to this application; we can store base vcmi configs etc. there
+    @SuppressWarnings(Const.JNI_METHOD_SUPPRESS)
+    public static String internalDataRoot()
+    {
+        Context ctx = requireContext();
+        String root = new File(ctx.getFilesDir(), Const.VCMI_DATA_ROOT_FOLDER_NAME).getAbsolutePath();
+        Log.i("VCMI", "Accessing internal data root: " + root);
+        return root;
+    }
+
     @SuppressWarnings(Const.JNI_METHOD_SUPPRESS)
     public static String nativePath()
     {

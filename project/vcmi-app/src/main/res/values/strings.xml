@@ -15,8 +15,8 @@
     <string name="launcher_version">Current launcher version: %1$s</string>
     <string name="launcher_error_vcmi_data_root_created">VCMI created folder \'%1$s\' (in %2$s). Place your H3 data files there (so that you have a folder %1$s/Data and %1$s/Mp3 etc) and restart the application.</string>
     <string name="launcher_error_vcmi_data_root_failed">Could not create VCMI data folder in %1$s.</string>
-    <string name="launcher_error_h3_data_missing">Could not find data folder \'%1$s\'. Place your H3 data files there (so that you have a folder %1$s/Data and %1$s/Mp3 etc) and restart the application.</string>
-    <string name="launcher_error_vcmi_data_missing">Could not find or init vcmi data (it should be included in apk and unpacked automatically but it currently doesn\'t work, so you need to copy config and mods folders manually from vcmi package to %1$s)</string>
+    <string name="launcher_error_h3_data_missing">Could not find data folder \'%1$s\'. Place your H3 data files there (so that you have a folder %1$s/Data and %2$s/Mp3 etc) and restart the application.</string>
+    <string name="launcher_error_vcmi_data_missing">Could not find or extract vcmi data from app resources</string>
     <string name="launcher_error_permissions">This application needs write permissions to use the content stored in external storage</string>
     <string name="launcher_error_permission_broken">Could not resolve permissions correctly</string>
     <string name="mods_item_author_template">by %1$s</string>

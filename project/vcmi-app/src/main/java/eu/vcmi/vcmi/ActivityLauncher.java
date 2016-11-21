@@ -22,8 +22,13 @@ import org.json.JSONObject;
 import org.libsdl.app.SDLActivity;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import eu.vcmi.vcmi.util.FileUtil;
 import eu.vcmi.vcmi.util.Log;
@@ -264,11 +269,14 @@ public class ActivityLauncher extends AppCompatActivity
     private InitResult handleDataFoldersInitialization()
     {
         final File baseDir = Environment.getExternalStorageDirectory();
+        final File internalDir = getFilesDir();
         final File vcmiDir = new File(baseDir, Const.VCMI_DATA_ROOT_FOLDER_NAME);
+        final File vcmiInternalDir = new File(internalDir, Const.VCMI_DATA_ROOT_FOLDER_NAME);
         Log.i(this, "Using " + vcmiDir.getAbsolutePath() + " as root vcmi dir");
         if (!vcmiDir.exists()) // we don't have root folder == new install (or deleted)
         {
             boolean allCreated = vcmiDir.mkdir();
+            allCreated &= vcmiInternalDir.exists() || vcmiInternalDir.mkdir();
 
             if (allCreated)
             {
@@ -284,16 +292,76 @@ public class ActivityLauncher extends AppCompatActivity
         final File testH3Data = new File(vcmiDir, "Data");
         if (!testH3Data.exists())
         {
-            return new InitResult(false, getString(R.string.launcher_error_h3_data_missing, testH3Data.getAbsolutePath()));
+            return new InitResult(false, getString(R.string.launcher_error_h3_data_missing, testH3Data.getAbsolutePath(), vcmiDir.getAbsolutePath() + "/Mp3"));
         }
 
-        final File testVcmiData = new File(vcmiDir, "Mods/vcmi/mod.json");
-        if (!testVcmiData.exists())
+        final File testVcmiData = new File(vcmiInternalDir, "Mods/vcmi/mod.json");
+        if (!testVcmiData.exists() && !unpackVcmiDataToInternalDir(vcmiInternalDir))
         {
-            return new InitResult(false, getString(R.string.launcher_error_vcmi_data_missing, vcmiDir.getAbsolutePath()));
+            return new InitResult(false, getString(R.string.launcher_error_vcmi_data_missing));
         }
 
         return new InitResult(true, "");
+    }
+
+    private boolean unpackVcmiDataToInternalDir(final File vcmiInternalDir)
+    {
+        try
+        {
+            byte[] buffer = new byte[4096];
+            final ZipInputStream is = new ZipInputStream(getAssets().open("internalData.zip"));
+            ZipEntry zipEntry;
+            while ((zipEntry = is.getNextEntry()) != null)
+            {
+
+                String fileName = zipEntry.getName();
+                File newFile = new File(vcmiInternalDir, fileName);
+
+                System.out.println("Unzipping file: " + newFile.getAbsoluteFile());
+                if (newFile.exists())
+                {
+                    Log.d(this, "Already exists");
+                    continue;
+                }
+                else if (zipEntry.isDirectory())
+                {
+                    Log.d(this, "Creating new dir");
+                    if (!newFile.mkdirs())
+                    {
+                        Log.e(this, "Couldn't create directory " + newFile.getAbsolutePath());
+                        return false;
+                    }
+                    continue;
+                }
+
+                File parentFile = new File(newFile.getParent());
+                if (!parentFile.exists() && !parentFile.mkdirs())
+                {
+                    Log.e(this, "Couldn't create directory " + parentFile.getAbsolutePath());
+                    return false;
+                }
+
+                FileOutputStream fos = new FileOutputStream(newFile, false);
+
+                int currentRead;
+                while ((currentRead = is.read(buffer)) > 0)
+                {
+                    fos.write(buffer, 0, currentRead);
+                }
+
+                fos.flush();
+                fos.close();
+            }
+
+            is.closeEntry();
+            is.close();
+            return true;
+        }
+        catch (Exception e)
+        {
+            Log.e(this, "Couldn't extract vcmi data to internal dir", e);
+            return false;
+        }
     }
 
     public interface IOnDialogEntryChosen<T>
