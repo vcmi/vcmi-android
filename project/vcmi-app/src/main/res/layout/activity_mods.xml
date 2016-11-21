@@ -9,9 +9,29 @@
 
     <include layout="@layout/inc_toolbar" />
 
-    <TextView
-        style="@style/VCMI.Text"
-        android:layout_marginTop="30dp"
-        android:gravity="center"
-        android:text="Currently not available" />
+    <FrameLayout
+        android:id="@+id/mods_data_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/mods_recycler"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/mods_adapter_item" />
+
+        <TextView
+            android:id="@+id/mods_error_text"
+            style="@style/VCMI.Text"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:text="Currently not available" />
+
+        <ProgressBar
+            android:id="@+id/mods_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
 </LinearLayout>
