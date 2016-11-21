@@ -22,7 +22,6 @@ model {
                 "-I" + file("${VCMI_PATH_BOOST}").absolutePath)
         ldLibs.addAll("atomic")
         abiFilters.addAll(VCMI_ABIS)
-        print(VCMI_ABIS)
     }
 
     android.sources {

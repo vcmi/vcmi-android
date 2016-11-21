@@ -20,6 +20,7 @@ ext {
     VCMI_INCL_SDL_TTF = "${VCMI_PATH_SDL}/SDL2-ttf/code"
 
     VCMI_PLATFORM = 21 // can be 16 if building only for armeabi, definitely needs to be 21+ to build arm64 and x86_64
+    // abis are automatically updated from python build script, but it can be edited here if you don't plan to rerun the script
     VCMI_ABIS = ["armeabi", "arm64-v8a"]
 
     VCMI_STL_VERSION = "c++_shared"
@@ -32,22 +33,13 @@ ext {
             ["prebuiltSDLTTF", ["libSDL2_ttf.so"], "${VCMI_INCL_SDL_TTF}"],
             ["prebuiltIconv", ["libiconv.so"], "${VCMI_INCL_ICONV}"],
             ["prebuiltFFcodec", ["libavcodec.so"], "${VCMI_INCL_FFMPEG}"],
-//            ["prebuiltFFcodec57", ["libavcodec-57.so"], ""],
             ["prebuiltFFdevice", ["libavdevice.so"], ""],
-//            ["prebuiltFFdevice57", ["libavdevice-57.so"], ""],
             ["prebuiltFFfilter", ["libavfilter.so"], ""],
-//            ["prebuiltFFfilter6", ["libavfilter-6.so"], ""],
             ["prebuiltFFformat", ["libavformat.so"], ""],
-//            ["prebuiltFFformat57", ["libavformat-57.so"], ""],
             ["prebuiltFFutil", ["libavutil.so"], ""],
-//            ["prebuiltFFutil55", ["libavutil-55.so"], ""],
             ["prebuiltFFpostproc", ["libpostproc.so"], ""],
-//            ["prebuiltFFpostproc54", ["libpostproc-54.so"], ""],
             ["prebuiltFFswresample", ["libswresample.so"], ""],
-//            ["prebuiltFFswresample2", ["libswresample-2.so"], ""],
             ["prebuiltFFswscale", ["libswscale.so"], ""],
-//            ["prebuiltFFswscale4", ["libswscale-4.so"], ""],
             ["prebuiltx264", ["libx264.so"], ""]
-//            ["prebuiltx264148", ["libx264-148.so"], ""]
     ]
 }

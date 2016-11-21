@@ -49,4 +49,9 @@ public class Log
     {
         log(android.util.Log.ERROR, obj, msg);
     }
+
+    public static void e(final Object obj, final String msg, final Throwable e)
+    {
+        log(android.util.Log.ERROR, obj, msg + "\n" + android.util.Log.getStackTraceString(e));
+    }
 }

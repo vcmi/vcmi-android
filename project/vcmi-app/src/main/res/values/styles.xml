@@ -8,6 +8,7 @@
         <item name="colorControlHighlight">@color/accent</item>
 
         <item name="android:textViewStyle">@style/VCMI.Text</item>
+        <item name="android:listDivider">@drawable/recycler_divider_drawable</item>
     </style>
 
     <style name="Theme.VCMI.Full">
@@ -43,5 +44,19 @@
     <style name="VCMI.Text.LauncherEntry.Sub">
         <item name="android:textColor">@color/textSecondary</item>
         <item name="android:textSize">@dimen/font_normal</item>
+    </style>
+
+    <style name="VCMI.Text.ModName">
+        <item name="android:textSize">@dimen/font_big</item>
+    </style>
+
+    <style name="VCMI.Text.ModAuthor" />
+
+    <style name="VCMI.Text.ModSize">
+        <item name="android:textColor">@color/textSecondary</item>
+    </style>
+
+    <style name="VCMI.Text.ModType">
+        <item name="android:textColor">@color/textSecondary</item>
     </style>
 </resources>

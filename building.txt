@@ -22,3 +22,5 @@ else
 }
 
 * start android studio project (in ./project) and try to build it
+	* if boost locale breaks on x64 abis (with iconv errors), you might need to remove/rename this ndk header file: ndk/sources/android/support/include/iconv.h
+	  (looks like android built-in iconv is broken for x64, but still, this is a hack, so it may break some other things ndk)
