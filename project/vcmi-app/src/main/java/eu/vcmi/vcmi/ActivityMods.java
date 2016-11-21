@@ -77,6 +77,7 @@ public class ActivityMods extends AppCompatActivity
 
     private void loadLocalModData() throws IOException, JSONException
     {
+        // TODO needs to check both external and internal locations
         final String dataRoot = Environment.getExternalStorageDirectory() + "/" + Const.VCMI_DATA_ROOT_FOLDER_NAME;
         final String configPath = dataRoot + "/config/modSettings.json";
         final File modConfigFile = new File(configPath);
