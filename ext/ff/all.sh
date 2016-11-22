@@ -57,3 +57,9 @@ copy_output arm64-v8a aarch64
 copy_output x86 i686
 copy_output x86_64 x86_64
 
+mkdir -p $FFDIR/include
+cp -r $FFDIR/ffmpeg/android/armeabi/include/* $FFDIR/include/
+assert_zero $? "Copied FFMPEG includes" "Could not copy FFMPEG includes"
+cp -r $FFDIR/x264/android/arm/include/* $FFDIR/include/
+assert_zero $? "Copied x264 includes" "Could not copy x264 includes"
+

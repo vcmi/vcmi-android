@@ -26,7 +26,7 @@ model {
         main {
             jni {
                 source {
-                    srcDir "../jni/vcmi-app/vcmi-app/lib/minizip"
+                    srcDir "${VCMI_PATH_VCMI}/lib/minizip"
                     exclude "iowin32.c"
                     exclude "mztools.c"
                     exclude "miniunz.c"

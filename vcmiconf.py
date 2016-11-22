@@ -29,7 +29,8 @@ def updateProjectProps():
 	replacements = [ fix.TmpReplacement("PROJECT_PATH_BASE", "PROJECT_PATH_BASE = " + pathProjRoot) ]	
 	fix.fixFile("./project/gradle.properties", replacements, False)
 	
-	replacements = [ fix.TmpReplacement("VCMI_ABIS", "\tVCMI_ABIS = " + buildAbisGradleArray()) ]	
+	replacements = [ fix.TmpReplacement("VCMI_ABIS", "\tVCMI_ABIS = " + buildAbisGradleArray()),
+		fix.TmpReplacement("VCMI_PATH_BOOST", "\tVCMI_PATH_BOOST = \"${VCMI_PATH_EXT}/boost/" + boostFolder + "\"")	]
 	fix.fixFile("./project/defs.gradle", replacements, False)
 	
 	replacements = [ fix.TmpReplacement("boostFolder = ", "boostFolder = \"" + boostFolder + "\"") ]	

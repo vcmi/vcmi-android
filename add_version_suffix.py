@@ -1,3 +1,4 @@
+import os
 import re
 
 def add():
@@ -13,13 +14,16 @@ def add():
 			break
 	launcherPropsFile.close()
 	
-	basePathIn = "./project/jni/vcmi-app/vcmi-app/Version.cpp.in"
-	basePathOut = "./project/jni/vcmi-app/generated-version-dir/Version.cpp"
+	basePathIn = "./ext/vcmi/Version.cpp.in"
+	baseDirOut = "./project/vcmi-lib/src/main/jni/generated-version-dir/"
+	basePathOut = baseDirOut + "Version.cpp"
 	inFile = open(basePathIn, "r")
 	versionFileContent = inFile.read()
 	inFile.close()
 
 	replacedVersion = versionFileContent.replace("@GIT_SHA1@", version)
+	if os.path.exists(baseDirOut) == False:
+		os.makedirs(baseDirOut)
 	outFile = open(basePathOut, "w")
 	outFile.write(replacedVersion)
 	outFile.close()
