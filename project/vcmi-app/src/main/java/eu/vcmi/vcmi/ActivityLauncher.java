@@ -22,10 +22,8 @@ import org.json.JSONObject;
 import org.libsdl.app.SDLActivity;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -76,12 +74,13 @@ public class ActivityLauncher extends AppCompatActivity
         public void onDialogEntryChosen(final String codepage)
         {
             Log.i(this, "Changed codepage; saving config to file");
-            if (mConfig != null)
+            if (mConfig == null)
             {
-                mConfig.mCodepage = codepage;
-                mConfig.save(new File(configFileLocation()));
-                onConfigUpdated();
+                mConfig = new Config();
             }
+            mConfig.mCodepage = codepage;
+            mConfig.save(new File(configFileLocation()));
+            onConfigUpdated();
         }
     };
     private IOnDialogEntryChosen<ScreenRes> mScreenResChangedListener = new IOnDialogEntryChosen<ScreenRes>()
@@ -90,13 +89,14 @@ public class ActivityLauncher extends AppCompatActivity
         public void onDialogEntryChosen(final ScreenRes res)
         {
             Log.i(this, "Changed screen res; saving config to file");
-            if (mConfig != null)
+            if (mConfig == null)
             {
-                mConfig.mResolutionWidth = res.mWidth;
-                mConfig.mResolutionHeight = res.mHeight;
-                mConfig.save(new File(configFileLocation()));
-                onConfigUpdated();
+                mConfig = new Config();
             }
+            mConfig.mResolutionWidth = res.mWidth;
+            mConfig.mResolutionHeight = res.mHeight;
+            mConfig.save(new File(configFileLocation()));
+            onConfigUpdated();
         }
     };
 
@@ -121,6 +121,7 @@ public class ActivityLauncher extends AppCompatActivity
 
         ((TextView) findViewById(R.id.launcher_version_info)).setText(getString(R.string.launcher_version, BuildConfig.VERSION_NAME));
 
+        // TODO reference vcmi version dynamically instead of hardcoding (or obtain it on build time)
         mBtnStart = initLauncherBtn(R.id.launcher_btn_start, new OnLauncherStartPressed(), getString(R.string.launcher_btn_start_title),
             getString(R.string.launcher_btn_start_subtitle));
         mBtnRes = initLauncherBtn(R.id.launcher_btn_res, new OnLauncherResPressed(), getString(R.string.launcher_btn_res_title),
@@ -193,7 +194,7 @@ public class ActivityLauncher extends AppCompatActivity
 
     private void onConfigUpdated()
     {
-        updateLauncherSubtitle(mBtnCodepage, mConfig.mCodepage == null
+        updateLauncherSubtitle(mBtnCodepage, mConfig.mCodepage == null || mConfig.mCodepage.isEmpty()
                                              ? getString(R.string.launcher_btn_cp_subtitle_unknown)
                                              : getString(R.string.launcher_btn_cp_subtitle, mConfig.mCodepage));
         updateLauncherSubtitle(mBtnRes, mConfig.mResolutionWidth <= 0 || mConfig.mResolutionHeight <= 0
@@ -292,7 +293,8 @@ public class ActivityLauncher extends AppCompatActivity
         final File testH3Data = new File(vcmiDir, "Data");
         if (!testH3Data.exists())
         {
-            return new InitResult(false, getString(R.string.launcher_error_h3_data_missing, testH3Data.getAbsolutePath(), vcmiDir.getAbsolutePath() + "/Mp3"));
+            return new InitResult(false,
+                getString(R.string.launcher_error_h3_data_missing, testH3Data.getAbsolutePath(), vcmiDir.getAbsolutePath() + "/Mp3"));
         }
 
         final File testVcmiData = new File(vcmiInternalDir, "Mods/vcmi/mod.json");
