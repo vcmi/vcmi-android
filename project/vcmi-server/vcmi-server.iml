@@ -14,8 +14,8 @@
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../jni/vcmi-app/vcmi-app/server">
-      <sourceFolder url="file://$MODULE_DIR$/../jni/vcmi-app/vcmi-app/server" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/server">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/server" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/debug/jni" isTestSource="false" />

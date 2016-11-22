@@ -14,19 +14,17 @@
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../jni/vcmi-app/generated-version-dir">
-      <sourceFolder url="file://$MODULE_DIR$/../jni/vcmi-app/generated-version-dir" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/BattleAI">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/BattleAI" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../jni/vcmi-app/vcmi-app/AI/BattleAI">
-      <sourceFolder url="file://$MODULE_DIR$/../jni/vcmi-app/vcmi-app/AI/BattleAI" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/VCAI">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/VCAI" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../jni/vcmi-app/vcmi-app/AI/VCAI">
-      <sourceFolder url="file://$MODULE_DIR$/../jni/vcmi-app/vcmi-app/AI/VCAI" isTestSource="false" />
-    </content>
-    <content url="file://$MODULE_DIR$/../jni/vcmi-app/vcmi-app/lib">
-      <sourceFolder url="file://$MODULE_DIR$/../jni/vcmi-app/vcmi-app/lib" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/lib">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/lib" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/jni/generated-version-dir" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/jni" isTestSource="false" />
     </content>

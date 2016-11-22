@@ -23,7 +23,10 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -77,8 +80,8 @@ public class ActivityMods extends AppCompatActivity
 
     private void loadLocalModData() throws IOException, JSONException
     {
-        // TODO needs to check both external and internal locations
         final String dataRoot = Environment.getExternalStorageDirectory() + "/" + Const.VCMI_DATA_ROOT_FOLDER_NAME;
+        final String internalDataRoot = getFilesDir() + "/" + Const.VCMI_DATA_ROOT_FOLDER_NAME;
         final String configPath = dataRoot + "/config/modSettings.json";
         final File modConfigFile = new File(configPath);
         if (!modConfigFile.exists())
@@ -98,17 +101,27 @@ public class ActivityMods extends AppCompatActivity
             localMods.put(name, VCMIMod.buildFromConfigJson(name, activeMods.getJSONObject(name)));
         }
 
-        final String modsBasePath = dataRoot + "/Mods";
-        final File modsRoot = new File(modsBasePath);
-        if (!modsRoot.exists())
+        final File modsRoot = new File(dataRoot + "/Mods");
+        final File internalModsRoot = new File(internalDataRoot + "/Mods");
+        if (!modsRoot.exists() && !internalModsRoot.exists())
         {
-            Log.w(this, "We don't have mods folder");
+            Log.w(this, "We don't have mods folders");
             handleNoData();
             return;
         }
-        File[] mods = modsRoot.listFiles();
+        final List<File> topLevelModsFolders = new ArrayList<>();
+        final File[] modsFiles = modsRoot.listFiles();
+        final File[] internalModsFiles = internalModsRoot.listFiles();
+        if (modsFiles != null && modsFiles.length > 0)
+        {
+            Collections.addAll(topLevelModsFolders, modsFiles);
+        }
+        if (internalModsFiles != null && internalModsFiles.length > 0)
+        {
+            Collections.addAll(topLevelModsFolders, internalModsFiles);
+        }
         Log.i(this, "Loaded mods: " + localMods);
-        mModContainer = VCMIMod.createContainer(localMods, mods);
+        mModContainer = VCMIMod.createContainer(localMods, topLevelModsFolders);
     }
 
     @Override

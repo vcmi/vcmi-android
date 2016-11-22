@@ -58,13 +58,13 @@ model {
         main {
             jni {
                 source {
-                    srcDir "../jni/vcmi-app/generated-version-dir"
-                    srcDir "../jni/vcmi-app/vcmi-app/lib"
+                    srcDir "src/main/jni/generated-version-dir"
+                    srcDir "${VCMI_PATH_VCMI}/lib"
                     excludes.add("**/minizip/*")
 
                     // currently all AI libraries are built together with lib, because using dlopen/dlsym from shared libraries breaks rtti in them
-                    srcDir "../jni/vcmi-app/vcmi-app/AI/BattleAI"
-                    srcDir "../jni/vcmi-app/vcmi-app/AI/VCAI"
+                    srcDir "${VCMI_PATH_VCMI}/AI/BattleAI"
+                    srcDir "${VCMI_PATH_VCMI}/AI/VCAI"
                     excludes.add("**/main.cpp")
                 }
                 dependencies {

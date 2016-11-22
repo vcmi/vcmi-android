@@ -55,7 +55,7 @@ model {
         main {
             jni {
                 source {
-                    srcDir "../jni/vcmi-app/vcmi-app/client"
+                    srcDir "${VCMI_PATH_VCMI}/client"
                     srcDir "${VCMI_PATH_SDL}/core/code/src/main/android"
                     srcDir "src/main/jni/gradle-hack"
                 }

@@ -6,14 +6,14 @@ ext {
     VCMI_PATH_SDL = "${VCMI_PATH_EXT}/SDL2"
     VCMI_PATH_FFMPEG = "${PROJECT_PATH_BASE}/ext/ff/ffmpeg"
     VCMI_PATH_BOOST = "${VCMI_PATH_EXT}/boost/boost_1_61_0"
-    VCMI_PATH_VCMI = "${VCMI_PATH_MAIN}/jni/vcmi-app/vcmi-app"
+    VCMI_PATH_VCMI = "${VCMI_PATH_EXT}/vcmi"
     VCMI_PATH_FUZZYLITE = "${VCMI_PATH_VCMI}/AI/FuzzyLite/fuzzylite"
 
     VCMI_INCL_VCMI = "${VCMI_PATH_VCMI} ${VCMI_PATH_VCMI}/include"
     VCMI_INCL_FUZZYLITE = "${VCMI_PATH_FUZZYLITE}"
     VCMI_INCL_BOOST = "${VCMI_PATH_BOOST}"
     VCMI_INCL_ICONV = "${VCMI_PATH_EXT}/iconv/code/include"
-    VCMI_INCL_FFMPEG = "${VCMI_PATH_FFMPEG}/android/armeabi/include" // maybe it should depend on ABI, but currently headers all the same for each ABI
+    VCMI_INCL_FFMPEG = "${VCMI_PATH_EXT}/ff/include"
     VCMI_INCL_SDL = "${VCMI_PATH_SDL}/core/code/include"
     VCMI_INCL_SDL_IMAGE = "${VCMI_PATH_SDL}/SDL2-image/code"
     VCMI_INCL_SDL_MIXER = "${VCMI_PATH_SDL}/SDL2-mixer/code"

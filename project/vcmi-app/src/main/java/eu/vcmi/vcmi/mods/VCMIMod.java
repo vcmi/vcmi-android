@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -74,7 +75,7 @@ public class VCMIMod
         return mod;
     }
 
-    public static VCMIMod createContainer(final Map<String, VCMIMod> localMods, final File[] modsList) throws IOException, JSONException
+    public static VCMIMod createContainer(final Map<String, VCMIMod> localMods, final List<File> modsList) throws IOException, JSONException
     {
         final VCMIMod mod = new VCMIMod();
         loadSubmods(localMods, modsList);
@@ -82,7 +83,7 @@ public class VCMIMod
         return mod;
     }
 
-    private static void loadSubmods(final Map<String, VCMIMod> localMods, final File[] modsList) throws IOException, JSONException
+    private static void loadSubmods(final Map<String, VCMIMod> localMods, final List<File> modsList) throws IOException, JSONException
     {
         for (final File f : modsList)
         {
@@ -122,7 +123,9 @@ public class VCMIMod
         File submodsDir = new File(modPath, "Mods");
         if (submodsDir.exists())
         {
-            loadSubmods(mSubmods, submodsDir.listFiles());
+            final List<File> submodsFiles = new ArrayList<>();
+            Collections.addAll(submodsFiles, submodsDir.listFiles());
+            loadSubmods(mSubmods, submodsFiles);
         }
         return true;
     }
