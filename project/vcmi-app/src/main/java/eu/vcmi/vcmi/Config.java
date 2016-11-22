@@ -24,7 +24,7 @@ public class Config
         JSONObject general = obj.optJSONObject("general");
         if (general != null)
         {
-            config.mCodepage = general.optString("codepage");
+            config.mCodepage = general.optString("encoding");
         }
         JSONObject video = obj.optJSONObject("video");
         if (video != null)
@@ -63,7 +63,7 @@ public class Config
         JSONObject screenRes = new JSONObject();
         if (mCodepage != null)
         {
-            general.put("codepage", mCodepage);
+            general.put("encoding", mCodepage);
         }
         if (mResolutionHeight > 0 && mResolutionWidth > 0)
         {
