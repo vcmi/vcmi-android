@@ -2,11 +2,13 @@ package eu.vcmi.vcmi;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 
+import eu.vcmi.vcmi.util.LibsLoader;
 import eu.vcmi.vcmi.util.Log;
 
 /**
@@ -29,7 +31,7 @@ public class ServerService extends Service
     public int onStartCommand(Intent intent, int flags, int startId)
     {
         NativeMethods.setupCtx(ServerService.this);
-        System.loadLibrary("vcmi-server");
+        LibsLoader.loadServerLibs();
         if (INTENT_ACTION_KILL_SERVER.equals(intent.getAction()))
         {
             stopSelf();

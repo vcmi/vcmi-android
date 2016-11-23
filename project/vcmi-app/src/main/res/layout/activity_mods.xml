@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clipChildren="false"
-    android:clipToPadding="false"
-    android:orientation="vertical">
-
-    <include layout="@layout/inc_toolbar" />
+    android:clipToPadding="false">
 
     <FrameLayout
         android:id="@+id/mods_data_root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar_include">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/mods_recycler"
@@ -25,8 +23,7 @@
             android:id="@+id/mods_error_text"
             style="@style/VCMI.Text"
             android:layout_marginTop="30dp"
-            android:gravity="center"
-            android:text="Currently not available" />
+            android:gravity="center" />
 
         <ProgressBar
             android:id="@+id/mods_progress"
@@ -34,4 +31,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
     </FrameLayout>
-</LinearLayout>
+
+    <include
+        android:id="@+id/toolbar_include"
+        layout="@layout/inc_toolbar" />
+</RelativeLayout>

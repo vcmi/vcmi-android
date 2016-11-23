@@ -2,6 +2,7 @@ import os
 import shutil
 import sys
 import subprocess
+import fix_files_common
 
 #os.environ["PATH"] = os.environ["PATH"] + ";Q:/P/Android/android-ndk-r13b;Q:/P/Android/android-sdk/platform-tools"
 #os.environ["JAVA_HOME"] = "Q:/p/java/8"
@@ -13,20 +14,8 @@ pathExtOutputForBash = vcmiconf.pathProjRootBash + "/ext-output/"
 targetAbis = "armeabi armeabi-v7a arm64-v8a x86 x86_64"
 targetPlatform = "android-16"
 
-def copytree(src, dst, symlinks=False, ignore=None):
-    if not os.path.exists(dst):
-        os.makedirs(dst)
-    for item in os.listdir(src):
-        s = os.path.join(src, item)
-        d = os.path.join(dst, item)
-        if os.path.isdir(s):
-            copytree(s, d, symlinks, ignore)
-        else:
-            if not os.path.exists(d) or os.stat(s).st_mtime - os.stat(d).st_mtime > 1:
-                shutil.copy2(s, d)
-
 def copyLibs():
-	copytree("./libs/", pathExtOutput)
+	fix_files_common.copytree("./libs/", pathExtOutput)
 	
 def assertZero(code, cmd):
 	if code != 0:
@@ -97,6 +86,9 @@ def buildSDL():
 	callBuild("ext/SDL2/SDL2-mixer", "", "SDL2_mixer", "", False)
 	callBuild("ext/SDL2/SDL2-image", "", "SDL2_image", "", False)
 	callBuild("ext/SDL2/SDL2-ttf", "", "SDL2_ttf", "", False)
+	import move_sdl_includes
+	move_sdl_includes.moveSDLIncludes()
+	move_sdl_includes.overwriteMainSDLFile()
 	
 def buildFFMPEG():
 	subprocess.call(["bash", vcmiconf.pathProjRootBash + "/ext/ff/all.sh", vcmiconf.ndkRootBash, pathExtOutputForBash])

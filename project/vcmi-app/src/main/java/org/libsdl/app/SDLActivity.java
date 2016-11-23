@@ -64,6 +64,7 @@ import java.util.List;
 
 import eu.vcmi.vcmi.NativeMethods;
 import eu.vcmi.vcmi.ServerService;
+import eu.vcmi.vcmi.util.LibsLoader;
 
 /**
  * SDL Activity
@@ -101,6 +102,7 @@ public class SDLActivity extends Activity
     // Audio
     protected static AudioTrack mAudioTrack;
     protected static AudioRecord mAudioRecord;
+
     /**
      * Result of current messagebox. Also used for blocking the calling thread.
      */
@@ -576,36 +578,6 @@ public class SDLActivity extends Activity
         );
     }
 
-    /**
-     * This method is called by SDL before loading the native shared libraries. It can be overridden to provide names of shared libraries to be
-     * loaded. The default implementation returns the defaults. It never returns null. An array returned by a new implementation must at least contain
-     * "SDL2". Also keep in mind that the order the libraries are loaded may matter.
-     *
-     * @return names of shared libraries to be loaded (e.g. "SDL2", "main").
-     */
-    protected static String[] getLibraries()
-    {
-        return new String[] {
-            "SDL2",
-            "SDL2_image",
-            "SDL2_mixer",
-            "SDL2_ttf",
-            "vcmi-fuzzylite",
-            "vcmi-client2",
-        };
-    }
-
-    // Audio
-
-    // Load the .so
-    public void loadLibraries()
-    {
-        for (String lib : getLibraries())
-        {
-            Log.v(TAG, "Loading native lib: " + lib);
-            System.loadLibrary(lib);
-        }
-    }
 
     /**
      * This method is called by SDL before starting the native application thread. It can be overridden to provide the arguments after the application
@@ -637,17 +609,17 @@ public class SDLActivity extends Activity
         String errorMsgBrokenLib = "";
         try
         {
-            loadLibraries();
+            LibsLoader.loadClientLibs();
         }
         catch (UnsatisfiedLinkError e)
         {
-            System.err.println(e.getMessage());
+            Log.e("VCMI", "Broken", e);
             mBrokenLibraries = true;
             errorMsgBrokenLib = e.getMessage();
         }
         catch (Exception e)
         {
-            System.err.println(e.getMessage());
+            Log.e("VCMI", "Broken", e);
             mBrokenLibraries = true;
             errorMsgBrokenLib = e.getMessage();
         }
@@ -677,7 +649,6 @@ public class SDLActivity extends Activity
         }
 
         NativeMethods.initClassloader();
-//        initService();
 
         // Set up the surface
         mSurface = new SDLSurface(getApplication());
@@ -1363,10 +1334,8 @@ class SDLMain implements Runnable
     @Override
     public void run()
     {
-        // Runs SDL_main()
         SDLActivity.nativeInit(SDLActivity.mSingleton.getArguments());
-
-        //Log.v("SDL", "SDL thread terminated");
+        NativeMethods.initClassloader();
     }
 }
 
