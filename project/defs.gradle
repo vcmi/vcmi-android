@@ -19,10 +19,12 @@ ext {
     VCMI_INCL_SDL_MIXER = "${VCMI_PATH_SDL}/SDL2-mixer/include"
     VCMI_INCL_SDL_TTF = "${VCMI_PATH_SDL}/SDL2-ttf/include"
 
-    VCMI_PLATFORM = 16 // can be 16 if building only for armeabi, definitely needs to be 21+ to build arm64 and x86_64
-    VCMI_COMPILE_SDK = 16 // can be 16 if building only for armeabi, definitely needs to be 21+ to build arm64 and x86_64
+    // can be 16 if building only for armeabi, definitely needs to be 21+ to build arm64 and x86_64
+    VCMI_PLATFORM = 21
+    // we should be able to use the newest version to compile, but it seems that gradle-experimental is somehow broken and doesn't compile native libs correctly for apis older than this setting...
+    VCMI_COMPILE_SDK = 21
     // abis are automatically updated from python build script, but it can be edited here if you don't plan to rerun the script
-    VCMI_ABIS = ["armeabi-v7a"]
+    VCMI_ABIS = ["armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"]
 
     VCMI_STL_VERSION = "c++_shared"
 
