@@ -11,8 +11,8 @@ GENERAL="\
 --cc=$PREBUILT/bin/arm-linux-androideabi-gcc \
 --cross-prefix=$PREBUILT/bin/arm-linux-androideabi- \
 --nm=$PREBUILT/bin/arm-linux-androideabi-nm \
---extra-cflags="-I../x264/android/arm/include" \
---extra-ldflags="-L../x264/android/arm/lib" "
+--extra-cflags="-I$FFDIR/x264/android/arm/include" \
+--extra-ldflags="-L$FFDIR/x264/android/arm/lib" "
 
 MODULES="\
 --enable-gpl \

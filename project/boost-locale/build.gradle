@@ -19,7 +19,7 @@ model {
     }
 
     android {
-        compileSdkVersion 24
+        compileSdkVersion VCMI_COMPILE_SDK
         buildToolsVersion "25.0.0"
 
         defaultConfig {

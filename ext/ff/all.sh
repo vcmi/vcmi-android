@@ -6,6 +6,8 @@ OUTPUT_DIR=$2
 cleanup()
 {
 	cd $FFDIR/ffmpeg
+	make distclean
+	make clean all
 	make clean
 	rm -f $FFDIR/ffmpeg/compat/strtod.o #clean leaves this file behind, breaking the rebuilds; lets remove it manually
 	rm -f $FFDIR/ffmpeg/compat/strtod.d
