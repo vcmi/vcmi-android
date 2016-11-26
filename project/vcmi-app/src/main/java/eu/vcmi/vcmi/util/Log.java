@@ -1,18 +1,64 @@
 package eu.vcmi.vcmi.util;
 
+import android.os.Environment;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import eu.vcmi.vcmi.Const;
+
 /**
  * @author F
  */
 
 public class Log
 {
-    private static final boolean LOGGING_ENABLED = true;
+    private static final boolean LOGGING_ENABLED_CONSOLE = true;
+    private static final boolean LOGGING_ENABLED_FILE = true;
+    private static final String FILELOG_PATH = "/" + Const.VCMI_DATA_ROOT_FOLDER_NAME + "/cache/VCMI_launcher.log";
 
     private static void log(final int priority, final Object obj, final String msg)
     {
-        if (LOGGING_ENABLED)
+        final String tagString = tag(obj);
+        if (LOGGING_ENABLED_CONSOLE)
         {
-            android.util.Log.println(priority, tag(obj), msg);
+            android.util.Log.println(priority, tagString, msg);
+        }
+        if (LOGGING_ENABLED_FILE) // this is probably very inefficient, but should be enough for now...
+        {
+            try
+            {
+                final BufferedWriter fileWriter = new BufferedWriter(new FileWriter(Environment.getExternalStorageDirectory() + FILELOG_PATH, true));
+                fileWriter.write(String.format("[%s] %s: %s\n", formatPriority(priority), tagString, msg));
+                fileWriter.flush();
+                fileWriter.close();
+            }
+            catch (IOException ignored)
+            {
+            }
+        }
+    }
+
+    private static String formatPriority(final int priority)
+    {
+        switch (priority)
+        {
+            default:
+                return "?";
+            case android.util.Log.VERBOSE:
+                return "V";
+            case android.util.Log.DEBUG:
+                return "D";
+            case android.util.Log.INFO:
+                return "I";
+            case android.util.Log.WARN:
+                return "W";
+            case android.util.Log.ERROR:
+                return "E";
         }
     }
 
@@ -23,6 +69,23 @@ public class Log
             return "null";
         }
         return obj.getClass().getSimpleName();
+    }
+
+    public static void init()
+    {
+        if (LOGGING_ENABLED_FILE) // clear previous log
+        {
+            try
+            {
+                final BufferedWriter fileWriter = new BufferedWriter(new FileWriter(Environment.getExternalStorageDirectory() + FILELOG_PATH, false));
+                fileWriter.write("Starting VCMI launcher log, " + DateFormat.getDateTimeInstance().format(new Date()) + "\n");
+                fileWriter.flush();
+                fileWriter.close();
+            }
+            catch (IOException ignored)
+            {
+            }
+        }
     }
 
     public static void v(final Object obj, final String msg)

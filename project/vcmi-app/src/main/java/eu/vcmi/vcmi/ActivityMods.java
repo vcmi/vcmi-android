@@ -87,7 +87,6 @@ public class ActivityMods extends AppCompatActivity
         if (!modConfigFile.exists())
         {
             Log.w(this, "We don't have mods config");
-            handleNoData();
             return;
         }
 
@@ -106,7 +105,6 @@ public class ActivityMods extends AppCompatActivity
         if (!modsRoot.exists() && !internalModsRoot.exists())
         {
             Log.w(this, "We don't have mods folders");
-            handleNoData();
             return;
         }
         final List<File> topLevelModsFolders = new ArrayList<>();
