@@ -109,6 +109,7 @@ public class ActivityLauncher extends AppCompatActivity
     public void onCreate(final Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        Log.init();
         Log.i(this, "Starting launcher");
         setContentView(R.layout.activity_launcher);
 
@@ -310,6 +311,7 @@ public class ActivityLauncher extends AppCompatActivity
     {
         try
         {
+            int unpackedEntries = 0;
             byte[] buffer = new byte[4096];
             final ZipInputStream is = new ZipInputStream(getAssets().open("internalData.zip"));
             ZipEntry zipEntry;
@@ -319,7 +321,6 @@ public class ActivityLauncher extends AppCompatActivity
                 String fileName = zipEntry.getName();
                 File newFile = new File(vcmiInternalDir, fileName);
 
-                System.out.println("Unzipping file: " + newFile.getAbsoluteFile());
                 if (newFile.exists())
                 {
                     Log.d(this, "Already exists");
@@ -353,7 +354,9 @@ public class ActivityLauncher extends AppCompatActivity
 
                 fos.flush();
                 fos.close();
+                ++unpackedEntries;
             }
+            Log.d(this, "Unpacked data (" + unpackedEntries + "entries)");
 
             is.closeEntry();
             is.close();
