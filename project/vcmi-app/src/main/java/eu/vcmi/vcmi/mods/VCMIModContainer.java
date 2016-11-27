@@ -38,12 +38,6 @@ public class VCMIModContainer extends VCMIMod
         {
             mCoreStatus = VCMIMod.buildFromConfigJson("core", coreStatus);
         }
-        else
-        {
-            mCoreStatus = new VCMIMod();
-            mCoreStatus.mId = "core";
-            mCoreStatus.mActive = true;
-        }
     }
 
     @Override
@@ -76,9 +70,20 @@ public class VCMIModContainer extends VCMIMod
         root.put("activeMods", activeMods);
         submodsToJson(activeMods);
 
-        mCoreStatus.toJsonInternal(coreStatus);
+        coreStatusToJson(coreStatus);
         root.put("core", coreStatus);
 
         return root.toString();
+    }
+
+    private void coreStatusToJson(final JSONObject coreStatus) throws JSONException
+    {
+        if (mCoreStatus == null)
+        {
+            mCoreStatus = new VCMIMod();
+            mCoreStatus.mId = "core";
+            mCoreStatus.mActive = true;
+        }
+        mCoreStatus.toJsonInternal(coreStatus);
     }
 }

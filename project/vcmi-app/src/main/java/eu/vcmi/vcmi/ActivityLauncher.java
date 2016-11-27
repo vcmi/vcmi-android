@@ -34,7 +34,7 @@ import eu.vcmi.vcmi.util.Log;
 /**
  * @author F
  */
-public class ActivityLauncher extends AppCompatActivity
+public class ActivityLauncher extends ActivityBase
 {
     private static final int PERMISSIONS_REQ_CODE = 123;
     private static final List<ScreenRes> AVAILABLE_RESOLUTIONS = new ArrayList<>();

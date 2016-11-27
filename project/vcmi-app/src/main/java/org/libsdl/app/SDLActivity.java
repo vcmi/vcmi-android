@@ -62,6 +62,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import eu.vcmi.vcmi.ActivityBase;
 import eu.vcmi.vcmi.NativeMethods;
 import eu.vcmi.vcmi.ServerService;
 import eu.vcmi.vcmi.util.LibsLoader;
@@ -69,7 +70,7 @@ import eu.vcmi.vcmi.util.LibsLoader;
 /**
  * SDL Activity
  */
-public class SDLActivity extends Activity
+public class SDLActivity extends ActivityBase
 {
     public static final int SERVER_MESSAGE_SERVER_READY = 1000;
     public static final int SERVER_MESSAGE_SERVER_KILLED = 1001;
