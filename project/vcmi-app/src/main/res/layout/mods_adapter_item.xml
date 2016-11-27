@@ -13,8 +13,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/side_margin"
         android:gravity="center_vertical"
         android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/mods_adapter_item_nesting"
+            style="@style/VCMI.Text"
+            android:layout_width="wrap_content"
+            android:lines="1"
+            android:text="mod name, v1.0" />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/mods_adapter_item_status"

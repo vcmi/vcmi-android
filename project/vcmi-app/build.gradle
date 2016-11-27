@@ -2,14 +2,15 @@ apply plugin: 'com.android.model.application'
 model {
     android {
         compileSdkVersion 25
-        buildToolsVersion "25.0.0"
+        buildToolsVersion "25.0.1"
 
         defaultConfig {
             applicationId "eu.vcmi.vcmi"
-            minSdkVersion.apiLevel 16
-            targetSdkVersion.apiLevel 24
+            minSdkVersion.apiLevel VCMI_PLATFORM
+            targetSdkVersion.apiLevel 25
             versionCode APP_VERSION_CODE
             versionName APP_VERSION
+            jackOptions { enabled true }
         }
     }
 
@@ -34,9 +35,15 @@ model {
             }
         }
     }
+
+    android.compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'com.android.support:design:25.0.1'
+    compile 'com.annimon:stream:1.1.4'
 }

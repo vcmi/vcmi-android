@@ -24,8 +24,7 @@ import eu.vcmi.vcmi.util.Log;
  */
 public class VCMIMod
 {
-    private final Map<String, VCMIMod> mSubmods;
-    public boolean mActive;
+    protected final Map<String, VCMIMod> mSubmods;
     public String mId;
     public String mName;
     public String mDesc;
@@ -36,7 +35,12 @@ public class VCMIMod
     public String mArchiveUrl;
     public long mSize;
 
-    private VCMIMod()
+    // config values
+    public boolean mActive;
+    public boolean mValidated;
+    public String mChecksum;
+
+    protected VCMIMod()
     {
         mSubmods = new HashMap<>();
     }
@@ -44,7 +48,7 @@ public class VCMIMod
     public static VCMIMod buildFromRepoJson(final String id, final JSONObject obj)
     {
         final VCMIMod mod = new VCMIMod();
-        mod.mId = id;
+        mod.mId = id.toLowerCase(Locale.US);
         mod.mName = obj.optString("name");
         mod.mDesc = obj.optString("description");
         mod.mVersion = obj.optString("version");
@@ -59,32 +63,24 @@ public class VCMIMod
     public static VCMIMod buildFromConfigJson(final String id, final JSONObject obj) throws JSONException
     {
         final VCMIMod mod = new VCMIMod();
-        mod.mId = id;
-        mod.mActive = obj.optBoolean("active");
-
-        final JSONObject submods = obj.optJSONObject("mods");
-        if (submods != null)
-        {
-            final JSONArray names = submods.names();
-            for (int i = 0; i < names.length(); ++i)
-            {
-                final String submodName = names.getString(i);
-                mod.mSubmods.put(submodName, VCMIMod.buildFromConfigJson(submodName, submods.getJSONObject(submodName)));
-            }
-        }
+        mod.updateFromConfigJson(id, obj);
         return mod;
     }
 
-    public static VCMIMod createContainer(final Map<String, VCMIMod> localMods, final List<File> modsList) throws IOException, JSONException
+    public static VCMIMod buildFromModInfo(final File modPath) throws IOException, JSONException
     {
         final VCMIMod mod = new VCMIMod();
-        loadSubmods(localMods, modsList);
-        mod.mSubmods.putAll(localMods);
+        if (!mod.updateFromModInfo(modPath))
+        {
+            return null;
+        }
+        mod.mActive = true; // active by default
         return mod;
     }
 
-    private static void loadSubmods(final Map<String, VCMIMod> localMods, final List<File> modsList) throws IOException, JSONException
+    protected static Map<String, VCMIMod> loadSubmods(final List<File> modsList) throws IOException, JSONException
     {
+        final Map<String, VCMIMod> submods = new HashMap<>();
         for (final File f : modsList)
         {
             if (!f.isDirectory())
@@ -92,16 +88,47 @@ public class VCMIMod
                 Log.w("VCMI", "Non-directory encountered in mods dir: " + f.getName());
                 continue;
             }
-            String dirName = f.getName().toLowerCase(Locale.US);
-            if (!localMods.containsKey(dirName))
+
+            final VCMIMod submod = buildFromModInfo(f);
+            if (submod == null)
             {
-                Log.w("VCMI", "Unknown folder encountered in mods dir: " + f.getName());
+                Log.w(null, "Could not build mod in folder " + f + "; ignoring");
                 continue;
             }
-            if (!localMods.get(dirName).updateFromModInfo(f))
+
+            submods.put(submod.mId, submod);
+        }
+        return submods;
+    }
+
+    public void updateFromConfigJson(final String id, final JSONObject obj) throws JSONException
+    {
+        mId = id.toLowerCase(Locale.US);
+        mActive = obj.optBoolean("active");
+        mValidated = obj.optBoolean("validated");
+        mChecksum = obj.optString("checksum");
+
+        final JSONObject submods = obj.optJSONObject("mods");
+        if (submods != null)
+        {
+            updateChildrenFromConfigJson(submods);
+        }
+    }
+
+    protected void updateChildrenFromConfigJson(final JSONObject submods) throws JSONException
+    {
+        final JSONArray names = submods.names();
+        for (int i = 0; i < names.length(); ++i)
+        {
+            final String modId = names.getString(i);
+            final String normalizedModId = modId.toLowerCase(Locale.US);
+            if (!mSubmods.containsKey(normalizedModId))
             {
-                Log.w("VCMI", "Error during mod info initialization...");
+                Log.w(this, "Mod present in config but not found in /Mods; ignoring: " + modId);
+                continue;
             }
+
+            mSubmods.get(normalizedModId).updateFromConfigJson(modId, submods.getJSONObject(modId));
         }
     }
 
@@ -114,6 +141,7 @@ public class VCMIMod
             return false;
         }
         final JSONObject modInfoContent = new JSONObject(FileUtil.read(modInfoFile));
+        mId = modPath.getName().toLowerCase(Locale.US);
         mName = modInfoContent.optString("name");
         mDesc = modInfoContent.optString("description");
         mVersion = modInfoContent.optString("version");
@@ -125,7 +153,7 @@ public class VCMIMod
         {
             final List<File> submodsFiles = new ArrayList<>();
             Collections.addAll(submodsFiles, submodsDir.listFiles());
-            loadSubmods(mSubmods, submodsFiles);
+            mSubmods.putAll(loadSubmods(submodsFiles));
         }
         return true;
     }
@@ -138,6 +166,32 @@ public class VCMIMod
             return "";
         }
         return String.format("mod:[id:%s,active:%s,submods:[%s]]", mId, mActive, TextUtils.join(",", mSubmods.values()));
+    }
+
+    protected void submodsToJson(final JSONObject modsRoot) throws JSONException
+    {
+        for (final VCMIMod submod : mSubmods.values())
+        {
+            final JSONObject submodEntry = new JSONObject();
+            submod.toJsonInternal(submodEntry);
+            modsRoot.put(submod.mId, submodEntry);
+        }
+    }
+
+    protected void toJsonInternal(final JSONObject root) throws JSONException
+    {
+        root.put("active", mActive);
+        root.put("validated", mValidated);
+        if (!TextUtils.isEmpty(mChecksum))
+        {
+            root.put("checksum", mChecksum);
+        }
+        if (!mSubmods.isEmpty())
+        {
+            JSONObject submods = new JSONObject();
+            submodsToJson(submods);
+            root.put("mods", submods);
+        }
     }
 
     public boolean hasSubmods()
