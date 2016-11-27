@@ -1,13 +1,5 @@
 package eu.vcmi.vcmi;
 
-import android.content.Context;
-import android.os.Environment;
-import android.util.Log;
-import android.widget.Toast;
-
-import java.io.File;
-import java.lang.ref.WeakReference;
-
 /**
  * @author F
  */

@@ -3,7 +3,6 @@ package eu.vcmi.vcmi;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -109,7 +108,10 @@ public class ActivityLauncher extends AppCompatActivity
     public void onCreate(final Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        Log.init();
+        if (savedInstanceState == null) // only clear the log if this is initial onCreate and not config change
+        {
+            Log.init();
+        }
         Log.i(this, "Starting launcher");
         setContentView(R.layout.activity_launcher);
 
@@ -427,13 +429,9 @@ public class ActivityLauncher extends AppCompatActivity
                 items[i] = AVAILABLE_RESOLUTIONS.get(i).toString();
             }
             builder.setTitle(R.string.launcher_btn_res_title)
-                .setItems(items, new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface dialog, int index)
-                    {
-                        dialog.dismiss();
-                        mCallback.onDialogEntryChosen(AVAILABLE_RESOLUTIONS.get(index));
-                    }
+                .setItems(items, (dialog, index) -> {
+                    dialog.dismiss();
+                    mCallback.onDialogEntryChosen(AVAILABLE_RESOLUTIONS.get(index));
                 });
             return builder.create();
         }
@@ -457,13 +455,9 @@ public class ActivityLauncher extends AppCompatActivity
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(R.string.launcher_btn_res_title)
-                .setItems(AVAILABLE_CODEPAGES.toArray(new String[AVAILABLE_CODEPAGES.size()]), new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface dialog, int index)
-                    {
-                        dialog.dismiss();
-                        mCallback.onDialogEntryChosen(AVAILABLE_CODEPAGES.get(index));
-                    }
+                .setItems(AVAILABLE_CODEPAGES.toArray(new String[AVAILABLE_CODEPAGES.size()]), (dialog, index) -> {
+                    dialog.dismiss();
+                    mCallback.onDialogEntryChosen(AVAILABLE_CODEPAGES.get(index));
                 });
             return builder.create();
         }

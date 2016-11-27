@@ -17,7 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import org.json.JSONArray;
+import com.annimon.stream.Collectors;
+import com.annimon.stream.Stream;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,13 +27,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 import eu.vcmi.vcmi.content.ModsAdapter;
-import eu.vcmi.vcmi.mods.VCMIMod;
+import eu.vcmi.vcmi.content.ModsViewHolder;
+import eu.vcmi.vcmi.mods.VCMIModContainer;
 import eu.vcmi.vcmi.mods.VCMIModsRepo;
 import eu.vcmi.vcmi.util.FileUtil;
 import eu.vcmi.vcmi.util.Log;
@@ -46,7 +46,7 @@ public class ActivityMods extends AppCompatActivity
     private VCMIModsRepo mRepo;
     private RecyclerView mRecycler;
 
-    private VCMIMod mModContainer;
+    private VCMIModContainer mModContainer;
     private TextView mErrorMessage;
     private View mProgress;
     private ModsAdapter mModsAdapter;
@@ -82,23 +82,6 @@ public class ActivityMods extends AppCompatActivity
     {
         final String dataRoot = Environment.getExternalStorageDirectory() + "/" + Const.VCMI_DATA_ROOT_FOLDER_NAME;
         final String internalDataRoot = getFilesDir() + "/" + Const.VCMI_DATA_ROOT_FOLDER_NAME;
-        final String configPath = dataRoot + "/config/modSettings.json";
-        final File modConfigFile = new File(configPath);
-        if (!modConfigFile.exists())
-        {
-            Log.w(this, "We don't have mods config");
-            return;
-        }
-
-        JSONObject jsonObject = new JSONObject(FileUtil.read(modConfigFile));
-        JSONObject activeMods = jsonObject.getJSONObject("activeMods");
-        final JSONArray names = activeMods.names();
-        final Map<String, VCMIMod> localMods = new HashMap<>();
-        for (int i = 0; i < names.length(); ++i)
-        {
-            String name = names.getString(i).toLowerCase(Locale.US);
-            localMods.put(name, VCMIMod.buildFromConfigJson(name, activeMods.getJSONObject(name)));
-        }
 
         final File modsRoot = new File(dataRoot + "/Mods");
         final File internalModsRoot = new File(internalDataRoot + "/Mods");
@@ -107,9 +90,9 @@ public class ActivityMods extends AppCompatActivity
             Log.w(this, "We don't have mods folders");
             return;
         }
-        final List<File> topLevelModsFolders = new ArrayList<>();
         final File[] modsFiles = modsRoot.listFiles();
         final File[] internalModsFiles = internalModsRoot.listFiles();
+        final List<File> topLevelModsFolders = new ArrayList<>();
         if (modsFiles != null && modsFiles.length > 0)
         {
             Collections.addAll(topLevelModsFolders, modsFiles);
@@ -118,8 +101,21 @@ public class ActivityMods extends AppCompatActivity
         {
             Collections.addAll(topLevelModsFolders, internalModsFiles);
         }
-        Log.i(this, "Loaded mods: " + localMods);
-        mModContainer = VCMIMod.createContainer(localMods, topLevelModsFolders);
+        mModContainer = VCMIModContainer.createContainer(topLevelModsFolders);
+
+        final String configPath = dataRoot + "/config/modSettings.json";
+        final File modConfigFile = new File(configPath);
+        if (!modConfigFile.exists())
+        {
+            Log.w(this, "We don't have mods config");
+            return;
+        }
+
+        JSONObject rootConfigObj = new JSONObject(FileUtil.read(modConfigFile));
+        JSONObject activeMods = rootConfigObj.getJSONObject("activeMods");
+        mModContainer.updateContainerFromConfigJson(activeMods, rootConfigObj.optJSONObject("core"));
+
+        Log.i(this, "Loaded mods: " + mModContainer);
     }
 
     @Override
@@ -160,6 +156,11 @@ public class ActivityMods extends AppCompatActivity
         mRecycler.setVisibility(View.GONE);
         mErrorMessage.setVisibility(View.VISIBLE);
         mErrorMessage.setText("Could not load local mods list");
+    }
+
+    private void saveModSettingsToFile()
+    {
+        mModContainer.saveToFile(new File(Environment.getExternalStorageDirectory(), Const.VCMI_DATA_ROOT_FOLDER_NAME + "/config/modSettings.json"));
     }
 
     private class OnModsRepoInitialized implements VCMIModsRepo.IOnModsRepoDownloaded
@@ -215,7 +216,8 @@ public class ActivityMods extends AppCompatActivity
             {
                 mProgress.setVisibility(View.GONE);
                 mRecycler.setVisibility(View.VISIBLE);
-                mModsAdapter = new ModsAdapter(mModContainer.submods(), new OnAdapterItemAction());
+                mModsAdapter = new ModsAdapter(Stream.of(mModContainer.submods()).map(ModsAdapter.ModItem::new).collect(Collectors.toList()),
+                    new OnAdapterItemAction());
                 mRecycler.setAdapter(mModsAdapter);
             }
         }
@@ -224,16 +226,36 @@ public class ActivityMods extends AppCompatActivity
     private class OnAdapterItemAction implements ModsAdapter.IOnItemAction
     {
         @Override
-        public void onItemPressed(final VCMIMod mod, final RecyclerView.ViewHolder vh)
+        public void onItemPressed(final ModsAdapter.ModItem mod, final RecyclerView.ViewHolder vh)
         {
             Log.i(this, "Mod pressed: " + mod);
-            // TODO show/hide submods
+            if (mod.mMod.hasSubmods())
+            {
+                if (mod.mExpanded)
+                {
+                    mModsAdapter.detachSubmods(mod, vh);
+                }
+                else
+                {
+                    mModsAdapter.attachSubmods(mod, vh);
+                    mRecycler.scrollToPosition(vh.getAdapterPosition() + 1);
+                }
+                mod.mExpanded = !mod.mExpanded;
+            }
         }
 
         @Override
-        public void onDownloadPressed(final VCMIMod mod, final RecyclerView.ViewHolder vh)
+        public void onDownloadPressed(final ModsAdapter.ModItem mod, final RecyclerView.ViewHolder vh)
         {
             Log.i(this, "Mod download pressed: " + mod);
+        }
+
+        @Override
+        public void onTogglePressed(final ModsAdapter.ModItem item, final ModsViewHolder holder)
+        {
+            item.mMod.mActive = !item.mMod.mActive;
+            mModsAdapter.notifyItemChanged(holder.getAdapterPosition());
+            saveModSettingsToFile();
         }
     }
 }

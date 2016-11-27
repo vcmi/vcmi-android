@@ -1,10 +1,8 @@
 package eu.vcmi.vcmi.util;
 
-import android.util.*;
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 /**
@@ -25,5 +23,13 @@ public class FileUtil
             totalRead += currentRead;
         }
         return content.toString();
+    }
+
+    public static void write(final File file, final String data) throws IOException
+    {
+        FileWriter fw = new FileWriter(file, false);
+        Log.v(null, "Saving data: " + data + " to " + file.getAbsolutePath());
+        fw.write(data);
+        fw.close();
     }
 }

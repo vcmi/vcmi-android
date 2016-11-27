@@ -22,9 +22,9 @@ ext {
     // can be 16 if building only for armeabi, definitely needs to be 21+ to build arm64 and x86_64
     VCMI_PLATFORM = 21
     // we should be able to use the newest version to compile, but it seems that gradle-experimental is somehow broken and doesn't compile native libs correctly for apis older than this setting...
-    VCMI_COMPILE_SDK = 21
+    VCMI_COMPILE_SDK = 25
     // abis are automatically updated from python build script, but it can be edited here if you don't plan to rerun the script
-    VCMI_ABIS = ["armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"]
+    VCMI_ABIS = ["arm64-v8a"]
 
     VCMI_STL_VERSION = "c++_shared"
 

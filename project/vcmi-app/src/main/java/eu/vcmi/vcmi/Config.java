@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileWriter;
 
+import eu.vcmi.vcmi.util.FileUtil;
 import eu.vcmi.vcmi.util.Log;
 
 /**
@@ -43,11 +44,7 @@ public class Config
     {
         try
         {
-            FileWriter fw = new FileWriter(location, false);
-            String jsonConfig = toJson();
-            Log.v(this, "Saving config: " + jsonConfig);
-            fw.write(jsonConfig);
-            fw.close();
+            FileUtil.write(location, toJson());
         }
         catch (Exception e)
         {
