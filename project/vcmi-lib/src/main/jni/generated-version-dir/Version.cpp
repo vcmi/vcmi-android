@@ -2,5 +2,5 @@
 
 namespace GameConstants
 {
-const char GIT_SHA1[] = "android-1.0";
+const char GIT_SHA1[] = "android-1.1";
 }
