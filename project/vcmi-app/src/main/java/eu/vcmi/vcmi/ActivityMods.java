@@ -39,7 +39,7 @@ import eu.vcmi.vcmi.util.Log;
 /**
  * @author F
  */
-public class ActivityMods extends AppCompatActivity
+public class ActivityMods extends ActivityBase
 {
     private static final boolean ENABLE_REPO_DOWNLOADING = false;
     private static final String REPO_URL = "http://download.vcmi.eu/mods/repository/repository.json";

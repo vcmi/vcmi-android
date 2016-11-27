@@ -62,14 +62,15 @@ public class Config
         {
             general.put("encoding", mCodepage);
         }
+        root.put("general", general);
+
         if (mResolutionHeight > 0 && mResolutionWidth > 0)
         {
             screenRes.put("width", mResolutionWidth);
             screenRes.put("height", mResolutionHeight);
+            video.put("screenRes", screenRes);
+            root.put("video", video);
         }
-        video.put("screenRes", screenRes);
-        root.put("general", general);
-        root.put("video", video);
         return root.toString();
     }
 }
