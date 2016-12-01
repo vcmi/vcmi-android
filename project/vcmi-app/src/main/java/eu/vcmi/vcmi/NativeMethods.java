@@ -6,12 +6,13 @@ import android.os.Environment;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.util.Log;
 
 import org.libsdl.app.SDLActivity;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+
+import eu.vcmi.vcmi.util.Log;
 
 /**
  * @author F
@@ -45,7 +46,7 @@ public class NativeMethods
     public static String dataRoot()
     {
         String root = new File(Environment.getExternalStorageDirectory(), Const.VCMI_DATA_ROOT_FOLDER_NAME).getAbsolutePath();
-        Log.i("VCMI", "Accessing data root: " + root);
+        Log.i("Accessing data root: " + root);
         return root;
     }
 
@@ -55,7 +56,7 @@ public class NativeMethods
     {
         Context ctx = requireContext();
         String root = new File(ctx.getFilesDir(), Const.VCMI_DATA_ROOT_FOLDER_NAME).getAbsolutePath();
-        Log.i("VCMI", "Accessing internal data root: " + root);
+        Log.i("Accessing internal data root: " + root);
         return root;
     }
 
@@ -63,24 +64,32 @@ public class NativeMethods
     public static String nativePath()
     {
         Context ctx = requireContext();
-        Log.i("VCMI", "Accessing ndk path: " + ctx.getApplicationInfo().nativeLibraryDir);
+        Log.i("Accessing ndk path: " + ctx.getApplicationInfo().nativeLibraryDir);
         return ctx.getApplicationInfo().nativeLibraryDir;
     }
 
     @SuppressWarnings(Const.JNI_METHOD_SUPPRESS)
     public static void startServer()
     {
-        Log.i("VCMI", "Got server create request");
+        Log.i("Got server create request");
         Context ctx = requireContext();
+        if (!(ctx instanceof SDLActivity))
+        {
+            Log.e("Unexpected context... " + ctx);
+            return;
+        }
         Intent intent = new Intent(ctx, SDLActivity.class);
         intent.setAction(SDLActivity.NATIVE_ACTION_CREATE_SERVER);
-        ctx.startActivity(intent);
+        // I probably do something incorrectly, but sending new intent to the activity "normally" breaks SDL events handling (probably detaches jnienv?)
+        // so instead let's call onNewIntent directly, as out context SHOULD be SDLActivity anyway
+        ((SDLActivity) ctx).hackCallNewIntentDirectly(intent);
+//        ctx.startActivity(intent);
     }
 
     @SuppressWarnings(Const.JNI_METHOD_SUPPRESS)
     public static void killServer()
     {
-        Log.i("VCMI", "Got server close request");
+        Log.i("Got server close request");
 
         Context ctx = requireContext();
         ctx.stopService(new Intent(ctx, ServerService.class));
@@ -93,14 +102,14 @@ public class NativeMethods
         }
         catch (RemoteException e)
         {
-            Log.w("VCMI", "Connection with client process broken?");
+            Log.w("Connection with client process broken?");
         }
     }
 
     @SuppressWarnings(Const.JNI_METHOD_SUPPRESS)
     public static void onServerReady()
     {
-        Log.i("VCMI", "Got server ready msg");
+        Log.i("Got server ready msg");
         Messenger messenger = requireServerMessenger();
 
         try
@@ -109,7 +118,7 @@ public class NativeMethods
         }
         catch (RemoteException e)
         {
-            Log.w("VCMI", "Connection with client process broken?");
+            Log.w("Connection with client process broken?");
         }
     }
 

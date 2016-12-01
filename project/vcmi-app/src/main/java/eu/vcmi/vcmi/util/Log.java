@@ -6,7 +6,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import eu.vcmi.vcmi.Const;
@@ -20,13 +19,19 @@ public class Log
     private static final boolean LOGGING_ENABLED_CONSOLE = true;
     private static final boolean LOGGING_ENABLED_FILE = true;
     private static final String FILELOG_PATH = "/" + Const.VCMI_DATA_ROOT_FOLDER_NAME + "/cache/VCMI_launcher.log";
+    private static final String TAG_PREFIX = "VCMI/";
+    private static final String STATIC_TAG = "static";
 
     private static void log(final int priority, final Object obj, final String msg)
     {
-        final String tagString = tag(obj);
+        logInternal(priority, tag(obj), msg);
+    }
+
+    private static void logInternal(final int priority, final String tagString, final String msg)
+    {
         if (LOGGING_ENABLED_CONSOLE)
         {
-            android.util.Log.println(priority, tagString, msg);
+            android.util.Log.println(priority, TAG_PREFIX + tagString, msg);
         }
         if (LOGGING_ENABLED_FILE) // this is probably very inefficient, but should be enough for now...
         {
@@ -86,6 +91,31 @@ public class Log
             {
             }
         }
+    }
+
+    public static void v(final String msg)
+    {
+        logInternal(android.util.Log.VERBOSE, STATIC_TAG, msg);
+    }
+
+    public static void d(final String msg)
+    {
+        logInternal(android.util.Log.DEBUG, STATIC_TAG, msg);
+    }
+
+    public static void i(final String msg)
+    {
+        logInternal(android.util.Log.INFO, STATIC_TAG, msg);
+    }
+
+    public static void w(final String msg)
+    {
+        logInternal(android.util.Log.WARN, STATIC_TAG, msg);
+    }
+
+    public static void e(final String msg)
+    {
+        logInternal(android.util.Log.ERROR, STATIC_TAG, msg);
     }
 
     public static void v(final Object obj, final String msg)
