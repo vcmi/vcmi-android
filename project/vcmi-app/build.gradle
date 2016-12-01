@@ -10,7 +10,9 @@ model {
             targetSdkVersion.apiLevel 25
             versionCode APP_VERSION_CODE
             versionName APP_VERSION
-            jackOptions { enabled true }
+            jackOptions {
+                enabled true
+            }
         }
     }
 

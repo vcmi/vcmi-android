@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
@@ -30,7 +29,6 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.text.InputType;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.Display;
 import android.view.Gravity;
@@ -66,6 +64,7 @@ import eu.vcmi.vcmi.ActivityBase;
 import eu.vcmi.vcmi.NativeMethods;
 import eu.vcmi.vcmi.ServerService;
 import eu.vcmi.vcmi.util.LibsLoader;
+import eu.vcmi.vcmi.util.Log;
 
 /**
  * SDL Activity
@@ -81,7 +80,6 @@ public class SDLActivity extends ActivityBase
     static final int COMMAND_UNUSED = 2;
     static final int COMMAND_TEXTEDIT_HIDE = 3;
     static final int COMMAND_SET_KEEP_SCREEN_ON = 5;
-    private static final String TAG = "SDL";
     // Keep track of the paused state
     public static boolean mIsPaused, mIsSurfaceReady, mHasFocus;
     public static boolean mExitCalledFromJava;
@@ -130,8 +128,9 @@ public class SDLActivity extends ActivityBase
         public void onServiceConnected(ComponentName className,
                                        IBinder service)
         {
-            Log.i("VCMI", "Service connection");
+            Log.i(this, "Service connection");
             mServiceMessenger = new Messenger(service);
+            mIsServerServiceBound = true;
 
             try
             {
@@ -146,7 +145,7 @@ public class SDLActivity extends ActivityBase
 
         public void onServiceDisconnected(ComponentName className)
         {
-            Log.i("VCMI", "Service disconnection");
+            Log.i(this, "Service disconnection");
             mServiceMessenger = null;
         }
     };
@@ -303,11 +302,11 @@ public class SDLActivity extends ActivityBase
      */
     public static int audioOpen(int sampleRate, boolean is16Bit, boolean isStereo, int desiredFrames)
     {
-        int channelConfig = isStereo ? AudioFormat.CHANNEL_CONFIGURATION_STEREO : AudioFormat.CHANNEL_CONFIGURATION_MONO;
+        int channelConfig = isStereo ? AudioFormat.CHANNEL_OUT_STEREO : AudioFormat.CHANNEL_OUT_MONO;
         int audioFormat = is16Bit ? AudioFormat.ENCODING_PCM_16BIT : AudioFormat.ENCODING_PCM_8BIT;
         int frameSize = (isStereo ? 2 : 1) * (is16Bit ? 2 : 1);
 
-        Log.v(TAG, "SDL audio: wanted "
+        Log.v("SDL audio: wanted "
                    + (isStereo ? "stereo" : "mono")
                    + " "
                    + (is16Bit ? "16-bit" : "8-bit")
@@ -333,7 +332,7 @@ public class SDLActivity extends ActivityBase
 
             if (mAudioTrack.getState() != AudioTrack.STATE_INITIALIZED)
             {
-                Log.e(TAG, "Failed during initialization of Audio Track");
+                Log.e("Failed during initialization of Audio Track");
                 mAudioTrack = null;
                 return -1;
             }
@@ -341,7 +340,7 @@ public class SDLActivity extends ActivityBase
             mAudioTrack.play();
         }
 
-        Log.v(TAG, "SDL audio: got "
+        Log.v("SDL audio: got "
                    + ((mAudioTrack.getChannelCount() >= 2) ? "stereo" : "mono")
                    + " "
                    + ((mAudioTrack.getAudioFormat()
@@ -383,7 +382,7 @@ public class SDLActivity extends ActivityBase
             }
             else
             {
-                Log.w(TAG, "SDL audio: error return from write(short)");
+                Log.w("SDL audio: error return from write(short)");
                 return;
             }
         }
@@ -414,7 +413,7 @@ public class SDLActivity extends ActivityBase
             }
             else
             {
-                Log.w(TAG, "SDL audio: error return from write(byte)");
+                Log.w("SDL audio: error return from write(byte)");
                 return;
             }
         }
@@ -429,7 +428,7 @@ public class SDLActivity extends ActivityBase
         int audioFormat = is16Bit ? AudioFormat.ENCODING_PCM_16BIT : AudioFormat.ENCODING_PCM_8BIT;
         int frameSize = (isStereo ? 2 : 1) * (is16Bit ? 2 : 1);
 
-        Log.v(TAG, "SDL capture: wanted "
+        Log.v("SDL capture: wanted "
                    + (isStereo ? "stereo" : "mono")
                    + " "
                    + (is16Bit ? "16-bit" : "8-bit")
@@ -452,7 +451,7 @@ public class SDLActivity extends ActivityBase
             // see notes about AudioTrack state in audioOpen(), above. Probably also applies here.
             if (mAudioRecord.getState() != AudioRecord.STATE_INITIALIZED)
             {
-                Log.e(TAG, "Failed during initialization of AudioRecord");
+                Log.e("Failed during initialization of AudioRecord");
                 mAudioRecord.release();
                 mAudioRecord = null;
                 return -1;
@@ -461,7 +460,7 @@ public class SDLActivity extends ActivityBase
             mAudioRecord.startRecording();
         }
 
-        Log.v(TAG, "SDL capture: got "
+        Log.v("SDL capture: got "
                    + ((mAudioRecord.getChannelCount() >= 2) ? "stereo" : "mono")
                    + " "
                    + ((mAudioRecord.getAudioFormat()
@@ -595,9 +594,9 @@ public class SDLActivity extends ActivityBase
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Log.v(TAG, "Device: " + android.os.Build.DEVICE);
-        Log.v(TAG, "Model: " + android.os.Build.MODEL);
-        Log.v(TAG, "onCreate(): " + mSingleton);
+        Log.v(this, "Device: " + android.os.Build.DEVICE);
+        Log.v(this, "Model: " + android.os.Build.MODEL);
+        Log.v(this, "onCreate(): " + mSingleton);
         super.onCreate(savedInstanceState);
 
         NativeMethods.setupCtx(this);
@@ -614,13 +613,13 @@ public class SDLActivity extends ActivityBase
         }
         catch (UnsatisfiedLinkError e)
         {
-            Log.e("VCMI", "Broken", e);
+            Log.e(this, "Broken", e);
             mBrokenLibraries = true;
             errorMsgBrokenLib = e.getMessage();
         }
         catch (Exception e)
         {
-            Log.e("VCMI", "Broken", e);
+            Log.e(this, "Broken", e);
             mBrokenLibraries = true;
             errorMsgBrokenLib = e.getMessage();
         }
@@ -634,14 +633,9 @@ public class SDLActivity extends ActivityBase
                                 + "Error: " + errorMsgBrokenLib);
             dlgAlert.setTitle("SDL Error");
             dlgAlert.setPositiveButton("Exit",
-                new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id)
-                    {
-                        // if this button is clicked, close current activity
-                        SDLActivity.mSingleton.finish();
-                    }
+                (dialog, id) -> {
+                    // if this button is clicked, close current activity
+                    SDLActivity.mSingleton.finish();
                 });
             dlgAlert.setCancelable(false);
             dlgAlert.create().show();
@@ -667,13 +661,17 @@ public class SDLActivity extends ActivityBase
         startService(new Intent(this, ServerService.class));
         bindService(new Intent(SDLActivity.this,
             ServerService.class), mServerServiceConnection, Context.BIND_AUTO_CREATE);
-        mIsServerServiceBound = true;
+    }
+
+    public void hackCallNewIntentDirectly(final Intent intent)
+    {
+        onNewIntent(intent);
     }
 
     @Override
     protected void onNewIntent(final Intent intent)
     {
-        Log.i("VCMI", "Got new intent with action " + intent.getAction());
+        Log.i(this, "Got new intent with action " + intent.getAction());
         if (NATIVE_ACTION_CREATE_SERVER.equals(intent.getAction()))
         {
             initService();
@@ -684,7 +682,7 @@ public class SDLActivity extends ActivityBase
     @Override
     protected void onPause()
     {
-        Log.v(TAG, "onPause()");
+        Log.v(this, "onPause()");
         super.onPause();
 
         if (SDLActivity.mBrokenLibraries)
@@ -698,7 +696,7 @@ public class SDLActivity extends ActivityBase
     @Override
     protected void onResume()
     {
-        Log.v(TAG, "onResume()");
+        Log.v(this, "onResume()");
         super.onResume();
 
         if (SDLActivity.mBrokenLibraries)
@@ -713,7 +711,7 @@ public class SDLActivity extends ActivityBase
     public void onWindowFocusChanged(boolean hasFocus)
     {
         super.onWindowFocusChanged(hasFocus);
-        Log.v(TAG, "onWindowFocusChanged(): " + hasFocus);
+        Log.v(this, "onWindowFocusChanged(): " + hasFocus);
 
         if (SDLActivity.mBrokenLibraries)
         {
@@ -730,7 +728,7 @@ public class SDLActivity extends ActivityBase
     @Override
     public void onLowMemory()
     {
-        Log.v(TAG, "onLowMemory()");
+        Log.v(this, "onLowMemory()");
         super.onLowMemory();
 
         if (SDLActivity.mBrokenLibraries)
@@ -747,7 +745,7 @@ public class SDLActivity extends ActivityBase
     @Override
     protected void onDestroy()
     {
-        Log.v(TAG, "onDestroy()");
+        Log.v(this, "onDestroy()");
 
         if (SDLActivity.mBrokenLibraries)
         {
@@ -773,11 +771,9 @@ public class SDLActivity extends ActivityBase
             }
             catch (Exception e)
             {
-                Log.v(TAG, "Problem stopping thread: " + e);
+                Log.v(this, "Problem stopping thread: " + e);
             }
             SDLActivity.mSDLThread = null;
-
-            //Log.v(TAG, "Finished waiting for SDL thread");
         }
 
         super.onDestroy();
@@ -787,7 +783,7 @@ public class SDLActivity extends ActivityBase
 
     private void unbindServer()
     {
-        Log.d("VCMI", "Unbinding server " + mIsServerServiceBound);
+        Log.d(this, "Unbinding server " + mIsServerServiceBound);
         if (mIsServerServiceBound)
         {
             unbindService(mServerServiceConnection);
@@ -855,17 +851,12 @@ public class SDLActivity extends ActivityBase
         final Object[] results = new Object[2]; // array for writable variables
         synchronized (lock)
         {
-            runOnUiThread(new Runnable()
-            {
-                @Override
-                public void run()
+            runOnUiThread(() -> {
+                synchronized (lock)
                 {
-                    synchronized (lock)
-                    {
-                        results[0] = getSystemService(name);
-                        results[1] = Boolean.TRUE;
-                        lock.notify();
-                    }
+                    results[0] = getSystemService(name);
+                    results[1] = Boolean.TRUE;
+                    lock.notify();
                 }
             });
             if (results[1] == null)
@@ -1007,14 +998,7 @@ public class SDLActivity extends ActivityBase
 
         // trigger Dialog creation on UI thread
 
-        runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                showDialog(dialogs++, args);
-            }
-        });
+        runOnUiThread(() -> showDialog(dialogs++, args));
 
         // block the calling thread
 
@@ -1075,15 +1059,10 @@ public class SDLActivity extends ActivityBase
         final Dialog dialog = new Dialog(this);
         dialog.setTitle(args.getString("title"));
         dialog.setCancelable(false);
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener()
-        {
-            @Override
-            public void onDismiss(DialogInterface unused)
+        dialog.setOnDismissListener(unused -> {
+            synchronized (messageboxSelection)
             {
-                synchronized (messageboxSelection)
-                {
-                    messageboxSelection.notify();
-                }
+                messageboxSelection.notify();
             }
         });
 
@@ -1112,14 +1091,9 @@ public class SDLActivity extends ActivityBase
         {
             Button button = new Button(this);
             final int id = buttonIds[i];
-            button.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    messageboxSelection[0] = id;
-                    dialog.dismiss();
-                }
+            button.setOnClickListener(v -> {
+                messageboxSelection[0] = id;
+                dialog.dismiss();
             });
             if (buttonFlags[i] != 0)
             {
@@ -1177,22 +1151,17 @@ public class SDLActivity extends ActivityBase
         // add content to dialog and return
 
         dialog.setContentView(content);
-        dialog.setOnKeyListener(new Dialog.OnKeyListener()
-        {
-            @Override
-            public boolean onKey(DialogInterface d, int keyCode, KeyEvent event)
+        dialog.setOnKeyListener((d, keyCode, event) -> {
+            Button button = mapping.get(keyCode);
+            if (button != null)
             {
-                Button button = mapping.get(keyCode);
-                if (button != null)
+                if (event.getAction() == KeyEvent.ACTION_UP)
                 {
-                    if (event.getAction() == KeyEvent.ACTION_UP)
-                    {
-                        button.performClick();
-                    }
-                    return true; // also for ignored actions
+                    button.performClick();
                 }
-                return false;
+                return true; // also for ignored actions
             }
+            return false;
         });
 
         return dialog;
@@ -1210,7 +1179,7 @@ public class SDLActivity extends ActivityBase
             Context context = getContext();
             if (context == null)
             {
-                Log.e(TAG, "error handling message, getContext() returned null");
+                Log.e(this, "error handling message, getContext() returned null");
                 return;
             }
             switch (msg.arg1)
@@ -1222,7 +1191,7 @@ public class SDLActivity extends ActivityBase
                     }
                     else
                     {
-                        Log.e(TAG, "error handling message, getContext() returned no Activity");
+                        Log.e(this, "error handling message, getContext() returned no Activity");
                     }
                     break;
                 case COMMAND_TEXTEDIT_HIDE:
@@ -1242,7 +1211,7 @@ public class SDLActivity extends ActivityBase
                     Window window = ((Activity) context).getWindow();
                     if (window != null)
                     {
-                        if ((msg.obj instanceof Integer) && (((Integer) msg.obj).intValue() != 0))
+                        if ((msg.obj instanceof Integer) && ((Integer) msg.obj != 0))
                         {
                             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                         }
@@ -1256,7 +1225,7 @@ public class SDLActivity extends ActivityBase
                 default:
                     if ((context instanceof SDLActivity) && !((SDLActivity) context).onUnhandledMessage(msg.arg1, msg.obj))
                     {
-                        Log.e(TAG, "error handling message, command is " + msg.arg1);
+                        Log.e(this, "error handling message, command is " + msg.arg1);
                     }
             }
         }
@@ -1312,7 +1281,7 @@ public class SDLActivity extends ActivityBase
         @Override
         public void handleMessage(Message msg)
         {
-            Log.i("VCMI", "Got server msg " + msg);
+            Log.i(this, "Got server msg " + msg);
             switch (msg.what)
             {
                 case SERVER_MESSAGE_SERVER_READY:
@@ -1406,78 +1375,78 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
     @Override
     public void surfaceCreated(SurfaceHolder holder)
     {
-        Log.v("SDL", "surfaceCreated()");
-        holder.setType(SurfaceHolder.SURFACE_TYPE_GPU);
+        Log.v(this, "surfaceCreated()");
     }
 
     // Called when we lose the surface
     @Override
     public void surfaceDestroyed(SurfaceHolder holder)
     {
-        Log.v("SDL", "surfaceDestroyed()");
+        Log.v(this, "surfaceDestroyed()");
         // Call this *before* setting mIsSurfaceReady to 'false'
         SDLActivity.handlePause();
         SDLActivity.mIsSurfaceReady = false;
         SDLActivity.onNativeSurfaceDestroyed();
     }
 
+
     // Called when the surface is resized
     @Override
     public void surfaceChanged(SurfaceHolder holder,
                                int format, int width, int height)
     {
-        Log.v("SDL", "surfaceChanged()");
+        Log.v(this, "surfaceChanged()");
 
         int sdlFormat = 0x15151002; // SDL_PIXELFORMAT_RGB565 by default
         switch (format)
         {
             case PixelFormat.A_8:
-                Log.v("SDL", "pixel format A_8");
+                Log.v(this, "pixel format A_8");
                 break;
             case PixelFormat.LA_88:
-                Log.v("SDL", "pixel format LA_88");
+                Log.v(this, "pixel format LA_88");
                 break;
             case PixelFormat.L_8:
-                Log.v("SDL", "pixel format L_8");
+                Log.v(this, "pixel format L_8");
                 break;
             case PixelFormat.RGBA_4444:
-                Log.v("SDL", "pixel format RGBA_4444");
+                Log.v(this, "pixel format RGBA_4444");
                 sdlFormat = 0x15421002; // SDL_PIXELFORMAT_RGBA4444
                 break;
             case PixelFormat.RGBA_5551:
-                Log.v("SDL", "pixel format RGBA_5551");
+                Log.v(this, "pixel format RGBA_5551");
                 sdlFormat = 0x15441002; // SDL_PIXELFORMAT_RGBA5551
                 break;
             case PixelFormat.RGBA_8888:
-                Log.v("SDL", "pixel format RGBA_8888");
+                Log.v(this, "pixel format RGBA_8888");
                 sdlFormat = 0x16462004; // SDL_PIXELFORMAT_RGBA8888
                 break;
             case PixelFormat.RGBX_8888:
-                Log.v("SDL", "pixel format RGBX_8888");
+                Log.v(this, "pixel format RGBX_8888");
                 sdlFormat = 0x16261804; // SDL_PIXELFORMAT_RGBX8888
                 break;
             case PixelFormat.RGB_332:
-                Log.v("SDL", "pixel format RGB_332");
+                Log.v(this, "pixel format RGB_332");
                 sdlFormat = 0x14110801; // SDL_PIXELFORMAT_RGB332
                 break;
             case PixelFormat.RGB_565:
-                Log.v("SDL", "pixel format RGB_565");
+                Log.v(this, "pixel format RGB_565");
                 sdlFormat = 0x15151002; // SDL_PIXELFORMAT_RGB565
                 break;
             case PixelFormat.RGB_888:
-                Log.v("SDL", "pixel format RGB_888");
+                Log.v(this, "pixel format RGB_888");
                 // Not sure this is right, maybe SDL_PIXELFORMAT_RGB24 instead?
                 sdlFormat = 0x16161804; // SDL_PIXELFORMAT_RGB888
                 break;
             default:
-                Log.v("SDL", "pixel format unknown " + format);
+                Log.v(this, "pixel format unknown " + format);
                 break;
         }
 
         mWidth = width;
         mHeight = height;
         SDLActivity.onNativeResize(width, height, sdlFormat, mDisplay.getRefreshRate());
-        Log.v("SDL", "Window size: " + width + "x" + height);
+        Log.v(this, "Window size: " + width + "x" + height);
 
 
         boolean skip = false;
@@ -1510,14 +1479,14 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
 
             if (max / min < 1.20)
             {
-                Log.v("SDL", "Don't skip on such aspect-ratio. Could be a square resolution.");
+                Log.v(this, "Don't skip on such aspect-ratio. Could be a square resolution.");
                 skip = false;
             }
         }
 
         if (skip)
         {
-            Log.v("SDL", "Skip .. Surface is not ready.");
+            Log.v(this, "Skip .. Surface is not ready.");
             return;
         }
 
@@ -1537,25 +1506,20 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
             sdlThread.start();
 
             // Set up a listener thread to catch when the native thread ends
-            SDLActivity.mSDLThread = new Thread(new Runnable()
-            {
-                @Override
-                public void run()
+            SDLActivity.mSDLThread = new Thread(() -> {
+                try
                 {
-                    try
+                    sdlThread.join();
+                }
+                catch (Exception e)
+                {
+                }
+                finally
+                {
+                    // Native thread has finished
+                    if (!SDLActivity.mExitCalledFromJava)
                     {
-                        sdlThread.join();
-                    }
-                    catch (Exception e)
-                    {
-                    }
-                    finally
-                    {
-                        // Native thread has finished
-                        if (!SDLActivity.mExitCalledFromJava)
-                        {
-                            SDLActivity.handleNativeExit();
-                        }
+                        SDLActivity.handleNativeExit();
                     }
                 }
             }, "SDLThreadListener");
@@ -1602,13 +1566,11 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
         {
             if (event.getAction() == KeyEvent.ACTION_DOWN)
             {
-                //Log.v("SDL", "key down: " + keyCode);
                 SDLActivity.onNativeKeyDown(keyCode);
                 return true;
             }
             else if (event.getAction() == KeyEvent.ACTION_UP)
             {
-                //Log.v("SDL", "key up: " + keyCode);
                 SDLActivity.onNativeKeyUp(keyCode);
                 return true;
             }
