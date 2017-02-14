@@ -1,12 +1,12 @@
 <component name="libraryTable">
   <library name="support-compat-25.0.1">
     <ANNOTATIONS>
-      <root url="jar://$USER_HOME$/.android/build-cache/94e0c928ce9f01079977b47d4e49b25bef2547a9/output/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/c2a14c786da8a2b84ed19923c8a2c4c53662056c/output/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/94e0c928ce9f01079977b47d4e49b25bef2547a9/output/jars/classes.jar!/" />
-      <root url="jar://$USER_HOME$/.android/build-cache/94e0c928ce9f01079977b47d4e49b25bef2547a9/output/jars/libs/internal_impl-25.0.1.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/94e0c928ce9f01079977b47d4e49b25bef2547a9/output/res" />
+      <root url="file://$USER_HOME$/.android/build-cache/c2a14c786da8a2b84ed19923c8a2c4c53662056c/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/c2a14c786da8a2b84ed19923c8a2c4c53662056c/output/jars/libs/internal_impl-25.0.1.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/c2a14c786da8a2b84ed19923c8a2c4c53662056c/output/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

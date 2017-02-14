@@ -14,9 +14,6 @@
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../ext/SDL2/core/code/src/main/android">
-      <sourceFolder url="file://$MODULE_DIR$/../../ext/SDL2/core/code/src/main/android" isTestSource="false" />
-    </content>
     <content url="file://$MODULE_DIR$/../../ext/vcmi/client">
       <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/client" isTestSource="false" />
     </content>
@@ -24,6 +21,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/jni/gradle-hack" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/jni" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/jni/sdl-main" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

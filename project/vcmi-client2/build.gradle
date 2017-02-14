@@ -20,11 +20,11 @@ model {
 
     android {
         compileSdkVersion VCMI_COMPILE_SDK
-        buildToolsVersion "25.0.0"
+        buildToolsVersion "25.0.1"
 
         defaultConfig {
             minSdkVersion.apiLevel VCMI_PLATFORM
-            targetSdkVersion.apiLevel 24
+            targetSdkVersion.apiLevel 25
         }
     }
 
@@ -56,8 +56,8 @@ model {
             jni {
                 source {
                     srcDir "${VCMI_PATH_VCMI}/client"
-                    srcDir "${VCMI_PATH_SDL}/core/code/src/main/android"
                     srcDir "src/main/jni/gradle-hack"
+                    srcDir "src/main/jni/sdl-main"
                 }
                 dependencies { // sdl
                     library "prebuiltSDL" linkage "shared"

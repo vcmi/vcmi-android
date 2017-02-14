@@ -1,12 +1,12 @@
 <component name="libraryTable">
   <library name="support-fragment-25.0.1">
     <ANNOTATIONS>
-      <root url="jar://$USER_HOME$/.android/build-cache/8d151e2f70c690e05f2ae1952c7fa5f7f82ff3c3/output/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/c1a644e5be620f41be798412504782ccf91b1ea4/output/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="file://$USER_HOME$/.android/build-cache/8d151e2f70c690e05f2ae1952c7fa5f7f82ff3c3/output/res" />
-      <root url="jar://$USER_HOME$/.android/build-cache/8d151e2f70c690e05f2ae1952c7fa5f7f82ff3c3/output/jars/libs/internal_impl-25.0.1.jar!/" />
-      <root url="jar://$USER_HOME$/.android/build-cache/8d151e2f70c690e05f2ae1952c7fa5f7f82ff3c3/output/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/c1a644e5be620f41be798412504782ccf91b1ea4/output/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/c1a644e5be620f41be798412504782ccf91b1ea4/output/jars/libs/internal_impl-25.0.1.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/c1a644e5be620f41be798412504782ccf91b1ea4/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
