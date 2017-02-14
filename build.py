@@ -88,7 +88,6 @@ def buildSDL():
 	callBuild("ext/SDL2/SDL2-ttf", "", "SDL2_ttf", "", False)
 	import move_sdl_includes
 	move_sdl_includes.moveSDLIncludes()
-	move_sdl_includes.overwriteMainSDLFile()
 	
 def buildFFMPEG():
 	subprocess.call(["bash", vcmiconf.pathProjRootBash + "/ext/ff/all.sh", vcmiconf.ndkRootBash, pathExtOutputForBash])
