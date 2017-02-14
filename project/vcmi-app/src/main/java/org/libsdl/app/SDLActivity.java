@@ -62,6 +62,7 @@ import java.util.List;
 
 import eu.vcmi.vcmi.ActivityBase;
 import eu.vcmi.vcmi.NativeMethods;
+import eu.vcmi.vcmi.R;
 import eu.vcmi.vcmi.ServerService;
 import eu.vcmi.vcmi.util.LibsLoader;
 import eu.vcmi.vcmi.util.Log;
@@ -149,6 +150,7 @@ public class SDLActivity extends ActivityBase
             mServiceMessenger = null;
         }
     };
+    private boolean mEmulateRightMouseButton;
 
     public static void initialize()
     {
@@ -239,7 +241,7 @@ public class SDLActivity extends ActivityBase
 
     public static native void onNativeTouch(int touchDevId, int pointerFingerId,
                                             int action, float x,
-                                            float y, float p);
+                                            float y, float p, int mouseButtonIndex);
 
     public static native void onNativeAccel(float x, float y, float z);
 
@@ -307,14 +309,14 @@ public class SDLActivity extends ActivityBase
         int frameSize = (isStereo ? 2 : 1) * (is16Bit ? 2 : 1);
 
         Log.v("SDL audio: wanted "
-                   + (isStereo ? "stereo" : "mono")
-                   + " "
-                   + (is16Bit ? "16-bit" : "8-bit")
-                   + " "
-                   + (sampleRate / 1000f)
-                   + "kHz, "
-                   + desiredFrames
-                   + " frames buffer");
+              + (isStereo ? "stereo" : "mono")
+              + " "
+              + (is16Bit ? "16-bit" : "8-bit")
+              + " "
+              + (sampleRate / 1000f)
+              + "kHz, "
+              + desiredFrames
+              + " frames buffer");
 
         // Let the user pick a larger buffer if they really want -- but ye
         // gods they probably shouldn't, the minimums are horrifyingly high
@@ -341,18 +343,18 @@ public class SDLActivity extends ActivityBase
         }
 
         Log.v("SDL audio: got "
-                   + ((mAudioTrack.getChannelCount() >= 2) ? "stereo" : "mono")
-                   + " "
-                   + ((mAudioTrack.getAudioFormat()
-                       == AudioFormat.ENCODING_PCM_16BIT)
-                      ? "16-bit"
-                      : "8-bit")
-                   + " "
-                   + (mAudioTrack.getSampleRate()
-                      / 1000f)
-                   + "kHz, "
-                   + desiredFrames
-                   + " frames buffer");
+              + ((mAudioTrack.getChannelCount() >= 2) ? "stereo" : "mono")
+              + " "
+              + ((mAudioTrack.getAudioFormat()
+                  == AudioFormat.ENCODING_PCM_16BIT)
+                 ? "16-bit"
+                 : "8-bit")
+              + " "
+              + (mAudioTrack.getSampleRate()
+                 / 1000f)
+              + "kHz, "
+              + desiredFrames
+              + " frames buffer");
 
         return 0;
     }
@@ -429,14 +431,14 @@ public class SDLActivity extends ActivityBase
         int frameSize = (isStereo ? 2 : 1) * (is16Bit ? 2 : 1);
 
         Log.v("SDL capture: wanted "
-                   + (isStereo ? "stereo" : "mono")
-                   + " "
-                   + (is16Bit ? "16-bit" : "8-bit")
-                   + " "
-                   + (sampleRate / 1000f)
-                   + "kHz, "
-                   + desiredFrames
-                   + " frames buffer");
+              + (isStereo ? "stereo" : "mono")
+              + " "
+              + (is16Bit ? "16-bit" : "8-bit")
+              + " "
+              + (sampleRate / 1000f)
+              + "kHz, "
+              + desiredFrames
+              + " frames buffer");
 
         // Let the user pick a larger buffer if they really want -- but ye
         // gods they probably shouldn't, the minimums are horrifyingly high
@@ -461,18 +463,18 @@ public class SDLActivity extends ActivityBase
         }
 
         Log.v("SDL capture: got "
-                   + ((mAudioRecord.getChannelCount() >= 2) ? "stereo" : "mono")
-                   + " "
-                   + ((mAudioRecord.getAudioFormat()
-                       == AudioFormat.ENCODING_PCM_16BIT)
-                      ? "16-bit"
-                      : "8-bit")
-                   + " "
-                   + (mAudioRecord.getSampleRate()
-                      / 1000f)
-                   + "kHz, "
-                   + desiredFrames
-                   + " frames buffer");
+              + ((mAudioRecord.getChannelCount() >= 2) ? "stereo" : "mono")
+              + " "
+              + ((mAudioRecord.getAudioFormat()
+                  == AudioFormat.ENCODING_PCM_16BIT)
+                 ? "16-bit"
+                 : "8-bit")
+              + " "
+              + (mAudioRecord.getSampleRate()
+                 / 1000f)
+              + "kHz, "
+              + desiredFrames
+              + " frames buffer");
 
         return 0;
     }
@@ -578,6 +580,12 @@ public class SDLActivity extends ActivityBase
         );
     }
 
+    public int emulatedMouseButtonIndex()
+    {
+        return mEmulateRightMouseButton
+               ? 3 // SDL_BUTTON_RIGHT
+               : 1; // SDL_BUTTON_LEFT
+    }
 
     /**
      * This method is called by SDL before starting the native application thread. It can be overridden to provide the arguments after the application
@@ -650,10 +658,20 @@ public class SDLActivity extends ActivityBase
 
         mJoystickHandler = new SDLJoystickHandler();
 
-        mLayout = new RelativeLayout(this);
+        final View outerLayout = getLayoutInflater().inflate(R.layout.activity_game, null, false);
+        mLayout = (ViewGroup) outerLayout.findViewById(R.id.game_outer_frame);
         mLayout.addView(mSurface);
 
-        setContentView(mLayout);
+        final View btnOverlayMouseButton = outerLayout.findViewById(R.id.game_overlaybtn_mousebutton);
+        btnOverlayMouseButton.setOnClickListener(this::onOverlayMouseButtonTypeChanged);
+
+        setContentView(outerLayout);
+    }
+
+    private void onOverlayMouseButtonTypeChanged(final View view)
+    {
+        mEmulateRightMouseButton = !mEmulateRightMouseButton;
+        ((TextView) view).setText(mEmulateRightMouseButton ? "RMB" : "LMB");
     }
 
     private void initService()
@@ -1641,7 +1659,7 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
                             // see the documentation of getPressure(i)
                             p = 1.0f;
                         }
-                        SDLActivity.onNativeTouch(touchDevId, pointerFingerId, action, x, y, p);
+                        SDLActivity.onNativeTouch(touchDevId, pointerFingerId, action, x, y, p, SDLActivity.mSingleton.emulatedMouseButtonIndex());
                     }
                     break;
 
@@ -1667,7 +1685,7 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
                         // see the documentation of getPressure(i)
                         p = 1.0f;
                     }
-                    SDLActivity.onNativeTouch(touchDevId, pointerFingerId, action, x, y, p);
+                    SDLActivity.onNativeTouch(touchDevId, pointerFingerId, action, x, y, p, SDLActivity.mSingleton.emulatedMouseButtonIndex());
                     break;
 
                 case MotionEvent.ACTION_CANCEL:
@@ -1683,7 +1701,8 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
                             // see the documentation of getPressure(i)
                             p = 1.0f;
                         }
-                        SDLActivity.onNativeTouch(touchDevId, pointerFingerId, MotionEvent.ACTION_UP, x, y, p);
+                        SDLActivity.onNativeTouch(touchDevId, pointerFingerId, MotionEvent.ACTION_UP, x, y, p,
+                            SDLActivity.mSingleton.emulatedMouseButtonIndex());
                     }
                     break;
 
