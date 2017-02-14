@@ -1,7 +1,6 @@
 /ext/boost/boost_1_61_0/*
 /ext/ff/ffmpeg/
 /ext/ff/x264/
-/ext/SDL2/core/code/
 /ext/SDL2/SDL2-image/code/
 /ext/SDL2/SDL2-mixer/code/
 /ext/SDL2/SDL2-ttf/code/
