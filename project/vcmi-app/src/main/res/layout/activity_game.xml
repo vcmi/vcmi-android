@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/game_overlaybtn_mousebutton"
             style="@style/VCMI.OverlayButton"
             android:layout_width="36dp"

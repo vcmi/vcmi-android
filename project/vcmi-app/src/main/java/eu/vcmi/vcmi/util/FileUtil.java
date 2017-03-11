@@ -12,17 +12,19 @@ public class FileUtil
 {
     public static String read(final File file) throws IOException
     {
-        FileReader modConfigReader = new FileReader(file);
-        char buffer[] = new char[4096];
-        int totalRead = 0;
-        int currentRead;
-        final StringBuilder content = new StringBuilder();
-        while ((currentRead = modConfigReader.read(buffer, 0, 4096)) >= 0)
+        try (FileReader modConfigReader = new FileReader(file))
         {
-            content.append(buffer, 0, currentRead);
-            totalRead += currentRead;
+            char buffer[] = new char[4096];
+            int totalRead = 0;
+            int currentRead;
+            final StringBuilder content = new StringBuilder();
+            while ((currentRead = modConfigReader.read(buffer, 0, 4096)) >= 0)
+            {
+                content.append(buffer, 0, currentRead);
+                totalRead += currentRead;
+            }
+            return content.toString();
         }
-        return content.toString();
     }
 
     public static void write(final File file, final String data) throws IOException

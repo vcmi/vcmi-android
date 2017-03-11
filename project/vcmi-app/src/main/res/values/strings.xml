@@ -20,4 +20,8 @@
     <string name="launcher_error_permissions">This application needs write permissions to use the content stored in external storage</string>
     <string name="launcher_error_permission_broken">Could not resolve permissions correctly</string>
     <string name="mods_item_author_template">by %1$s</string>
+    <string name="misc_try_again">Try again</string>
+    <string name="launcher_section_init">Game init</string>
+    <string name="launcher_section_settings">Settings</string>
+    <string name="menu_mods_download_repo">Download repository data</string>
 </resources>

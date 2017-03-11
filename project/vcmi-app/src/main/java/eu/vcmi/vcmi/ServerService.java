@@ -7,6 +7,8 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 
+import java.lang.ref.WeakReference;
+
 import eu.vcmi.vcmi.util.LibsLoader;
 import eu.vcmi.vcmi.util.Log;
 
@@ -17,7 +19,7 @@ public class ServerService extends Service
 {
     public static final int CLIENT_MESSAGE_CLIENT_REGISTERED = 1;
     public static final String INTENT_ACTION_KILL_SERVER = "ServerService.Action.Kill";
-    final Messenger mMessenger = new Messenger(new IncomingClientMessageHandler());
+    final Messenger mMessenger = new Messenger(new IncomingClientMessageHandler(new OnClientRegisteredCallback()));
     private Messenger mClient;
 
     @Override
@@ -49,6 +51,11 @@ public class ServerService extends Service
         System.exit(0);
     }
 
+    private interface IncomingClientMessageHandlerCallback
+    {
+        void onClientRegistered(Messenger client);
+    }
+
     private static class ServerStartThread extends Thread
     {
         @Override
@@ -58,21 +65,41 @@ public class ServerService extends Service
         }
     }
 
-    private class IncomingClientMessageHandler extends Handler
+    private static class IncomingClientMessageHandler extends Handler
     {
+        private WeakReference<IncomingClientMessageHandlerCallback> mCallbackRef;
+
+        IncomingClientMessageHandler(final IncomingClientMessageHandlerCallback callback)
+        {
+            mCallbackRef = new WeakReference<>(callback);
+        }
+
         @Override
         public void handleMessage(Message msg)
         {
             switch (msg.what)
             {
                 case CLIENT_MESSAGE_CLIENT_REGISTERED:
-                    mClient = msg.replyTo;
-                    NativeMethods.setupMsg(mClient);
+                    final IncomingClientMessageHandlerCallback callback = mCallbackRef.get();
+                    if (callback != null)
+                    {
+                        callback.onClientRegistered(msg.replyTo);
+                    }
+                    NativeMethods.setupMsg(msg.replyTo);
                     new ServerStartThread().start();
                     break;
                 default:
                     super.handleMessage(msg);
             }
+        }
+    }
+
+    private class OnClientRegisteredCallback implements IncomingClientMessageHandlerCallback
+    {
+        @Override
+        public void onClientRegistered(final Messenger client)
+        {
+            mClient = client;
         }
     }
 }

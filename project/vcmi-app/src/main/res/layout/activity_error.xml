@@ -20,5 +20,5 @@
         android:layout_gravity="right"
         android:layout_margin="@dimen/side_margin"
         android:layout_marginTop="20dp"
-        android:text="Try again" />
+        android:text="@string/misc_try_again" />
 </LinearLayout>

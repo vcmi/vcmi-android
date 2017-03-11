@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    style="@style/VCMI.ClickableEntry"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:minHeight="80dp"
-    android:orientation="vertical"
-    android:paddingBottom="5dp"
-    android:paddingLeft="@dimen/side_margin"
-    android:paddingRight="@dimen/side_margin"
-    android:paddingTop="5dp">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
