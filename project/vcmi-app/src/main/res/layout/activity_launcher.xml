@@ -32,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:elevation="2dp"
-                android:text="Game init"
+                android:text="@string/launcher_section_init"
                 app:elevation="2dp" />
 
             <FrameLayout
@@ -65,7 +65,7 @@
                 style="@style/VCMI.Text.LauncherSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Settings" />
+                android:text="@string/launcher_section_settings" />
 
             <include
                 android:id="@+id/launcher_btn_mods"
