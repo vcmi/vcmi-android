@@ -130,6 +130,7 @@ public class SDLActivity extends ActivityBase
             mServiceMessenger = null;
         }
     };
+    private View mProgressBar;
 
     public static void initialize()
     {
@@ -655,6 +656,7 @@ public class SDLActivity extends ActivityBase
 
         final View outerLayout = getLayoutInflater().inflate(R.layout.activity_game, null, false);
         final ViewGroup layout = (ViewGroup) outerLayout.findViewById(R.id.game_outer_frame);
+        mProgressBar = outerLayout.findViewById(R.id.game_progress);
         layout.addView(surface);
         mHolder.setLayout(layout);
 
@@ -1097,6 +1099,14 @@ public class SDLActivity extends ActivityBase
         });
 
         return dialog;
+    }
+
+    public void displayProgress(final boolean show)
+    {
+        if (mProgressBar != null)
+        {
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
     }
 
     // Messagebox

@@ -122,6 +122,28 @@ public class NativeMethods
         }
     }
 
+    @SuppressWarnings(Const.JNI_METHOD_SUPPRESS)
+    public static void showProgress()
+    {
+        internalProgressDisplay(true);
+    }
+
+    @SuppressWarnings(Const.JNI_METHOD_SUPPRESS)
+    public static void hideProgress()
+    {
+        internalProgressDisplay(false);
+    }
+
+    private static void internalProgressDisplay(final boolean show)
+    {
+        final Context ctx = requireContext();
+        if (!(ctx instanceof SDLActivity))
+        {
+            return;
+        }
+        ((SDLActivity) ctx).runOnUiThread(() -> ((SDLActivity) ctx).displayProgress(show));
+    }
+
     private static Context requireContext()
     {
         Context ctx = ctxRef.get();
