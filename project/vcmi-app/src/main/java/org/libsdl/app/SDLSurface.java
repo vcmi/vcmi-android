@@ -30,21 +30,20 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback, View.OnK
     // Sensors
     protected static SensorManager mSensorManager;
     protected static Display mDisplay;
-
-    // Keep track of the surface size to normalize touch events
-    static float mWidth, mHeight;
+    private SurfaceTouchHandler mSurfaceTouchHandler;
 
     // Startup
     public SDLSurface(Context context)
     {
         super(context);
         getHolder().addCallback(this);
+        mSurfaceTouchHandler = new SurfaceTouchHandler(context);
 
         setFocusable(true);
         setFocusableInTouchMode(true);
         requestFocus();
         setOnKeyListener(this);
-        setOnTouchListener(new SurfaceTouchHandler());
+        setOnTouchListener(mSurfaceTouchHandler);
 
         mDisplay = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -53,10 +52,6 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback, View.OnK
         {
             setOnGenericMotionListener(new SDLGenericMotionListener_API12());
         }
-
-        // Some arbitrary defaults to avoid a potential division by zero
-        mWidth = 1.0f;
-        mHeight = 1.0f;
     }
 
     public void handlePause()
@@ -66,11 +61,15 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback, View.OnK
 
     public void handleResume()
     {
+        if (mSurfaceTouchHandler == null)
+        {
+            mSurfaceTouchHandler = new SurfaceTouchHandler(getContext());
+        }
         setFocusable(true);
         setFocusableInTouchMode(true);
         requestFocus();
         setOnKeyListener(this);
-        setOnTouchListener(new SurfaceTouchHandler());
+        setOnTouchListener(mSurfaceTouchHandler);
         enableSensor(Sensor.TYPE_ACCELEROMETER, true);
     }
 
@@ -151,8 +150,7 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback, View.OnK
                 break;
         }
 
-        mWidth = width;
-        mHeight = height;
+        mSurfaceTouchHandler.onSurfaceUpdated(width, height);
         SDLActivity.onNativeResize(width, height, sdlFormat, mDisplay.getRefreshRate());
         Log.v(this, "Window size: " + width + "x" + height);
 
@@ -172,14 +170,14 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback, View.OnK
         }
         else if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         {
-            if (mWidth > mHeight)
+            if (width > height)
             {
                 skip = true;
             }
         }
         else if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
         {
-            if (mWidth < mHeight)
+            if (width < height)
             {
                 skip = true;
             }
@@ -188,8 +186,8 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback, View.OnK
         // Special Patch for Square Resolution: Black Berry Passport
         if (skip)
         {
-            double min = Math.min(mWidth, mHeight);
-            double max = Math.max(mWidth, mHeight);
+            double min = Math.min(width, height);
+            double max = Math.max(width, height);
 
             if (max / min < 1.20)
             {
