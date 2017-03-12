@@ -28,6 +28,7 @@ import java.util.zip.ZipInputStream;
 
 import eu.vcmi.vcmi.util.FileUtil;
 import eu.vcmi.vcmi.util.Log;
+import eu.vcmi.vcmi.util.SharedPrefs;
 
 
 /**
@@ -66,6 +67,17 @@ public class ActivityLauncher extends ActivityBase
     private View mBtnRes;
     private View mBtnCodepage;
     private View mBtnMods;
+    private View mBtnPointerMode;
+    private IOnDialogEntryChosen<Boolean> mPointerModeChangedListener = new IOnDialogEntryChosen<Boolean>()
+    {
+        @Override
+        public void onDialogEntryChosen(final Boolean entry)
+        {
+            Log.i(this, "Changed relative pointer mode to " + entry);
+            mPrefs.save(SharedPrefs.KEY_POINTER_RELATIVE_MODE, entry);
+            onConfigUpdated();
+        }
+    };
     private IOnDialogEntryChosen<String> mCodepageChangedListener = new IOnDialogEntryChosen<String>()
     {
         @Override
@@ -97,6 +109,11 @@ public class ActivityLauncher extends ActivityBase
             onConfigUpdated();
         }
     };
+
+    private static String pointerModeToUserString(final Context ctx, final boolean relative)
+    {
+        return ctx.getString(relative ? R.string.misc_pointermode_relative : R.string.misc_pointermode_normal);
+    }
 
     private String configFileLocation()
     {
@@ -132,6 +149,9 @@ public class ActivityLauncher extends ActivityBase
             getString(R.string.launcher_btn_mods_subtitle));
         mBtnCodepage = initLauncherBtn(R.id.launcher_btn_cp, new OnLauncherCodepagePressed(), getString(R.string.launcher_btn_cp_title),
             getString(R.string.launcher_btn_cp_subtitle_unknown));
+        mBtnPointerMode = initLauncherBtn(R.id.launcher_btn_internal_relative_pointer, new OnLauncherPointerModePressed(),
+            getString(R.string.launcher_btn_pointermode_title), getString(R.string.launcher_btn_pointermode_subtitle,
+                pointerModeToUserString(this, mPrefs.load(SharedPrefs.KEY_POINTER_RELATIVE_MODE, false))));
 
         mBtnStart.setVisibility(View.GONE);
 
@@ -202,6 +222,7 @@ public class ActivityLauncher extends ActivityBase
         updateLauncherSubtitle(mBtnRes, mConfig.mResolutionWidth <= 0 || mConfig.mResolutionHeight <= 0
                                         ? getString(R.string.launcher_btn_res_subtitle_unknown)
                                         : getString(R.string.launcher_btn_res_subtitle, mConfig.mResolutionWidth, mConfig.mResolutionHeight));
+        updateLauncherSubtitle(mBtnPointerMode, pointerModeToUserString(this, mPrefs.load(SharedPrefs.KEY_POINTER_RELATIVE_MODE, false)));
     }
 
     private InitResult handlePermissions()
@@ -428,7 +449,8 @@ public class ActivityLauncher extends ActivityBase
                 items[i] = AVAILABLE_RESOLUTIONS.get(i).toString();
             }
             builder.setTitle(R.string.launcher_btn_res_title)
-                .setItems(items, (dialog, index) -> {
+                .setItems(items, (dialog, index) ->
+                {
                     dialog.dismiss();
                     mCallback.onDialogEntryChosen(AVAILABLE_RESOLUTIONS.get(index));
                 });
@@ -443,6 +465,34 @@ public class ActivityLauncher extends ActivityBase
         }
     }
 
+    public static class PointerModeChooserDialog extends DialogFragment
+    {
+        private IOnDialogEntryChosen<Boolean> mCallback;
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(final Bundle savedInstanceState)
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(R.string.launcher_btn_pointermode_title)
+                .setItems(new String[] {
+                    pointerModeToUserString(getContext(), false),
+                    pointerModeToUserString(getContext(), true)}, (dialog, index) ->
+                {
+                    dialog.dismiss();
+                    mCallback.onDialogEntryChosen(index > 0);
+                });
+            return builder.create();
+        }
+
+        @Override
+        public void onAttach(Context ctx)
+        {
+            super.onAttach(ctx);
+            mCallback = ((ActivityLauncher) ctx).mPointerModeChangedListener;
+        }
+    }
+
     public static class CodepageChooserDialog extends DialogFragment
     {
 
@@ -454,7 +504,8 @@ public class ActivityLauncher extends ActivityBase
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(R.string.launcher_btn_res_title)
-                .setItems(AVAILABLE_CODEPAGES.toArray(new String[AVAILABLE_CODEPAGES.size()]), (dialog, index) -> {
+                .setItems(AVAILABLE_CODEPAGES.toArray(new String[AVAILABLE_CODEPAGES.size()]), (dialog, index) ->
+                {
                     dialog.dismiss();
                     mCallback.onDialogEntryChosen(AVAILABLE_CODEPAGES.get(index));
                 });
@@ -506,6 +557,16 @@ public class ActivityLauncher extends ActivityBase
         {
             Log.i(this, "Showing codepage dialog");
             new CodepageChooserDialog().show(getSupportFragmentManager(), null);
+        }
+    }
+
+    private class OnLauncherPointerModePressed implements View.OnClickListener
+    {
+        @Override
+        public void onClick(final View v)
+        {
+            Log.i(this, "Showing pointer mode dialog");
+            new PointerModeChooserDialog().show(getSupportFragmentManager(), null);
         }
     }
 }
