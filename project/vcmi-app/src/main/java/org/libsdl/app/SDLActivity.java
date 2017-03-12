@@ -130,7 +130,6 @@ public class SDLActivity extends ActivityBase
             mServiceMessenger = null;
         }
     };
-    private boolean mEmulateRightMouseButton;
 
     public static void initialize()
     {
@@ -581,13 +580,6 @@ public class SDLActivity extends ActivityBase
         }
     }
 
-    public int emulatedMouseButtonIndex()
-    {
-        return mEmulateRightMouseButton
-               ? 3 // SDL_BUTTON_RIGHT
-               : 1; // SDL_BUTTON_LEFT
-    }
-
     /**
      * This method is called by SDL before starting the native application thread. It can be overridden to provide the arguments after the application
      * name. The default implementation returns an empty array. It never returns null.
@@ -666,16 +658,7 @@ public class SDLActivity extends ActivityBase
         layout.addView(surface);
         mHolder.setLayout(layout);
 
-        final View btnOverlayMouseButton = outerLayout.findViewById(R.id.game_overlaybtn_mousebutton);
-        btnOverlayMouseButton.setOnClickListener(this::onOverlayMouseButtonTypeChanged);
-
         setContentView(outerLayout);
-    }
-
-    private void onOverlayMouseButtonTypeChanged(final View view)
-    {
-        mEmulateRightMouseButton = !mEmulateRightMouseButton;
-        ((TextView) view).setText(mEmulateRightMouseButton ? "RMB" : "LMB");
     }
 
     private void initService()

@@ -11,7 +11,6 @@ import android.os.Build;
 import android.view.Display;
 import android.view.InputDevice;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -26,16 +25,14 @@ import eu.vcmi.vcmi.util.Log;
  * <p>
  * Because of this, that's where we set up the SDL thread
  */
-class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
-    View.OnKeyListener, View.OnTouchListener, SensorEventListener
+class SDLSurface extends SurfaceView implements SurfaceHolder.Callback, View.OnKeyListener, SensorEventListener
 {
-
     // Sensors
     protected static SensorManager mSensorManager;
     protected static Display mDisplay;
 
     // Keep track of the surface size to normalize touch events
-    protected static float mWidth, mHeight;
+    static float mWidth, mHeight;
 
     // Startup
     public SDLSurface(Context context)
@@ -47,7 +44,7 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
         setFocusableInTouchMode(true);
         requestFocus();
         setOnKeyListener(this);
-        setOnTouchListener(this);
+        setOnTouchListener(new SurfaceTouchHandler());
 
         mDisplay = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -73,7 +70,7 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
         setFocusableInTouchMode(true);
         requestFocus();
         setOnKeyListener(this);
-        setOnTouchListener(this);
+        setOnTouchListener(new SurfaceTouchHandler());
         enableSensor(Sensor.TYPE_ACCELEROMETER, true);
     }
 
@@ -312,108 +309,6 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
         }
 
         return false;
-    }
-
-    // Touch events
-    @Override
-    public boolean onTouch(View v, MotionEvent event)
-    {
-        /* Ref: http://developer.android.com/training/gestures/multi.html */
-        final int touchDevId = event.getDeviceId();
-        final int pointerCount = event.getPointerCount();
-        int action = event.getActionMasked();
-        int pointerFingerId;
-        int mouseButton;
-        int i = -1;
-        float x, y, p;
-
-        // !!! FIXME: dump this SDK check after 2.0.4 ships and require API14.
-        if (event.getSource() == InputDevice.SOURCE_MOUSE && SDLActivity.mSeparateMouseAndTouch)
-        {
-
-            try
-            {
-                mouseButton = (Integer) event.getClass().getMethod("getButtonState").invoke(event);
-            }
-            catch (Exception e)
-            {
-                mouseButton = 1;    // oh well.
-            }
-
-            SDLActivity.onNativeMouse(mouseButton, action, event.getX(0), event.getY(0));
-        }
-        else
-        {
-            switch (action)
-            {
-                case MotionEvent.ACTION_MOVE:
-                    for (i = 0; i < pointerCount; i++)
-                    {
-                        pointerFingerId = event.getPointerId(i);
-                        x = event.getX(i) / mWidth;
-                        y = event.getY(i) / mHeight;
-                        p = event.getPressure(i);
-                        if (p > 1.0f)
-                        {
-                            // may be larger than 1.0f on some devices
-                            // see the documentation of getPressure(i)
-                            p = 1.0f;
-                        }
-                        SDLActivity
-                            .onNativeTouch(touchDevId, pointerFingerId, action, x, y, p, SDLActivity.mHolder.singleton().emulatedMouseButtonIndex());
-                    }
-                    break;
-
-                case MotionEvent.ACTION_UP:
-                case MotionEvent.ACTION_DOWN:
-                    // Primary pointer up/down, the index is always zero
-                    i = 0;
-                case MotionEvent.ACTION_POINTER_UP:
-                case MotionEvent.ACTION_POINTER_DOWN:
-                    // Non primary pointer up/down
-                    if (i == -1)
-                    {
-                        i = event.getActionIndex();
-                    }
-
-                    pointerFingerId = event.getPointerId(i);
-                    x = event.getX(i) / mWidth;
-                    y = event.getY(i) / mHeight;
-                    p = event.getPressure(i);
-                    if (p > 1.0f)
-                    {
-                        // may be larger than 1.0f on some devices
-                        // see the documentation of getPressure(i)
-                        p = 1.0f;
-                    }
-                    SDLActivity
-                        .onNativeTouch(touchDevId, pointerFingerId, action, x, y, p, SDLActivity.mHolder.singleton().emulatedMouseButtonIndex());
-                    break;
-
-                case MotionEvent.ACTION_CANCEL:
-                    for (i = 0; i < pointerCount; i++)
-                    {
-                        pointerFingerId = event.getPointerId(i);
-                        x = event.getX(i) / mWidth;
-                        y = event.getY(i) / mHeight;
-                        p = event.getPressure(i);
-                        if (p > 1.0f)
-                        {
-                            // may be larger than 1.0f on some devices
-                            // see the documentation of getPressure(i)
-                            p = 1.0f;
-                        }
-                        SDLActivity.onNativeTouch(touchDevId, pointerFingerId, MotionEvent.ACTION_UP, x, y, p,
-                            SDLActivity.mHolder.singleton().emulatedMouseButtonIndex());
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-        return true;
     }
 
     // Sensor events
