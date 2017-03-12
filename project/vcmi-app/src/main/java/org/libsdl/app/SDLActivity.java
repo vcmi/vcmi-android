@@ -158,7 +158,11 @@ public class SDLActivity extends ActivityBase
         {
             SDLActivity.mIsPaused = false;
             SDLActivity.nativeResume();
-            handleResume();
+            final SDLSurface surface = mHolder.surface();
+            if (surface != null)
+            {
+                surface.handleResume();
+            }
         }
     }
 
