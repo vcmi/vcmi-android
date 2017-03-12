@@ -12,6 +12,8 @@
     <string name="launcher_btn_cp_title">Codepage</string>
     <string name="launcher_btn_cp_subtitle_unknown">Currently: unknown</string>
     <string name="launcher_btn_cp_subtitle">Currently: %1$s</string>
+    <string name="launcher_btn_pointermode_title">Change pointer mode</string>
+    <string name="launcher_btn_pointermode_subtitle">Currently: %1$s</string>
     <string name="launcher_version">Current launcher version: %1$s</string>
     <string name="launcher_error_vcmi_data_root_created">VCMI created folder \'%1$s\' (in %2$s). Place your H3 data files there (so that you have a folder %1$s/Data and %1$s/Mp3 etc) and restart the application.</string>
     <string name="launcher_error_vcmi_data_root_failed">Could not create VCMI data folder in %1$s.</string>
@@ -24,4 +26,7 @@
     <string name="launcher_section_init">Game init</string>
     <string name="launcher_section_settings">Settings</string>
     <string name="menu_mods_download_repo">Download repository data</string>
+
+    <string name="misc_pointermode_normal">Normal</string>
+    <string name="misc_pointermode_relative">Relative</string>
 </resources>

@@ -5,17 +5,21 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import eu.vcmi.vcmi.util.Log;
+import eu.vcmi.vcmi.util.SharedPrefs;
 
 /**
  * @author F
  */
 public abstract class ActivityBase extends AppCompatActivity
 {
+    protected SharedPrefs mPrefs;
+
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setupExceptionHandler();
+        mPrefs = new SharedPrefs(this);
     }
 
     private void setupExceptionHandler()
