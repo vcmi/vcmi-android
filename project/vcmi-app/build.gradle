@@ -1,8 +1,8 @@
 apply plugin: 'com.android.model.application'
 model {
     android {
-        compileSdkVersion 25
-        buildToolsVersion "25.0.1"
+        compileSdkVersion VCMI_COMPILE_SDK
+        buildToolsVersion "25.0.2"
 
         defaultConfig {
             applicationId "eu.vcmi.vcmi"

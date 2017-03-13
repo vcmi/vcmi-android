@@ -317,7 +317,7 @@ public class ActivityLauncher extends ActivityBase
         if (!testH3Data.exists())
         {
             return new InitResult(false,
-                getString(R.string.launcher_error_h3_data_missing, testH3Data.getAbsolutePath(), vcmiDir.getAbsolutePath() + "/Mp3"));
+                getString(R.string.launcher_error_h3_data_missing, testH3Data.getAbsolutePath(), Const.VCMI_DATA_ROOT_FOLDER_NAME));
         }
 
         final File testVcmiData = new File(vcmiInternalDir, "Mods/vcmi/mod.json");

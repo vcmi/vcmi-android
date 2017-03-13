@@ -218,30 +218,32 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback, View.OnK
             sdlThread.start();
 
             // Set up a listener thread to catch when the native thread ends
-            SDLActivity.mSDLThread = new Thread(() ->
-            {
-                try
-                {
-                    sdlThread.join();
-                }
-                catch (Exception e)
-                {
-                }
-                finally
-                {
-                    // Native thread has finished
-                    if (!SDLActivity.mExitCalledFromJava)
-                    {
-                        SDLActivity.handleNativeExit();
-                    }
-                }
-            }, "SDLThreadListener");
+            SDLActivity.mSDLThread = new Thread(() -> sdlThreadFinishListener(sdlThread), "SDLThreadListener");
             SDLActivity.mSDLThread.start();
         }
 
         if (SDLActivity.mHasFocus)
         {
             SDLActivity.handleResume();
+        }
+    }
+
+    private void sdlThreadFinishListener(final Thread sdlThread)
+    {
+        try
+        {
+            sdlThread.join();
+        }
+        catch (Exception e)
+        {
+        }
+        finally
+        {
+            // Native thread has finished
+            if (!SDLActivity.mExitCalledFromJava)
+            {
+                SDLActivity.handleNativeExit();
+            }
         }
     }
 
