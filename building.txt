@@ -12,6 +12,7 @@ if you want to build SDL, ffmpeg and iconv manually
 	* place SDL addons sources into folders in ./ext/SDL2 (so that ./ext/SDL2/SDL2-image/code/configure , ./ext/SDL2/SDL2-mixer/code/configure , ./ext/SDL2/SDL2-ttf/code/configure all exist)
 	* file ./ext/SDL2/SDL2-mixer/build.mk has hardcoded path to "smpeg2-2.0.0", so if there's some newer version, you might need to change it
 	* try to enter bash and check if "make" and "yasm" work (install them if not (sudo apt-get install or something like that))
+	* make sure that bash scripts (eg. ./ext/ff/ffmpeg/configure and ./ext/ff/x264/configure) have unix newlines (lf) otherwise building ffmpeg fails with cryptic errors
 	* run in main folder: python build.py all
 	* if it eventually finishes without errors, there should be libs in ./ext-output/(ARCH)
 		* iconv and SDL are build only in configurations declared in vcmiconf.in

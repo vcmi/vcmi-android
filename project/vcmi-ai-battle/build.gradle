@@ -4,11 +4,11 @@ model {
 
     android {
         compileSdkVersion VCMI_COMPILE_SDK
-        buildToolsVersion "25.0.1"
+        buildToolsVersion "25.0.2"
 
         defaultConfig {
-            minSdkVersion.apiLevel 16
-            targetSdkVersion.apiLevel 24
+            minSdkVersion.apiLevel VCMI_PLATFORM
+            targetSdkVersion.apiLevel 25
         }
     }
 
