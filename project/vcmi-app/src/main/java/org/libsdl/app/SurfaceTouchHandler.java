@@ -4,6 +4,9 @@ import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.Arrays;
+
+import eu.vcmi.vcmi.util.Log;
 import eu.vcmi.vcmi.util.SharedPrefs;
 
 /**
@@ -26,14 +29,16 @@ class SurfaceTouchHandler implements View.OnTouchListener
     /**
      * used to disable main pointer UP action after we sent 2-finger right-click to prevent accidental left click afterwards
      */
-    private boolean mIgnoreActionUp = false;
+    private boolean mSecondaryPointerActive = false;
     private int mWidth;
     private int mHeight;
+    private float mRelativeSpeedMultiplier;
 
     SurfaceTouchHandler(final Context context)
     {
         final SharedPrefs prefs = new SharedPrefs(context);
         mPointerRelativeMode = prefs.load(SharedPrefs.KEY_POINTER_RELATIVE_MODE, false);
+        mRelativeSpeedMultiplier = 2.0f;
     }
 
     @Override
@@ -50,13 +55,17 @@ class SurfaceTouchHandler implements View.OnTouchListener
         switch (action)
         {
             case MotionEvent.ACTION_MOVE:
+                if (mSecondaryPointerActive)
+                {
+                    break;
+                }
                 sendTouchEvent(event, touchDevId, action, MOUSE_BTN_LEFT);
                 break;
 
             case MotionEvent.ACTION_POINTER_UP:
                 if (event.getPointerCount() < 3) // ignore 3+ finger taps, only check for doubles
                 {
-                    mIgnoreActionUp = false;
+                    mSecondaryPointerActive = false;
                     sendTouchEvent(event, touchDevId, MotionEvent.ACTION_UP, MOUSE_BTN_RIGHT);
                 }
                 break;
@@ -64,23 +73,23 @@ class SurfaceTouchHandler implements View.OnTouchListener
             case MotionEvent.ACTION_POINTER_DOWN:
                 if (event.getPointerCount() < 3) // ignore 3+ finger taps, only check for doubles
                 {
-                    mIgnoreActionUp = true;
+                    mSecondaryPointerActive = true;
                     sendTouchEvent(event, touchDevId, MotionEvent.ACTION_DOWN, MOUSE_BTN_RIGHT);
                 }
                 break;
 
             case MotionEvent.ACTION_UP:
-                if (mIgnoreActionUp)
+            case MotionEvent.ACTION_DOWN:
+                if (mSecondaryPointerActive)
                 {
                     break;
                 }
-                // fallthrough
-            case MotionEvent.ACTION_DOWN:
+
                 sendTouchEvent(event, touchDevId, action, MOUSE_BTN_LEFT);
                 break;
 
             case MotionEvent.ACTION_CANCEL:
-                mIgnoreActionUp = false;
+                mSecondaryPointerActive = false;
                 sendTouchEvent(event, touchDevId, MotionEvent.ACTION_UP, MOUSE_BTN_LEFT);
                 break;
 
@@ -106,10 +115,18 @@ class SurfaceTouchHandler implements View.OnTouchListener
             return;
         }
 
+        if (action == MotionEvent.ACTION_DOWN && pressedButton == MOUSE_BTN_LEFT)
+        {
+            final int cursorPos[] = new int[2];
+            retrieveCursorPositions(cursorPos);
+            Log.v("retrieved cursor position for relative mode: " + Arrays.toString(cursorPos));
+            mCachedRealPos.mX = (float) cursorPos[0] / mWidth;
+            mCachedRealPos.mY = (float) cursorPos[1] / mHeight;
+        }
+
         if (pressedButton == MOUSE_BTN_RIGHT)
         {
-            mCurrentPos.mX = mCachedRealPos.mX + (mCurrentPos.mX - mCachedTouchPos.mX);
-            mCurrentPos.mY = mCachedRealPos.mY + (mCurrentPos.mY - mCachedTouchPos.mY);
+            modifyCurrentPositionForRelativeMode();
         }
         else if (action == MotionEvent.ACTION_DOWN)
         {
@@ -120,14 +137,17 @@ class SurfaceTouchHandler implements View.OnTouchListener
         }
         else if (pressedButton == MOUSE_BTN_LEFT)
         {
-            mCurrentPos.mX = mCachedRealPos.mX + (mCurrentPos.mX - mCachedTouchPos.mX);
-            mCurrentPos.mY = mCachedRealPos.mY + (mCurrentPos.mY - mCachedTouchPos.mY);
-            if (action == MotionEvent.ACTION_UP)
-            {
-                mCachedRealPos.mX = mCurrentPos.mX;
-                mCachedRealPos.mY = mCurrentPos.mY;
-            }
+            modifyCurrentPositionForRelativeMode();
         }
+    }
+
+    /**
+     * updates current desired cursor position taking relative mode calculations into account
+     */
+    private void modifyCurrentPositionForRelativeMode()
+    {
+        mCurrentPos.mX = mCachedRealPos.mX + (mCurrentPos.mX - mCachedTouchPos.mX) * mRelativeSpeedMultiplier;
+        mCurrentPos.mY = mCachedRealPos.mY + (mCurrentPos.mY - mCachedTouchPos.mY) * mRelativeSpeedMultiplier;
     }
 
     private float pressure(final MotionEvent ev)
@@ -145,6 +165,8 @@ class SurfaceTouchHandler implements View.OnTouchListener
         mWidth = width;
         mHeight = height;
     }
+
+    private native void retrieveCursorPositions(final int[] outValues);
 
     private static class TouchPoint
     {

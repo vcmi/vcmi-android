@@ -8,6 +8,7 @@ extern "C" {
 #include "SDL_main.h"
 }
 
+#include <SDL_mouse.h>
 #include "AndroidVMHelper.h"
 
 /*******************************************************************************
@@ -21,6 +22,7 @@ extern void SDL_Android_Init(JNIEnv *env, jclass cls);
 /* This prototype is needed to prevent a warning about the missing prototype for global function below */
 JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv *env, jclass cls,
 																 jobjectArray array);
+JNIEXPORT void JNICALL Java_org_libsdl_app_SurfaceTouchHandler_retrieveCursorPositions(JNIEnv *env, jclass cls, jintArray outValues);
 }
 //JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeQuit(JNIEnv* env, jclass cls)
 //{
@@ -88,6 +90,19 @@ JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv *env, jc
 	/* exit(status); */
 
 	return status;
+}
+
+JNIEXPORT void JNICALL Java_org_libsdl_app_SurfaceTouchHandler_retrieveCursorPositions(JNIEnv *env, jclass cls, jintArray outValues)
+{
+	auto len = env->GetArrayLength(outValues);
+	if (len != 2)
+	{
+		return;
+	}
+	int x, y;
+	SDL_GetMouseState(&x, &y);
+	jint elements[] = {x, y};
+	env->SetIntArrayRegion(outValues, 0, 2, elements);
 }
 
 #endif /* __ANDROID__ */
