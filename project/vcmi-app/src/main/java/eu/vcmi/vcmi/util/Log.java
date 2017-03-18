@@ -147,4 +147,9 @@ public class Log
     {
         log(android.util.Log.ERROR, obj, msg + "\n" + android.util.Log.getStackTraceString(e));
     }
+
+    public static void e(final String msg, final Throwable e)
+    {
+        logInternal(android.util.Log.ERROR, STATIC_TAG, msg + "\n" + android.util.Log.getStackTraceString(e));
+    }
 }

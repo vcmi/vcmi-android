@@ -5,7 +5,7 @@ ext {
 
     VCMI_PATH_SDL = "${VCMI_PATH_EXT}/SDL2"
     VCMI_PATH_FFMPEG = "${PROJECT_PATH_BASE}/ext/ff/ffmpeg"
-    VCMI_PATH_BOOST = "${VCMI_PATH_EXT}/boost/boost_1_61_0"
+	VCMI_PATH_BOOST = "${VCMI_PATH_EXT}/boost/boost_1_61_0"
     VCMI_PATH_VCMI = "${VCMI_PATH_EXT}/vcmi"
     VCMI_PATH_FUZZYLITE = "${VCMI_PATH_VCMI}/AI/FuzzyLite/fuzzylite"
 
@@ -24,9 +24,10 @@ ext {
     // we should be able to use the newest version to compile, but it seems that gradle-experimental is somehow broken and doesn't compile native libs correctly for apis older than this setting...
     VCMI_COMPILE_SDK = 25
     // abis are automatically updated from python build script, but it can be edited here if you don't plan to rerun the script
-    VCMI_ABIS = ["arm64-v8a"]
+	VCMI_ABIS = ["armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"]
 
     VCMI_STL_VERSION = "c++_shared"
+    VCMI_BUILD_TOOLS = "25.0.2"
 
     LIBS_DEF = [
             ["prebuiltSDL", ["libSDL2.so"], "${VCMI_INCL_SDL}"],
