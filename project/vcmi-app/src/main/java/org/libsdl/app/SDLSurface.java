@@ -7,7 +7,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Build;
 import android.view.Display;
 import android.view.InputDevice;
 import android.view.KeyEvent;
@@ -37,7 +36,7 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback, View.OnK
     {
         super(context);
         getHolder().addCallback(this);
-        mSurfaceTouchHandler = new SurfaceTouchHandler(context);
+        mSurfaceTouchHandler = SurfaceTouchHandler.createSurfaceTouchHandler(context);
 
         setFocusable(true);
         setFocusableInTouchMode(true);
@@ -48,10 +47,7 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback, View.OnK
         mDisplay = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 
-        if (Build.VERSION.SDK_INT >= 12)
-        {
-            setOnGenericMotionListener(new SDLGenericMotionListener_API12());
-        }
+        setOnGenericMotionListener(new SDLGenericMotionListener_API12());
     }
 
     public void handlePause()
@@ -63,7 +59,7 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback, View.OnK
     {
         if (mSurfaceTouchHandler == null)
         {
-            mSurfaceTouchHandler = new SurfaceTouchHandler(getContext());
+            mSurfaceTouchHandler = SurfaceTouchHandler.createSurfaceTouchHandler(getContext());
         }
         setFocusable(true);
         setFocusableInTouchMode(true);

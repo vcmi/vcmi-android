@@ -4,10 +4,7 @@ import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.util.Arrays;
-
 import eu.vcmi.vcmi.settings.PointerModeSettingController;
-import eu.vcmi.vcmi.util.Log;
 import eu.vcmi.vcmi.util.SharedPrefs;
 
 /**
@@ -15,32 +12,30 @@ import eu.vcmi.vcmi.util.SharedPrefs;
  */
 class SurfaceTouchHandler implements View.OnTouchListener
 {
-    private static final int MOUSE_BTN_LEFT = 1;
-    private static final int MOUSE_BTN_RIGHT = 3;
-    private final boolean mPointerRelativeMode;
-    /**
-     * last ACTION_DOWN touch position, needed for relative pointer mode calculations
-     */
-    private final TouchPoint mCachedTouchPos = new TouchPoint();
-    /**
-     * last remembered real pointer position, needed for relative pointer mode calculations
-     */
-    private final TouchPoint mCachedRealPos = new TouchPoint();
-    private final TouchPoint mCurrentPos = new TouchPoint();
+    protected static final int MOUSE_BTN_LEFT = 1;
+    protected static final int MOUSE_BTN_RIGHT = 3;
+    protected final TouchPoint mCurrentPos = new TouchPoint();
+    protected int mWidth;
+    protected int mHeight;
     /**
      * used to disable main pointer UP action after we sent 2-finger right-click to prevent accidental left click afterwards
      */
     private boolean mSecondaryPointerActive = false;
-    private int mWidth;
-    private int mHeight;
-    private float mRelativeSpeedMultiplier;
 
-    SurfaceTouchHandler(final Context context)
+    protected SurfaceTouchHandler()
     {
-        final SharedPrefs prefs = new SharedPrefs(context);
-        mPointerRelativeMode = prefs.loadEnum(SharedPrefs.KEY_POINTER_MODE, PointerModeSettingController.PointerMode.NORMAL)
-                               == PointerModeSettingController.PointerMode.RELATIVE;
-        mRelativeSpeedMultiplier = 2.0f;
+    }
+
+    public static SurfaceTouchHandler createSurfaceTouchHandler(final Context ctx)
+    {
+        final SharedPrefs prefs = new SharedPrefs(ctx);
+        final boolean relativeMode = prefs.loadEnum(SharedPrefs.KEY_POINTER_MODE, PointerModeSettingController.PointerMode.NORMAL)
+                                     == PointerModeSettingController.PointerMode.RELATIVE;
+        if (relativeMode)
+        {
+            return new SurfaceTouchHandlerRelative();
+        }
+        return new SurfaceTouchHandler();
     }
 
     @Override
@@ -106,51 +101,14 @@ class SurfaceTouchHandler implements View.OnTouchListener
     {
         mCurrentPos.mX = event.getX(0) / mWidth;
         mCurrentPos.mY = event.getY(0) / mHeight;
-        handleRelativeModeTouch(action, pressedButton);
+        sendTouchEventInternal(event, touchDevId, action, pressedButton);
+    }
+
+    protected void sendTouchEventInternal(final MotionEvent event, final int touchDevId, final int action, final int pressedButton)
+    {
         SDLActivity.onNativeTouch(touchDevId, event.getPointerId(0), action, mCurrentPos.mX, mCurrentPos.mY, pressure(event), pressedButton);
     }
 
-    private void handleRelativeModeTouch(final int action, final int pressedButton)
-    {
-        if (!mPointerRelativeMode)
-        {
-            return;
-        }
-
-        if (action == MotionEvent.ACTION_DOWN && pressedButton == MOUSE_BTN_LEFT)
-        {
-            final int cursorPos[] = new int[2];
-            retrieveCursorPositions(cursorPos);
-            Log.v("retrieved cursor position for relative mode: " + Arrays.toString(cursorPos));
-            mCachedRealPos.mX = (float) cursorPos[0] / mWidth;
-            mCachedRealPos.mY = (float) cursorPos[1] / mHeight;
-        }
-
-        if (pressedButton == MOUSE_BTN_RIGHT)
-        {
-            modifyCurrentPositionForRelativeMode();
-        }
-        else if (action == MotionEvent.ACTION_DOWN)
-        {
-            mCachedTouchPos.mX = mCurrentPos.mX;
-            mCachedTouchPos.mY = mCurrentPos.mY;
-            mCurrentPos.mX = mCachedRealPos.mX;
-            mCurrentPos.mY = mCachedRealPos.mY;
-        }
-        else if (pressedButton == MOUSE_BTN_LEFT)
-        {
-            modifyCurrentPositionForRelativeMode();
-        }
-    }
-
-    /**
-     * updates current desired cursor position taking relative mode calculations into account
-     */
-    private void modifyCurrentPositionForRelativeMode()
-    {
-        mCurrentPos.mX = mCachedRealPos.mX + (mCurrentPos.mX - mCachedTouchPos.mX) * mRelativeSpeedMultiplier;
-        mCurrentPos.mY = mCachedRealPos.mY + (mCurrentPos.mY - mCachedTouchPos.mY) * mRelativeSpeedMultiplier;
-    }
 
     private float pressure(final MotionEvent ev)
     {
@@ -168,9 +126,9 @@ class SurfaceTouchHandler implements View.OnTouchListener
         mHeight = height;
     }
 
-    private native void retrieveCursorPositions(final int[] outValues);
+    protected native void retrieveCursorPositions(final int[] outValues);
 
-    private static class TouchPoint
+    protected static class TouchPoint
     {
         float mX;
         float mY;
