@@ -115,6 +115,6 @@ if flagPaths:
 	addVersionSuffix()
 	
 if flagBuild:
-	#buildIconv()
+	buildIconv()
 	buildSDL()
-	#buildFFMPEG()
+	buildFFMPEG()

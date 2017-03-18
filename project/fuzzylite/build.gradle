@@ -3,7 +3,7 @@ apply plugin: 'com.android.model.native'
 model {
     android {
         compileSdkVersion VCMI_COMPILE_SDK
-        buildToolsVersion "25.0.2"
+        buildToolsVersion VCMI_BUILD_TOOLS
 
         defaultConfig {
             minSdkVersion.apiLevel VCMI_PLATFORM

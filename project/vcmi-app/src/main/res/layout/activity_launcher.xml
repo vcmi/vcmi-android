@@ -80,7 +80,7 @@
                 layout="@layout/inc_launcher_btn" />
 
             <include
-                android:id="@+id/launcher_btn_internal_relative_pointer"
+                android:id="@+id/launcher_btn_pointer_mode"
                 layout="@layout/inc_launcher_btn" />
         </LinearLayout>
     </ScrollView>

@@ -6,6 +6,7 @@ import android.view.View;
 
 import java.util.Arrays;
 
+import eu.vcmi.vcmi.settings.PointerModeSettingController;
 import eu.vcmi.vcmi.util.Log;
 import eu.vcmi.vcmi.util.SharedPrefs;
 
@@ -37,7 +38,8 @@ class SurfaceTouchHandler implements View.OnTouchListener
     SurfaceTouchHandler(final Context context)
     {
         final SharedPrefs prefs = new SharedPrefs(context);
-        mPointerRelativeMode = prefs.load(SharedPrefs.KEY_POINTER_RELATIVE_MODE, false);
+        mPointerRelativeMode = prefs.loadEnum(SharedPrefs.KEY_POINTER_MODE, PointerModeSettingController.PointerMode.NORMAL)
+                               == PointerModeSettingController.PointerMode.RELATIVE;
         mRelativeSpeedMultiplier = 2.0f;
     }
 
