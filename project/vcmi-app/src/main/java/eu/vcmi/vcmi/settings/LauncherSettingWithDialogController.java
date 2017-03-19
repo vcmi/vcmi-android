@@ -21,16 +21,11 @@ public abstract class LauncherSettingWithDialogController<T, Conf> extends Launc
     @Override
     public void onClick(final View v)
     {
-        Log.i(this, "Showing resolution dialog");
+        Log.i(this, "Showing dialog");
         final LauncherSettingDialog<T> dialog = dialog();
         dialog.observe(this); // TODO rebinding dialogs on activity config changes
         dialog.show(mActivity.getSupportFragmentManager(), SETTING_DIALOG_ID);
     }
 
     protected abstract LauncherSettingDialog<T> dialog();
-
-    public void updateConfig(final Conf conf)
-    {
-        mConfig = conf;
-    }
 }

@@ -5,6 +5,7 @@ import android.view.MotionEvent;
 import java.util.Arrays;
 
 import eu.vcmi.vcmi.util.Log;
+import eu.vcmi.vcmi.util.SharedPrefs;
 
 /**
  * @author F
@@ -20,11 +21,11 @@ public class SurfaceTouchHandlerRelative extends SurfaceTouchHandler
      */
     private final TouchPoint mCachedRealPos = new TouchPoint();
 
-    private float mRelativeSpeedMultiplier;
+    private final float mRelativeSpeedMultiplier;
 
-    protected SurfaceTouchHandlerRelative()
+    protected SurfaceTouchHandlerRelative(final SharedPrefs prefs)
     {
-        mRelativeSpeedMultiplier = 2.0f;
+        mRelativeSpeedMultiplier = prefs.load(SharedPrefs.KEY_POINTER_MULTIPLIER, 1.0f);
     }
 
     private void handleRelativeModeTouch(final int action, final int pressedButton)
