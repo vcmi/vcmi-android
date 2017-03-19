@@ -41,6 +41,7 @@ public abstract class LauncherSettingController<TSetting, TConf> implements View
     public void updateConfig(final TConf conf)
     {
         mConfig = conf;
+        updateContent();
     }
 
     public void updateContent()

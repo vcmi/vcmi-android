@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 public class SharedPrefs
 {
     public static final String KEY_POINTER_MODE = "KEY_POINTER_MODE"; // [int]
+    public static final String KEY_POINTER_MULTIPLIER = "KEY_POINTER_MULTIPLIER"; // [float]
     private static final String VCMI_PREFS_NAME = "VCMIPrefs";
     private final SharedPreferences mPrefs;
 
@@ -29,6 +30,17 @@ public class SharedPrefs
     public int load(final String name, final int defaultValue)
     {
         return log(name, mPrefs.getInt(name, defaultValue), false);
+    }
+
+    public void save(final String name, final float value)
+    {
+        mPrefs.edit().putFloat(name, value).apply();
+        log(name, value, true);
+    }
+
+    public float load(final String name, final float defaultValue)
+    {
+        return log(name, mPrefs.getFloat(name, defaultValue), false);
     }
 
     public void save(final String name, final boolean value)

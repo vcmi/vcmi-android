@@ -33,7 +33,7 @@ class SurfaceTouchHandler implements View.OnTouchListener
                                      == PointerModeSettingController.PointerMode.RELATIVE;
         if (relativeMode)
         {
-            return new SurfaceTouchHandlerRelative();
+            return new SurfaceTouchHandlerRelative(prefs);
         }
         return new SurfaceTouchHandler();
     }
@@ -108,7 +108,6 @@ class SurfaceTouchHandler implements View.OnTouchListener
     {
         SDLActivity.onNativeTouch(touchDevId, event.getPointerId(0), action, mCurrentPos.mX, mCurrentPos.mY, pressure(event), pressedButton);
     }
-
 
     private float pressure(final MotionEvent ev)
     {

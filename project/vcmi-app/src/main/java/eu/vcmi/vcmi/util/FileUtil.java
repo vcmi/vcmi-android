@@ -64,7 +64,7 @@ public class FileUtil
                 }
                 else if (zipEntry.isDirectory())
                 {
-                    Log.d("Creating new dir");
+                    Log.v("Creating new dir: " + zipEntry);
                     if (!newFile.mkdirs())
                     {
                         Log.e("Couldn't create directory " + newFile.getAbsolutePath());
@@ -92,7 +92,7 @@ public class FileUtil
                 fos.close();
                 ++unpackedEntries;
             }
-            Log.d("Unpacked data (" + unpackedEntries + "entries)");
+            Log.d("Unpacked data (" + unpackedEntries + " entries)");
 
             is.closeEntry();
             is.close();
