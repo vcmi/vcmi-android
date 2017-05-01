@@ -16,26 +16,39 @@ public class Config
     public String mCodepage;
     public int mResolutionWidth;
     public int mResolutionHeight;
+    private JSONObject mRawObject;
+
+    private static JSONObject accessGeneralNode(final JSONObject baseObj)
+    {
+        return baseObj.optJSONObject("general");
+    }
+
+    private static JSONObject accessScreenResNode(final JSONObject baseObj)
+    {
+        final JSONObject video = baseObj.optJSONObject("video");
+        if (video != null)
+        {
+            return video.optJSONObject("screenRes");
+        }
+        return null;
+    }
 
     public static Config load(final JSONObject obj)
     {
         Log.v("VCMI", "loading config from json: " + obj.toString());
-        Config config = new Config();
-        JSONObject general = obj.optJSONObject("general");
+        final Config config = new Config();
+        final JSONObject general = accessGeneralNode(obj);
         if (general != null)
         {
             config.mCodepage = general.optString("encoding");
         }
-        JSONObject video = obj.optJSONObject("video");
-        if (video != null)
+        final JSONObject screenRes = accessScreenResNode(obj);
+        if (screenRes != null)
         {
-            JSONObject screenRes = video.optJSONObject("screenRes");
-            if (screenRes != null)
-            {
-                config.mResolutionWidth = screenRes.optInt("width");
-                config.mResolutionHeight = screenRes.optInt("height");
-            }
+            config.mResolutionWidth = screenRes.optInt("width");
+            config.mResolutionHeight = screenRes.optInt("height");
         }
+        config.mRawObject = obj;
         return config;
     }
 
@@ -45,7 +58,7 @@ public class Config
         {
             FileUtil.write(location, toJson());
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             Log.e(this, "Could not save config", e);
         }
@@ -53,6 +66,9 @@ public class Config
 
     private String toJson() throws JSONException
     {
+        final JSONObject videoNode = accessGeneralNode(mRawObject);
+        final JSONObject screenResNode = accessScreenResNode(mRawObject);
+
         JSONObject root = new JSONObject();
         JSONObject general = new JSONObject();
         JSONObject video = new JSONObject();
