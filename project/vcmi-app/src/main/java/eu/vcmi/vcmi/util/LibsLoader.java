@@ -25,7 +25,7 @@ public final class LibsLoader
         loadLib("boost-locale", true);
         loadLib("boost-filesystem", true);
         loadLib("boost-program-options", true);
-        loadLib("boost-smartptr", true);
+//        loadLib("boost-smartptr", true);
         loadLib("boost-thread", true);
         loadLib("SDL2", false);
         loadLib("smpeg2", true);
@@ -49,7 +49,7 @@ public final class LibsLoader
     public static void loadClientLibs()
     {
         loadCommon();
-        loadLib("vcmi-client2", false);
+        loadLib("vcmi-client", false);
     }
 
     public static void loadServerLibs()

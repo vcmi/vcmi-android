@@ -1,1 +1,1 @@
-include ':vcmi-client2', ':vcmi-app', ':vcmi-lib', ':boost-locale', ':boost-datetime', ':boost-system', ':boost-thread', ':boost-filesystem', ':boost-smartptr', ':boost-program-options', ':fuzzylite', ':minizip', ':vcmi-server', ':vcmi-ai-battle', ':vcmi-ai-vcai', ':vcmi-ai-stupid'
+include ':vcmi-app'

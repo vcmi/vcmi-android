@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import eu.vcmi.vcmi.R;
+import eu.vcmi.vcmi.util.GeneratedVersion;
 
 /**
  * @author F
@@ -27,8 +28,7 @@ public class StartGameController extends LauncherSettingController<Void, Void>
     @Override
     protected String subText()
     {
-        // TODO reference vcmi version dynamically instead of hardcoding (or obtain it on build time)
-        return mActivity.getString(R.string.launcher_btn_start_subtitle);
+        return mActivity.getString(R.string.launcher_btn_start_subtitle, GeneratedVersion.VCMI_VERSION);
     }
 
     @Override

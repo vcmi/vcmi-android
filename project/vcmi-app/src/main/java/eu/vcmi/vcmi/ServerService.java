@@ -47,7 +47,7 @@ public class ServerService extends Service
         Log.i(this, "destroyed");
         // we need to kill the process to ensure all server data is cleaned up; this isn't a good solution (as we mess with system's
         // memory management stuff), but clearing all native data manually would be a pain and we can't force close the server "gracefully", because
-        // even after onDestroy call, the system can postpone actually finishing the process -- this would bread CVCMIServer initialization
+        // even after onDestroy call, the system can postpone actually finishing the process -- this would break CVCMIServer initialization
         System.exit(0);
     }
 

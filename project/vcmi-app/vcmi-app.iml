@@ -8,11 +8,11 @@
     </facet>
     <facet type="android" name="Android">
       <configuration>
-        <option name="SELECTED_BUILD_VARIANT" value="debug" />
-        <option name="ASSEMBLE_TASK_NAME" value="assembleDebug" />
-        <option name="COMPILE_JAVA_TASK_NAME" value="compileDebugSources" />
+        <option name="SELECTED_BUILD_VARIANT" value="vcmiOnlyDebug" />
+        <option name="ASSEMBLE_TASK_NAME" value="assembleVcmiOnlyDebug" />
+        <option name="COMPILE_JAVA_TASK_NAME" value="compileVcmiOnlyDebugSources" />
         <afterSyncTasks>
-          <task>generateDebugSources</task>
+          <task>generateVcmiOnlyDebugSources</task>
         </afterSyncTasks>
         <option name="ALLOW_USER_CONFIGURATION" value="false" />
         <option name="MANIFEST_FILE_RELATIVE_PATH" value="/src/main/AndroidManifest.xml" />
@@ -23,36 +23,200 @@
     </facet>
     <facet type="native-android-gradle" name="Native-Android-Gradle">
       <configuration>
-        <option name="SELECTED_BUILD_VARIANT" value="-----" />
+        <option name="SELECTED_BUILD_VARIANT" value="vcmiOnlyDebug" />
       </configuration>
     </facet>
   </component>
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
-    <output url="file://$MODULE_DIR$/build/intermediates/classes/debug" />
-    <output-test url="file://$MODULE_DIR$/build/intermediates/classes/test/debug" />
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
+    <output url="file://$MODULE_DIR$/build/intermediates/classes/vcmiOnly/debug" />
+    <output-test url="file://$MODULE_DIR$/build/intermediates/classes/test/vcmiOnly/debug" />
     <exclude-output />
+    <content url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/date_time/src/gregorian">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/date_time/src/gregorian" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/date_time/src/posix_time">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/date_time/src/posix_time" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/filesystem/src">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/filesystem/src" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/locale/src/encoding">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/locale/src/encoding" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/locale/src/shared">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/locale/src/shared" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/locale/src/std">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/locale/src/std" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/locale/src/util">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/locale/src/util" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/program_options/src">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/program_options/src" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/system/src">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/system/src" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/thread/src">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/thread/src" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/thread/src/pthread">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/boost/boost_1_64_0/libs/thread/src/pthread" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/BattleAI">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/BattleAI" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/defuzzifier">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/defuzzifier" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/factory">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/factory" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/hedge">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/hedge" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/imex">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/imex" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/norm/s">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/norm/s" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/norm/t">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/norm/t" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/rule">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/rule" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/term">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/term" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/variable">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/variable" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/VCAI">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/VCAI" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/client">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/client" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/client/battle">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/client/battle" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/client/gui">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/client/gui" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/client/widgets">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/client/widgets" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/client/windows">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/client/windows" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/lib">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/lib" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/lib/filesystem">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/lib/filesystem" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/lib/logging">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/lib/logging" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/lib/mapObjects">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/lib/mapObjects" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/lib/mapping">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/lib/mapping" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/lib/minizip">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/lib/minizip" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/lib/registerTypes">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/lib/registerTypes" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/lib/rmg">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/lib/rmg" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/lib/serializer">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/lib/serializer" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/lib/spells">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/lib/spells" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/server">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/server" isTestSource="false" />
+    </content>
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/debug" isTestSource="false" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/debug" isTestSource="false" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/debug" isTestSource="false" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/debug" isTestSource="false" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/debug" isTestSource="false" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/debug" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/debug" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/androidTest/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/androidTest/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/androidTest/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/androidTest/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/androidTest/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/androidTest/debug" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/androidTest/debug" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/.externalNativeBuild/cmake/vcmiOnlyDebug/arm64-v8a" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/.externalNativeBuild/cmake/vcmiOnlyDebug/x86_64" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/.externalNativeBuild/cmake/vcmiOnlyDebug/armeabi-v7a" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/.externalNativeBuild/cmake/vcmiOnlyDebug/x86" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/vcmiOnly/debug" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/vcmiOnly/debug" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/vcmiOnly/debug" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/vcmiOnly/debug" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/vcmiOnly/debug" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/vcmiOnly/debug" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/vcmiOnly/debug" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vcmiOnlyDebug/res" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vcmiOnlyDebug/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vcmiOnlyDebug/assets" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vcmiOnlyDebug/aidl" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vcmiOnlyDebug/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vcmiOnlyDebug/jni" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vcmiOnlyDebug/rs" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vcmiOnlyDebug/shaders" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/androidTest/vcmiOnly/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/androidTest/vcmiOnly/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/androidTest/vcmiOnly/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/androidTest/vcmiOnly/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/androidTest/vcmiOnly/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/androidTest/vcmiOnly/debug" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/androidTest/vcmiOnly/debug" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnlyDebug/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnlyDebug/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnlyDebug/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnlyDebug/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnlyDebug/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnlyDebug/jni" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnlyDebug/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnlyDebug/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vcmiOnly/res" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vcmiOnly/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vcmiOnly/assets" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vcmiOnly/aidl" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vcmiOnly/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vcmiOnly/jni" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vcmiOnly/rs" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vcmiOnly/shaders" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestVcmiOnly/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestVcmiOnly/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestVcmiOnly/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestVcmiOnly/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestVcmiOnly/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestVcmiOnly/jni" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestVcmiOnly/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestVcmiOnly/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/jni" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/assets" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/aidl" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/jni" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/debug/renderscript" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/debug/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/shaders" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/testDebug/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testDebug/resources" type="java-test-resource" />
@@ -68,53 +232,62 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/aidl" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/jni" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/main/renderscript" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/shaders" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/jni" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/renderscript" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/assets" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/aidl" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/jni" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/renderscript" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/jni" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/shaders" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/assets" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/binaries" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/blame" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/cmake" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-safeguard" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/packaged" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/processing-tools" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/rs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/shaders" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/symbols" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/transforms" />
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
+      <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
+    </content>
+    <content url="file://$MODULE_DIR$/../vcmi-client/src/main/cpp">
+      <sourceFolder url="file://$MODULE_DIR$/../vcmi-client/src/main/cpp" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../vcmi-server/src/main/cpp">
+      <sourceFolder url="file://$MODULE_DIR$/../vcmi-server/src/main/cpp" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 25 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="stream-1.1.4" level="project" />
-    <orderEntry type="library" exported="" name="design-25.3.0" level="project" />
-    <orderEntry type="library" exported="" name="transition-25.3.0" level="project" />
-    <orderEntry type="library" exported="" name="support-compat-25.3.0" level="project" />
-    <orderEntry type="library" exported="" name="support-v4-25.3.0" level="project" />
-    <orderEntry type="library" exported="" name="support-media-compat-25.3.0" level="project" />
-    <orderEntry type="library" exported="" name="support-core-ui-25.3.0" level="project" />
-    <orderEntry type="library" exported="" name="recyclerview-v7-25.3.0" level="project" />
-    <orderEntry type="library" exported="" name="support-core-utils-25.3.0" level="project" />
-    <orderEntry type="library" exported="" name="appcompat-v7-25.3.0" level="project" />
-    <orderEntry type="library" exported="" name="support-fragment-25.3.0" level="project" />
-    <orderEntry type="library" exported="" name="animated-vector-drawable-25.3.0" level="project" />
-    <orderEntry type="library" exported="" name="support-annotations-25.3.0" level="project" />
-    <orderEntry type="library" exported="" name="support-vector-drawable-25.3.0" level="project" />
+    <orderEntry type="library" exported="" name="transition-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="design-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="support-core-ui-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="support-media-compat-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="recyclerview-v7-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="support-annotations-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="appcompat-v7-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="support-vector-drawable-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="support-compat-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="support-core-utils-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="support-fragment-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="animated-vector-drawable-25.3.1" level="project" />
   </component>
 </module>

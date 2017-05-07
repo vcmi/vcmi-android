@@ -1,0 +1,13 @@
+{
+	"bash" :
+	{
+		"projectRoot" : "/mnt/q/Dev/VCMI/vcmi-android",
+		"ndkRoot" : "/mnt/q/P/Android/android-ndk-r15-linux"
+	},
+	"projectRoot" : "q:/Dev/VCMI/vcmi-android",
+	"ndkRoot" : "Q:/P/Android/android-sdk/ndk-bundle",
+	"sdkRoot" : "Q:/P/Android/android-sdk",
+	"abis" : "arm64-v8a",
+	"boostFolderName" : "boost_1_64_0",
+	"androidApi" : 21
+}
