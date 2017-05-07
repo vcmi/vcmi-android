@@ -1,51 +1,97 @@
-apply plugin: 'com.android.model.application'
-model {
-    android {
-        compileSdkVersion VCMI_COMPILE_SDK
-        buildToolsVersion VCMI_BUILD_TOOLS
+apply plugin: 'com.android.application'
 
-        defaultConfig {
-            applicationId "eu.vcmi.vcmi"
-            minSdkVersion.apiLevel VCMI_PLATFORM
-            targetSdkVersion.apiLevel 25
-            versionCode APP_VERSION_CODE
-            versionName APP_VERSION
-            jackOptions {
-                enabled true
-            }
+android {
+    signingConfigs {
+        config {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file('C:/Users/F/.android/adbkey')
+            storePassword 'android'
         }
     }
+    compileSdkVersion VCMI_COMPILE_SDK
+    buildToolsVersion VCMI_BUILD_TOOLS
+    defaultConfig {
+        applicationId "eu.vcmi.vcmi"
+        minSdkVersion VCMI_PLATFORM
+        targetSdkVersion VCMI_COMPILE_SDK
+        versionCode Integer.parseInt(APP_VERSION_CODE)
+        versionName APP_VERSION
 
-    android.ndk {
-        abiFilters.addAll(VCMI_ABIS)
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_STL=${VCMI_STL_VERSION}",
+                        "-DANDROID_NATIVE_API_LEVEL=${VCMI_PLATFORM}",
+                        "-DANDROID_TOOLCHAIN=clang",
+                        "-DVCMI_ROOT=${PROJECT_PATH_BASE}"
+                cppFlags "-std=c++11", "-frtti", "-fexceptions", "-Wno-switch"
+            }
+        }
+
+        ndk {
+            abiFilters = new HashSet<>(VCMI_ABIS)
+        }
     }
-
-    android.sources {
+    externalNativeBuild {
+        cmake {
+            path 'cmake-scripts/CMakeLists.txt'
+        }
+    }
+    sourceSets {
         main {
-            jniLibs {
-                source {
-                    srcDir "${PROJECT_PATH_BASE}/ext-output"
-                    srcDir "src/main/jniLibs"
-                }
-                dependencies {
-//                    project ":vcmi-ai-battle"
-//                    project ":vcmi-ai-stupid"
-//                    project ":vcmi-ai-vcai"
-                    project ":vcmi-client2"
-                    project ":vcmi-server"
-                }
-            }
+            jniLibs.srcDirs = ["${PROJECT_PATH_BASE}/ext-output"]
         }
     }
-
-    android.compileOptions {
+    compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    productFlavors {
+        vcmiOnly {
+            externalNativeBuild {
+                cmake {
+                    targets "vcmi",
+                            "vcmiserver",
+                            "vcmiclient"
+                }
+            }
+        }
+        libsOnly {
+            externalNativeBuild {
+                cmake {
+                    targets "boost-datetime",
+                            "boost-system",
+                            "boost-filesystem",
+                            "boost-locale",
+                            "boost-program-options",
+                            "boost-thread",
+                            "fl-shared",
+                            "minizip"
+                }
+            }
+        }
+        allTargets {
+            externalNativeBuild {
+                cmake {
+                    targets "boost-datetime",
+                            "boost-system",
+                            "boost-filesystem",
+                            "boost-locale",
+                            "boost-program-options",
+                            "boost-thread",
+                            "fl-shared",
+                            "minizip",
+                            "vcmi",
+                            "vcmiserver",
+                            "vcmiclient"
+                }
+            }
+        }
     }
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.3.0'
-    compile 'com.android.support:design:25.3.0'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
     compile 'com.annimon:stream:1.1.4'
 }

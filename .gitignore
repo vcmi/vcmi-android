@@ -1,4 +1,4 @@
-/ext/boost/boost_1_61_0/*
+/ext/boost/boost*/*
 /ext/ff/ffmpeg/
 /ext/ff/x264/
 /ext/SDL2/SDL2-image/code/
@@ -9,6 +9,7 @@
 /project/jni/vcmi-app/
 /**/jniLibs/
 /project/build
+/project/**/.externalNativeBuild
 /project/**/build
 /**/.gradle
 /project/.idea/workspace.xml

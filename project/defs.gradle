@@ -1,49 +1,18 @@
 ext {
-    VCMI_PATH_PREBUILT = "${PROJECT_PATH_BASE}/prebuilt-include"
+//    VCMI_PATH_PREBUILT = "${PROJECT_PATH_BASE}/prebuilt-include"
     VCMI_PATH_EXT = "${PROJECT_PATH_BASE}/ext"
     VCMI_PATH_MAIN = "${PROJECT_PATH_BASE}/project"
 
-    VCMI_PATH_SDL = "${VCMI_PATH_EXT}/SDL2"
-    VCMI_PATH_FFMPEG = "${PROJECT_PATH_BASE}/ext/ff/ffmpeg"
-	VCMI_PATH_BOOST = "${VCMI_PATH_EXT}/boost/boost_1_61_0"
     VCMI_PATH_VCMI = "${VCMI_PATH_EXT}/vcmi"
-    VCMI_PATH_FUZZYLITE = "${VCMI_PATH_VCMI}/AI/FuzzyLite/fuzzylite"
-
-    VCMI_INCL_VCMI = "${VCMI_PATH_VCMI} ${VCMI_PATH_VCMI}/include"
-    VCMI_INCL_FUZZYLITE = "${VCMI_PATH_FUZZYLITE}"
-    VCMI_INCL_BOOST = "${VCMI_PATH_BOOST}"
-    VCMI_INCL_ICONV = "${VCMI_PATH_EXT}/iconv/code/include"
-    VCMI_INCL_FFMPEG = "${VCMI_PATH_EXT}/ff/include"
-    VCMI_INCL_SDL = "${VCMI_PATH_SDL}/core/include"
-    VCMI_INCL_SDL_IMAGE = "${VCMI_PATH_SDL}/SDL2-image/include"
-    VCMI_INCL_SDL_MIXER = "${VCMI_PATH_SDL}/SDL2-mixer/include"
-    VCMI_INCL_SDL_TTF = "${VCMI_PATH_SDL}/SDL2-ttf/include"
 
     // can be 16 if building only for armeabi, definitely needs to be 21+ to build arm64 and x86_64
     VCMI_PLATFORM = 21
     // we should be able to use the newest version to compile, but it seems that gradle-experimental is somehow broken and doesn't compile native libs correctly for apis older than this setting...
     VCMI_COMPILE_SDK = 25
     // abis are automatically updated from python build script, but it can be edited here if you don't plan to rerun the script
-	VCMI_ABIS = ["armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"]
+//    VCMI_ABIS = ["arm64-v8a"]
+    VCMI_ABIS = ["armeabi-v7a", "arm64-v8a", "x86", "x86_64"]
 
-    VCMI_STL_VERSION = "c++_shared"
+    VCMI_STL_VERSION = "gnustl_shared"
     VCMI_BUILD_TOOLS = "25.0.2"
-
-    LIBS_DEF = [
-            ["prebuiltSDL", ["libSDL2.so"], "${VCMI_INCL_SDL}"],
-            ["prebuiltSDLImage", ["libSDL2_image.so"], "${VCMI_INCL_SDL_IMAGE}"],
-            ["prebuiltSDLMixer", ["libSDL2_mixer.so"], "${VCMI_INCL_SDL_MIXER}"],
-            ["prebuiltsmpeg2", ["libsmpeg2.so"], ""],
-            ["prebuiltSDLTTF", ["libSDL2_ttf.so"], "${VCMI_INCL_SDL_TTF}"],
-            ["prebuiltIconv", ["libiconv.so"], "${VCMI_INCL_ICONV}"],
-            ["prebuiltFFcodec", ["libavcodec.so"], "${VCMI_INCL_FFMPEG}"],
-            ["prebuiltFFdevice", ["libavdevice.so"], ""],
-            ["prebuiltFFfilter", ["libavfilter.so"], ""],
-            ["prebuiltFFformat", ["libavformat.so"], ""],
-            ["prebuiltFFutil", ["libavutil.so"], ""],
-            ["prebuiltFFpostproc", ["libpostproc.so"], ""],
-            ["prebuiltFFswresample", ["libswresample.so"], ""],
-            ["prebuiltFFswscale", ["libswscale.so"], ""],
-            ["prebuiltx264", ["libx264.so"], ""]
-    ]
 }

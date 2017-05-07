@@ -1,22 +1,12 @@
 import os
-import fix_files_common
-fix = fix_files_common
+import vcmiutil
+import vcmiconf
 
-boostFolder = "boost_1_61_0"
-
-#android build doesn't seems to be able to handle including .ipp file so just rename it to cpp + fix include
-
-def fixLocaleIppInclude():
-	replacements = [ fix.TmpReplacement("#include \"iconv_codepage.ipp\"", "#include \"iconv_codepage.cpp\"") ]
+def fixBrokenFeatureDetectionInPthreadMutex():
+	replacements = [ vcmiutil.ReplacementEntry("#if (defined(_POSIX_TIMEOUTS) && (_POSIX_TIMEOUTS-0)>=200112L) \\", "#if 0 \\") ]
+	replacements2 = [ vcmiutil.ReplacementEntry("#if (defined _POSIX_TIMEOUTS && (_POSIX_TIMEOUTS-0)>=200112L) \\", "#if 0 \\") ]
 	
-	fix.fixFile("./ext/boost/" + boostFolder + "/libs/locale/src/encoding/codepage.cpp", replacements)
+	vcmiutil.fixFile("./ext/boost/" + vcmiconf.config["boostFolderName"] + "/boost/thread/pthread/mutex.hpp", replacements)
+	vcmiutil.fixFile("./ext/boost/" + vcmiconf.config["boostFolderName"] + "/boost/thread/pthread/recursive_mutex.hpp", replacements2)
 
-def renameIpp():
-	try:
-		os.replace("./ext/boost/" + boostFolder + "/libs/locale/src/encoding/iconv_codepage.ipp",
-			"./ext/boost/" + boostFolder + "/libs/locale/src/encoding/iconv_codepage.cpp")
-	except OSError:
-		print("Couldn't rename iconv_codepage.ipp (already fixed?)")
-		
-fixLocaleIppInclude()
-renameIpp()
+fixBrokenFeatureDetectionInPthreadMutex()

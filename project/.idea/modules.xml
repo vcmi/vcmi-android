@@ -2,23 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/boost-datetime/boost-datetime.iml" filepath="$PROJECT_DIR$/boost-datetime/boost-datetime.iml" />
-      <module fileurl="file://$PROJECT_DIR$/boost-filesystem/boost-filesystem.iml" filepath="$PROJECT_DIR$/boost-filesystem/boost-filesystem.iml" />
-      <module fileurl="file://$PROJECT_DIR$/boost-locale/boost-locale.iml" filepath="$PROJECT_DIR$/boost-locale/boost-locale.iml" />
-      <module fileurl="file://$PROJECT_DIR$/boost-program-options/boost-program-options.iml" filepath="$PROJECT_DIR$/boost-program-options/boost-program-options.iml" />
-      <module fileurl="file://$PROJECT_DIR$/boost-smartptr/boost-smartptr.iml" filepath="$PROJECT_DIR$/boost-smartptr/boost-smartptr.iml" />
-      <module fileurl="file://$PROJECT_DIR$/boost-system/boost-system.iml" filepath="$PROJECT_DIR$/boost-system/boost-system.iml" />
-      <module fileurl="file://$PROJECT_DIR$/boost-thread/boost-thread.iml" filepath="$PROJECT_DIR$/boost-thread/boost-thread.iml" />
-      <module fileurl="file://$PROJECT_DIR$/fuzzylite/fuzzylite.iml" filepath="$PROJECT_DIR$/fuzzylite/fuzzylite.iml" />
-      <module fileurl="file://$PROJECT_DIR$/minizip/minizip.iml" filepath="$PROJECT_DIR$/minizip/minizip.iml" />
       <module fileurl="file://$PROJECT_DIR$/project.iml" filepath="$PROJECT_DIR$/project.iml" />
-      <module fileurl="file://$PROJECT_DIR$/vcmi-ai-battle/vcmi-ai-battle.iml" filepath="$PROJECT_DIR$/vcmi-ai-battle/vcmi-ai-battle.iml" />
-      <module fileurl="file://$PROJECT_DIR$/vcmi-ai-stupid/vcmi-ai-stupid.iml" filepath="$PROJECT_DIR$/vcmi-ai-stupid/vcmi-ai-stupid.iml" />
-      <module fileurl="file://$PROJECT_DIR$/vcmi-ai-vcai/vcmi-ai-vcai.iml" filepath="$PROJECT_DIR$/vcmi-ai-vcai/vcmi-ai-vcai.iml" />
       <module fileurl="file://$PROJECT_DIR$/vcmi-app/vcmi-app.iml" filepath="$PROJECT_DIR$/vcmi-app/vcmi-app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/vcmi-client2/vcmi-client2.iml" filepath="$PROJECT_DIR$/vcmi-client2/vcmi-client2.iml" />
-      <module fileurl="file://$PROJECT_DIR$/vcmi-lib/vcmi-lib.iml" filepath="$PROJECT_DIR$/vcmi-lib/vcmi-lib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/vcmi-server/vcmi-server.iml" filepath="$PROJECT_DIR$/vcmi-server/vcmi-server.iml" />
     </modules>
   </component>
 </project>

@@ -60,6 +60,7 @@ public class SharedPrefs
         log(name, value, true);
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends Enum<T>> T loadEnum(final String name, @NonNull final T defaultValue)
     {
         final int rawValue = mPrefs.getInt(name, defaultValue.ordinal());
