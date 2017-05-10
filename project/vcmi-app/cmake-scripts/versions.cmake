@@ -1,4 +1,4 @@
-execute_process(COMMAND git describe --match= --always --abbrev=40 
+execute_process(COMMAND git describe origin --match= --always --abbrev=40 
 	WORKING_DIRECTORY "${VCMI_PATH_VCMI}"
 	OUTPUT_VARIABLE GIT_SHA1_RAW
 	ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)

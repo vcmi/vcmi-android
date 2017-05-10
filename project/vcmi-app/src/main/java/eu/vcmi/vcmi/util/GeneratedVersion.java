@@ -5,5 +5,5 @@ package eu.vcmi.vcmi.util;
  */
 public class GeneratedVersion
 {
-    public static final String VCMI_VERSION = "0.99.0 (97ea38aacff80d75b771929a13245b2582a77500)";
+    public static final String VCMI_VERSION = "0.99.0 (48702a26a474ea25798f5a99289895540861e152)";
 }
