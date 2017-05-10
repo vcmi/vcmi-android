@@ -8,6 +8,10 @@ import vcmiutil
 import vcmiconf
 conf = vcmiconf.config
 
+PARAM_FIXES = 0
+PARAM_BUILD_EXT = 1
+PARAM_BUILD_CMAKE = 2
+
 def copyLibs():
 	vcmiutil.copytree("./libs/", conf["extOutput"])
 	
@@ -64,40 +68,51 @@ def buildFFMPEG():
 	
 def buildCMakeExternals():	
 	os.chdir("project")
+	os.environ["JAVA_HOME"] = conf["javaRoot"]
 	cmd = "gradlew -a :vcmi-app:compileLibsOnlyDebugSources"
 	assertZero(os.system(cmd), cmd)
 	
-def buildAll():
+def buildAllOptional():
 	timed(buildIconv, "iconv")
-	#timed(buildSDL, "sdl")
-	#timed(buildFFMPEG, "ffmpeg")
-	#timed(buildCMakeExternals, "cmake external libs")
+	timed(buildSDL, "sdl")
+	timed(buildFFMPEG, "ffmpeg")
+	
+def buildAllCmake():
+	timed(buildCMakeExternals, "cmake external libs")
 				
 def timed(fun, name):
 	startTime = time.time()
 	fun()
 	print("Built {} in {:.3}s".format(name, time.time() - startTime))
+	
+def inputError():
+	print("run with any of these: all, build-optional, build-cmake, fixpaths")
+	sys.exit(1)
 				
 args = len(sys.argv)
-if args != 2:
+if args < 2:
 	print("run with any of these: all, build, fixpaths")
 	sys.exit(1)
 	
-flagBuild = False
-flagPaths = False
-if sys.argv[1] == "all":
-	flagBuild = True
-	flagPaths = True
-elif sys.argv[1] == "build":
-	flagBuild = True
-elif sys.argv[1] == "fixpaths":
-	flagPaths = True
-else:
-	print("run with any of these: all, build, fixpaths")
-	sys.exit(1)
-
-if flagPaths:
+parsedParams = [False, False, False]
+for arg in sys.argv[1:]:
+	if arg == "all" or arg == "build-optional":
+		parsedParams[PARAM_BUILD_EXT] = True
+	if arg == "all" or arg == "build-cmake":
+		parsedParams[PARAM_BUILD_CMAKE] = True
+	if arg == "all" or arg == "fixpaths":
+		parsedParams[PARAM_FIXES] = True
+		
+executedAnything = False
+if parsedParams[PARAM_FIXES]:
 	fixLibsFiles()
-	
-if flagBuild:
-	timed(buildAll, "everything")
+	executedAnything = True
+if parsedParams[PARAM_BUILD_EXT]:
+	timed(buildAllOptional, "optional libs")
+	executedAnything = True
+if parsedParams[PARAM_BUILD_CMAKE]:
+	buildAllCmake()
+	executedAnything = True
+
+if executedAnything == False:
+	inputError()
