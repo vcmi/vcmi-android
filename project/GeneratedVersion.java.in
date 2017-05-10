@@ -1,7 +1,7 @@
 package eu.vcmi.vcmi.util;
 
 /**
- * Generated via cmake
+ * Generated via cmake (./project/vcmi-app/cmake-scripts/versions.cmake)
  */
 public class GeneratedVersion
 {
