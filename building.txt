@@ -1,9 +1,10 @@
-needed: python3, android studio + ndk
+needed: python, android studio + ndk
 
+* also needed: java 8 jdk (implied by android build)
 * git update submodules (vcmi definitely needed, ffmpeg/x264/iconv only if you want to build them)
 * place boost into ./ext/boost/ (so that ./ext/boost/boost_X_YY_Z/b2.exe exists)
-* open ./vcmiconf.in and enter the correct paths (paths with *_BASH are needed only for ffmpeg build; on linux they'll probably be the same as normal paths)
-	* for testing, you might want to set only one abi in ABIS field (builds will be much faster and armeabi should work on most devices)
+* open ./vcmiconf.json and enter the correct paths (paths in "bash" object are needed only for ffmpeg build; on linux they'll probably be the same as normal paths)
+	* for testing, you might want to set only one abi in "abis" field (builds will be much faster and armeabi should work on most devices)
 
 if you want to build SDL, ffmpeg and iconv manually
 {
@@ -15,14 +16,20 @@ if you want to build SDL, ffmpeg and iconv manually
 	* make sure that bash scripts (eg. ./ext/ff/ffmpeg/configure and ./ext/ff/x264/configure) have unix newlines (lf) otherwise building ffmpeg fails with cryptic errors
 	* run in main folder: python build.py all
 	* if it eventually finishes without errors, there should be libs in ./ext-output/(ARCH)
-		* iconv and SDL are build only in configurations declared in vcmiconf.in
 		* ffmpeg is built in all possible configurations; if you don't like that, you can comment the lines in ./ext/ff/all.sh
+		* all other libs (iconv, SDL+addons, boost, minizip, fuzzylite) are built only in configurations declared in vcmiconf.in
 }
 else
 {
-	* run in main folder: python build.py fixpaths
+	* run in main folder: python build.py fixpaths build-cmake
+		* ("build-cmake" will execute gradle-configured-cmake build for boost libs and "external" vcmi libs of fuzzylite and minizip)
 }
 
-* start android studio project (in ./project) and try to build it
-	* if boost locale breaks on x64 abis (with iconv errors), you might need to remove/rename this ndk header file: ndk/sources/android/support/include/iconv.h
-	  (looks like android built-in iconv is broken for x64, but still, this is a hack, so it may break some other things in ndk -- https://github.com/android-ndk/ndk/issues/236)
+* start android studio project (in ./project)
+* make sure that current flavor (menu Build->Select build variant) is "vcmiOnlyDebug/Release" (it should be the default; other flavors can additionally build boost/fuzzylite/minizip but you already built them from the script)
+* try to build/run the project
+
+* if boost locale breaks on x64 abis (with iconv errors), you might need to remove/rename this ndk header file: ndk/sources/android/support/include/iconv.h
+  (looks like android built-in iconv is broken for x64, but still, this is a hack, so it may break some other things in ndk -- https://github.com/android-ndk/ndk/issues/236)
+  
+Note that the current build might not work on armeabi (due to clang crashing during SDL build) or api <21 (due to some boost<->ndk problems that I can't really pinpoint atm); these might be related to the fact I used preview ndk version (r15 beta1)
