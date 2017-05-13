@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -344,6 +345,10 @@ public class SDLActivity extends ActivityBase
      */
     public static void audioWriteShortBuffer(short[] buffer)
     {
+        if (mAudioTrack == null)
+        {
+            return;
+        }
         for (int i = 0; i < buffer.length; )
         {
             int result = mAudioTrack.write(buffer, i, buffer.length - i);
@@ -719,6 +724,13 @@ public class SDLActivity extends ActivityBase
     }
 
     @Override
+    public void onConfigurationChanged(final Configuration newConfig)
+    {
+        Log.d(this, "Config changed " + newConfig);
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     public void onWindowFocusChanged(boolean hasFocus)
     {
         super.onWindowFocusChanged(hasFocus);
@@ -763,12 +775,27 @@ public class SDLActivity extends ActivityBase
             return;
         }
 
-        stopService(new Intent(this, ServerService.class));
-        unbindServer();
+        try
+        {
+            // since android can kill the activity unexpectedly (e.g. memory is low or device is inactive for some time), let's try creating
+            // an autosave so user might be able to resume the game; this isn't a very good impl (we shouldn't really sleep here and hope that the
+            // save is created, but for now it might suffice
+            // (better solution: listen for game's confirmation that the save has been created -- this would allow us to inform the users
+            // on the next app launch that there is an automatic save that they can use)
+            if (NativeMethods.tryToSaveTheGame())
+            {
+                Thread.sleep(1000L);
+            }
+        }
+        catch (final InterruptedException ignored)
+        {
+        }
 
         // Send a quit message to the application
         SDLActivity.mExitCalledFromJava = true;
         SDLActivity.nativeQuit();
+
+        unbindServer();
 
         // Now wait for the SDL thread to quit
         if (SDLActivity.mSDLThread != null)
@@ -784,13 +811,13 @@ public class SDLActivity extends ActivityBase
             SDLActivity.mSDLThread = null;
         }
 
+        stopService(new Intent(this, ServerService.class));
+
         super.onDestroy();
         // Reset everything in case the user re opens the app
         SDLActivity.initialize();
     }
 
-
-    // Input
 
     private void unbindServer()
     {

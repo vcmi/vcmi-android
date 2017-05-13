@@ -11,7 +11,7 @@ public final class LibsLoader
     {
         if (!onlyForOldApis || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
         {
-            Log.v("VCMI-libs-loading", "Loading native lib: " + libName);
+            Log.v("Loading native lib: " + libName);
             System.loadLibrary(libName);
         }
     }

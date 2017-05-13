@@ -23,6 +23,7 @@ function(build_vcmi)
 		-DIOAPI64_ANDROID_HACK
 		-DNO_STD_TOSTRING
 		-DFL_CPP11)
+	add_definitions(-DBOOST_DISABLE_ASSERTS) # there's a problem in vcmi where mutexes can't be cleaned up correctly on exit (asserting on EBUSY result from pthread_mutex_destroy); I can't really debug it easily so just try to ignore it (we try to quit the app anyway)
 		
 	import_lib(SDL2)
 	import_lib(SDL2_image)
