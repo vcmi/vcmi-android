@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -344,6 +345,10 @@ public class SDLActivity extends ActivityBase
      */
     public static void audioWriteShortBuffer(short[] buffer)
     {
+        if (mAudioTrack == null)
+        {
+            return;
+        }
         for (int i = 0; i < buffer.length; )
         {
             int result = mAudioTrack.write(buffer, i, buffer.length - i);
@@ -719,6 +724,13 @@ public class SDLActivity extends ActivityBase
     }
 
     @Override
+    public void onConfigurationChanged(final Configuration newConfig)
+    {
+        Log.d(this, "Config changed " + newConfig);
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     public void onWindowFocusChanged(boolean hasFocus)
     {
         super.onWindowFocusChanged(hasFocus);
@@ -763,12 +775,12 @@ public class SDLActivity extends ActivityBase
             return;
         }
 
-        stopService(new Intent(this, ServerService.class));
-        unbindServer();
 
         // Send a quit message to the application
         SDLActivity.mExitCalledFromJava = true;
         SDLActivity.nativeQuit();
+
+        unbindServer();
 
         // Now wait for the SDL thread to quit
         if (SDLActivity.mSDLThread != null)
@@ -783,6 +795,8 @@ public class SDLActivity extends ActivityBase
             }
             SDLActivity.mSDLThread = null;
         }
+
+        stopService(new Intent(this, ServerService.class));
 
         super.onDestroy();
         // Reset everything in case the user re opens the app
