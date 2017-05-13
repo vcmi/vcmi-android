@@ -37,6 +37,7 @@ function(build_boost)
 	if (${ANDROID_NATIVE_API_LEVEL} LESS 21)
 		add_definitions("-Depoll_create1(x)=-1;errno=EINVAL")
 	endif()
+	add_definitions(-DBOOST_DISABLE_ASSERTS)
 
 	add_library(iconv SHARED IMPORTED)
 	set_target_properties(iconv PROPERTIES IMPORTED_LOCATION ${VCMI_PATH_EXT_LIBS}/libiconv.so)
@@ -52,7 +53,7 @@ function(build_boost)
 
 	#adding boost-thread manually, because they #include .cpp files directly and we can't just add everything to project
 	add_library(boost-thread SHARED ${BOOST_ROOT}/libs/thread/src/future.cpp ${BOOST_ROOT}/libs/thread/src/tss_null.cpp ${BOOST_ROOT}/libs/thread/src/pthread/once.cpp ${BOOST_ROOT}/libs/thread/src/pthread/thread.cpp)
-	set_target_properties(boost-thread PROPERTIES LINKER_LANGUAGE CXX)
+	set_target_properties(boost-thread PROPERTIES LINKER_LANGUAGE CXX)	
 	target_link_libraries(boost-thread atomic)
 
 	target_link_libraries(boost-locale iconv)

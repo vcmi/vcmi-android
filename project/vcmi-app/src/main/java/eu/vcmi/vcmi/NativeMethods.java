@@ -32,6 +32,8 @@ public class NativeMethods
 
     public static native void notifyServerReady();
 
+    public static native boolean tryToSaveTheGame();
+
     public static void setupCtx(final Context ctx)
     {
         ctxRef = new WeakReference<>(ctx);
