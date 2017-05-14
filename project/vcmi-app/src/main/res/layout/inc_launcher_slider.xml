@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    style="@style/VCMI.Entry.Clickable"
+    style="@style/VCMI.Entry"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -16,9 +16,11 @@
             style="@style/VCMI.Text.LauncherEntry"
             android:text="@string/app_name" />
 
-        <TextView
-            android:id="@+id/inc_launcher_btn_sub"
-            style="@style/VCMI.Text.LauncherEntry.Sub"
-            android:text="@string/app_name" />
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/inc_launcher_btn_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp" />
     </LinearLayout>
 </RelativeLayout>
