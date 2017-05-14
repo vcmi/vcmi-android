@@ -1,22 +1,21 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        config {
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
-            storeFile file('C:/Users/F/.android/adbkey')
-            storePassword 'android'
-        }
-    }
     compileSdkVersion VCMI_COMPILE_SDK
     buildToolsVersion VCMI_BUILD_TOOLS
+
+    signingConfigs {
+        releaseSigning
+        LoadSigningConfig(PROJECT_PATH_BASE)
+    }
+
     defaultConfig {
         applicationId "eu.vcmi.vcmi"
         minSdkVersion VCMI_PLATFORM
         targetSdkVersion VCMI_COMPILE_SDK
         versionCode Integer.parseInt(APP_VERSION_CODE)
         versionName APP_VERSION
+        setProperty("archivesBaseName", "VCMI-${APP_VERSION}-api${VCMI_PLATFORM}")
 
         externalNativeBuild {
             cmake {
@@ -46,6 +45,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     productFlavors {
         vcmiOnly {
             externalNativeBuild {
@@ -87,6 +87,50 @@ android {
                 }
             }
         }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.releaseSigning
+        }
+    }
+
+    applicationVariants.all { final variant -> RenameOutput(project.archivesBaseName, variant) }
+}
+
+static def RenameOutput(final baseName, final variant) {
+    final def apkPath = variant.outputs[0].outputFile.parent
+    def name = baseName + "-" + new Date().format("yyyyMMdd")
+
+    if (variant.name != 'release') {
+        name += "-" + variant.buildType.name
+    }
+    variant.outputs*.outputFile = new File(apkPath, name + ".apk")
+}
+
+def LoadSigningConfig(final basePath) {
+    final def props = new Properties()
+    final def propFile = file(basePath + "/../signing.properties")
+    if (propFile.canRead()) {
+        props.load(new FileInputStream(propFile))
+
+        if (props != null
+            && props.containsKey('STORE_FILE')
+            && props.containsKey('STORE_PASSWORD')
+            && props.containsKey('KEY_ALIAS')
+            && props.containsKey('KEY_PASSWORD')) {
+
+            android.signingConfigs.releaseSigning.storeFile = file(basePath + "/../" + props['STORE_FILE'])
+            android.signingConfigs.releaseSigning.storePassword = props['STORE_PASSWORD']
+            android.signingConfigs.releaseSigning.keyAlias = props['KEY_ALIAS']
+            android.signingConfigs.releaseSigning.keyPassword = props['KEY_PASSWORD']
+        } else {
+            println("Some props from signing file are missing")
+            android.buildTypes.release.signingConfig = null
+        }
+    } else {
+        println("file with signing properties is missing")
+        android.buildTypes.release.signingConfig = null
     }
 }
 
