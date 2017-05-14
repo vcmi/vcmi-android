@@ -14,15 +14,15 @@ import eu.vcmi.vcmi.R;
  */
 public class ModsViewHolder extends RecyclerView.ViewHolder
 {
-    public final TextView mModNesting;
-    public final TextView mModName;
-    public final TextView mModAuthor;
-    public final TextView mModType;
-    public final TextView mModSize;
-    public final ImageView mStatusIcon;
-    public final View mDownloadBtn;
+    final TextView mModNesting;
+    final TextView mModName;
+    final TextView mModAuthor;
+    final TextView mModType;
+    final TextView mModSize;
+    final ImageView mStatusIcon;
+    final View mDownloadBtn;
 
-    public ModsViewHolder(final View parentView)
+    ModsViewHolder(final View parentView)
     {
         super(LayoutInflater.from(parentView.getContext()).inflate(R.layout.mods_adapter_item, (ViewGroup) parentView, false));
         mModNesting = (TextView) itemView.findViewById(R.id.mods_adapter_item_nesting);

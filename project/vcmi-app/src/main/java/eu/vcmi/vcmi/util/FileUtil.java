@@ -18,7 +18,7 @@ import eu.vcmi.vcmi.Const;
  */
 public class FileUtil
 {
-    public static final int CURRENT_INTERNAL_ASSETS_VERSION = 2;
+    public static final int CURRENT_INTERNAL_ASSETS_VERSION = 4;
 
     public static String read(final File file) throws IOException
     {

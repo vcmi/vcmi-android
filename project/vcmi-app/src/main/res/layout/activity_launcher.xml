@@ -7,7 +7,6 @@
     android:clipChildren="false"
     android:clipToPadding="false">
 
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -46,11 +45,12 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/launcher_error"
                     style="@style/VCMI.Text"
-                    android:drawableLeft="@android:drawable/ic_menu_close_clear_cancel"
+                    android:drawableStart="@drawable/ic_error"
+                    android:drawablePadding="10dp"
                     android:gravity="center_vertical"
                     android:minHeight="80dp"
                     android:padding="@dimen/side_margin"
-                    android:text="ERROR TEXT" />
+                    android:text="@string/app_name" />
 
                 <ProgressBar
                     android:id="@+id/launcher_progress"

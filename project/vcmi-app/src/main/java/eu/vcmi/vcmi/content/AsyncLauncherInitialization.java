@@ -95,6 +95,10 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
 
         if (callbacks.prefs().load(SharedPrefs.KEY_CURRENT_INTERNAL_ASSET_VERSION, -1) != FileUtil.CURRENT_INTERNAL_ASSETS_VERSION)
         {
+            Log.i(this, "Internal data needs update; new version is "
+                        + FileUtil.CURRENT_INTERNAL_ASSETS_VERSION
+                        + ", and current is "
+                        + callbacks.prefs().load(SharedPrefs.KEY_CURRENT_INTERNAL_ASSET_VERSION, -1));
             // there was an update to internal assets so we need to replace the existing ones
             if (!FileUtil.reloadVcmiDataToInternalDir(vcmiInternalDir, ctx.getAssets()))
             {
