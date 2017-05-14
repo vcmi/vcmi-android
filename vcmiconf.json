@@ -8,7 +8,7 @@
 	"ndkRoot" : "Q:/P/Android/android-sdk/ndk-bundle",
 	"sdkRoot" : "Q:/P/Android/android-sdk",
 	"javaRoot": "Q:/P/Java/8",
-	"abis" : "arm64-v8a",
+	"abis" : "armeabi-v7a arm64-v8a x86 x86_64",
 	"boostFolderName" : "boost_1_64_0",
 	"androidApi" : 21
 }

@@ -20,6 +20,7 @@ import eu.vcmi.vcmi.mods.VCMIMod;
  */
 public class ModsAdapter extends RecyclerView.Adapter<ModsViewHolder>
 {
+    private static final int NESTING_WIDTH_PER_LEVEL = 16;
     private final List<ModItem> mDataset = new ArrayList<>();
     private final IOnItemAction mItemListener;
 
@@ -54,14 +55,7 @@ public class ModsAdapter extends RecyclerView.Adapter<ModsViewHolder>
         holder.mModAuthor.setText(ctx.getString(R.string.mods_item_author_template, item.mMod.mAuthor));
         holder.mStatusIcon.setImageResource(selectModStatusIcon(item.mMod.mActive));
 
-        if (item.mNestingLevel > 0)
-        {
-            holder.mModNesting.setText(String.format("%" + (item.mNestingLevel + 1) + "s", ">").replace(' ', '-'));
-        }
-        else
-        {
-            holder.mModNesting.setText("");
-        }
+        holder.mModNesting.getLayoutParams().width = item.mNestingLevel * NESTING_WIDTH_PER_LEVEL;
 
         holder.mDownloadBtn.setVisibility(View.GONE); // TODO visible for mods that aren't downloaded
 

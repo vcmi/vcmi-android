@@ -83,7 +83,7 @@ def buildAllCmake():
 def timed(fun, name):
 	startTime = time.time()
 	fun()
-	print("Built {} in {:.3}s".format(name, time.time() - startTime))
+	print("Built {} in {:.3f}s".format(name, time.time() - startTime))
 	
 def inputError():
 	print("run with any of these: all, build-optional, build-cmake, fixpaths")
