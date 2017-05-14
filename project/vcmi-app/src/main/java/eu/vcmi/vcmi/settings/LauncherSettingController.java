@@ -17,25 +17,31 @@ public abstract class LauncherSettingController<TSetting, TConf> implements View
     private TextView mSettingsTextMain;
     private TextView mSettingsTextSub;
 
-    protected LauncherSettingController(final AppCompatActivity act)
+    LauncherSettingController(final AppCompatActivity act)
     {
         mActivity = act;
     }
 
-    public LauncherSettingController<TSetting, TConf> init(final int rootViewResId)
+    public final LauncherSettingController<TSetting, TConf> init(final int rootViewResId)
     {
         return init(rootViewResId, null);
     }
 
-    public LauncherSettingController<TSetting, TConf> init(final int rootViewResId, final TConf config)
+    public final LauncherSettingController<TSetting, TConf> init(final int rootViewResId, final TConf config)
     {
         mSettingViewRoot = mActivity.findViewById(rootViewResId);
         mSettingViewRoot.setOnClickListener(this);
         mSettingsTextMain = (TextView) mSettingViewRoot.findViewById(R.id.inc_launcher_btn_main);
         mSettingsTextSub = (TextView) mSettingViewRoot.findViewById(R.id.inc_launcher_btn_sub);
+        childrenInit(mSettingViewRoot);
         updateConfig(config);
         updateContent();
         return this;
+    }
+
+    protected void childrenInit(final View root)
+    {
+
     }
 
     public void updateConfig(final TConf conf)
@@ -47,7 +53,10 @@ public abstract class LauncherSettingController<TSetting, TConf> implements View
     public void updateContent()
     {
         mSettingsTextMain.setText(mainText());
-        mSettingsTextSub.setText(subText());
+        if (mSettingsTextSub != null)
+        {
+            mSettingsTextSub.setText(subText());
+        }
     }
 
     protected abstract String mainText();

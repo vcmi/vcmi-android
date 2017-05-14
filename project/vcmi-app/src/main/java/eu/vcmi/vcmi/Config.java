@@ -14,13 +14,64 @@ import eu.vcmi.vcmi.util.Log;
  */
 public class Config
 {
+    public static final String DEFAULT_CODEPAGE = "CP1250";
+    public static final int DEFAULT_MUSIC_VALUE = 5;
+    public static final int DEFAULT_SOUND_VALUE = 5;
+    public static final int DEFAULT_SCREEN_RES_W = 800;
+    public static final int DEFAULT_SCREEN_RES_H = 600;
+
     public String mCodepage;
     public int mResolutionWidth;
     public int mResolutionHeight;
     public boolean mSwipeEnabled;
+    public int mVolumeSound;
+    public int mVolumeMusic;
     private JSONObject mRawObject;
 
     private boolean mIsModified;
+
+    private static JSONObject accessGeneralNode(final JSONObject baseObj)
+    {
+        return baseObj.optJSONObject("general");
+    }
+
+    private static JSONObject accessScreenResNode(final JSONObject baseObj)
+    {
+        final JSONObject video = baseObj.optJSONObject("video");
+        if (video != null)
+        {
+            return video.optJSONObject("screenRes");
+        }
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> T loadEntry(final JSONObject node, final String key, final T fallback)
+    {
+        if (node == null)
+        {
+            return fallback;
+        }
+        final Object value = node.opt(key);
+        return value == null ? fallback : (T) value;
+    }
+
+    public static Config load(final JSONObject obj)
+    {
+        Log.v("loading config from json: " + obj.toString());
+        final Config config = new Config();
+        final JSONObject general = accessGeneralNode(obj);
+        config.mCodepage = loadEntry(general, "encoding", DEFAULT_CODEPAGE);
+        config.mVolumeSound = loadEntry(general, "sound", DEFAULT_SOUND_VALUE);
+        config.mVolumeMusic = loadEntry(general, "music", DEFAULT_MUSIC_VALUE);
+        config.mSwipeEnabled = loadEntry(general, "swipe", false);
+        final JSONObject screenRes = accessScreenResNode(obj);
+        config.mResolutionWidth = loadEntry(screenRes, "width", DEFAULT_SCREEN_RES_W);
+        config.mResolutionHeight = loadEntry(screenRes, "height", DEFAULT_SCREEN_RES_H);
+
+        config.mRawObject = obj;
+        return config;
+    }
 
     public void updateCodepage(final String s)
     {
@@ -41,38 +92,16 @@ public class Config
         mIsModified = true;
     }
 
-    private static JSONObject accessGeneralNode(final JSONObject baseObj)
+    public void updateSound(final int i)
     {
-        return baseObj.optJSONObject("general");
+        mVolumeSound = i;
+        mIsModified = true;
     }
 
-    private static JSONObject accessScreenResNode(final JSONObject baseObj)
+    public void updateMusic(final int i)
     {
-        final JSONObject video = baseObj.optJSONObject("video");
-        if (video != null)
-        {
-            return video.optJSONObject("screenRes");
-        }
-        return null;
-    }
-
-    public static Config load(final JSONObject obj)
-    {
-        Log.v("VCMI", "loading config from json: " + obj.toString());
-        final Config config = new Config();
-        final JSONObject general = accessGeneralNode(obj);
-        if (general != null)
-        {
-            config.mCodepage = general.optString("encoding");
-        }
-        final JSONObject screenRes = accessScreenResNode(obj);
-        if (screenRes != null)
-        {
-            config.mResolutionWidth = screenRes.optInt("width");
-            config.mResolutionHeight = screenRes.optInt("height");
-        }
-        config.mRawObject = obj;
-        return config;
+        mVolumeMusic = i;
+        mIsModified = true;
     }
 
     public void save(final File location) throws IOException, JSONException
@@ -114,6 +143,8 @@ public class Config
             general.put("encoding", mCodepage);
         }
         general.put("swipe", mSwipeEnabled);
+        general.put("music", mVolumeMusic);
+        general.put("sound", mVolumeSound);
         root.put("general", general);
 
         if (mResolutionHeight > 0 && mResolutionWidth > 0)

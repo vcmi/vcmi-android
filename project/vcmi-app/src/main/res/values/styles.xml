@@ -71,13 +71,16 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="VCMI.ClickableEntry">
-        <item name="android:background">?attr/selectableItemBackground</item>
+    <style name="VCMI.Entry">
         <item name="android:minHeight">80dp</item>
         <item name="android:paddingBottom">5dp</item>
         <item name="android:paddingTop">5dp</item>
         <item name="android:paddingLeft">@dimen/side_margin</item>
         <item name="android:paddingRight">@dimen/side_margin</item>
+    </style>
+
+    <style name="VCMI.Entry.Clickable">
+        <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
 </resources>

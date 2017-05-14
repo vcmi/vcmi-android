@@ -86,6 +86,14 @@
             <include
                 android:id="@+id/launcher_btn_pointer_multi"
                 layout="@layout/inc_launcher_btn" />
+
+            <include
+                android:id="@+id/launcher_btn_volume_sound"
+                layout="@layout/inc_launcher_slider" />
+
+            <include
+                android:id="@+id/launcher_btn_volume_music"
+                layout="@layout/inc_launcher_slider" />
         </LinearLayout>
     </ScrollView>
 
