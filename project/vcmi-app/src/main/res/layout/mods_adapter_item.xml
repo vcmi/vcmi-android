@@ -1,32 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    style="@style/VCMI.Entry.Clickable"
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    android:background="?attr/selectableItemBackground"
+    android:minHeight="@dimen/entry_min_height"
+    android:orientation="horizontal">
+
+    <View
+        android:id="@+id/mods_adapter_item_nesting"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:background="@color/accent" />
 
     <LinearLayout
+        style="@style/VCMI.Entry"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:layout_gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/mods_adapter_item_nesting"
-            style="@style/VCMI.Text"
-            android:layout_width="wrap_content"
-            android:lines="1"
-            android:text=">" />
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="@dimen/side_margin"
+        android:paddingTop="5dp">
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/mods_adapter_item_status"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="@dimen/side_margin"
-            android:layout_marginRight="@dimen/side_margin"
-            android:src="@android:drawable/btn_star_big_on" />
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_star_full" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -78,4 +83,4 @@
             android:padding="@dimen/side_margin"
             android:src="@android:drawable/stat_sys_download" />
     </LinearLayout>
-</FrameLayout>
+</LinearLayout>
