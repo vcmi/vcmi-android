@@ -13,6 +13,7 @@ public class SharedPrefs
 {
     public static final String KEY_POINTER_MODE = "KEY_POINTER_MODE"; // [int]
     public static final String KEY_POINTER_MULTIPLIER = "KEY_POINTER_MULTIPLIER"; // [float]
+    public static final String KEY_CURRENT_INTERNAL_ASSET_VERSION = "KEY_CURRENT_INTERNAL_ASSET_VERSION"; // [int]
     private static final String VCMI_PREFS_NAME = "VCMIPrefs";
     private final SharedPreferences mPrefs;
 

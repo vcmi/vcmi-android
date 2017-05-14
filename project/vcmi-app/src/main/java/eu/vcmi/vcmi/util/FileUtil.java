@@ -18,18 +18,18 @@ import eu.vcmi.vcmi.Const;
  */
 public class FileUtil
 {
+    public static final int CURRENT_INTERNAL_ASSETS_VERSION = 2;
+
     public static String read(final File file) throws IOException
     {
         try (FileReader modConfigReader = new FileReader(file))
         {
-            char buffer[] = new char[4096];
-            int totalRead = 0;
+            final char[] buffer = new char[4096];
             int currentRead;
             final StringBuilder content = new StringBuilder();
             while ((currentRead = modConfigReader.read(buffer, 0, 4096)) >= 0)
             {
                 content.append(buffer, 0, currentRead);
-                totalRead += currentRead;
             }
             return content.toString();
         }
@@ -37,10 +37,32 @@ public class FileUtil
 
     public static void write(final File file, final String data) throws IOException
     {
-        FileWriter fw = new FileWriter(file, false);
+        final FileWriter fw = new FileWriter(file, false);
         Log.v(null, "Saving data: " + data + " to " + file.getAbsolutePath());
         fw.write(data);
         fw.close();
+    }
+
+    private static boolean clearDirectory(final File dir)
+    {
+        for (final File f : dir.listFiles())
+        {
+            if (f.isDirectory() && !clearDirectory(f))
+            {
+                return false;
+            }
+            if (!f.delete())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // (when internal data have changed)
+    public static boolean reloadVcmiDataToInternalDir(final File vcmiInternalDir, final AssetManager assets)
+    {
+        return clearDirectory(vcmiInternalDir) && unpackVcmiDataToInternalDir(vcmiInternalDir, assets);
     }
 
     public static boolean unpackVcmiDataToInternalDir(final File vcmiInternalDir, final AssetManager assets)
@@ -48,14 +70,14 @@ public class FileUtil
         try
         {
             int unpackedEntries = 0;
-            byte[] buffer = new byte[4096];
+            final byte[] buffer = new byte[4096];
             final ZipInputStream is = new ZipInputStream(assets.open("internalData.zip"));
             ZipEntry zipEntry;
             while ((zipEntry = is.getNextEntry()) != null)
             {
 
-                String fileName = zipEntry.getName();
-                File newFile = new File(vcmiInternalDir, fileName);
+                final String fileName = zipEntry.getName();
+                final File newFile = new File(vcmiInternalDir, fileName);
 
                 if (newFile.exists())
                 {
@@ -73,14 +95,14 @@ public class FileUtil
                     continue;
                 }
 
-                File parentFile = new File(newFile.getParent());
+                final File parentFile = new File(newFile.getParent());
                 if (!parentFile.exists() && !parentFile.mkdirs())
                 {
                     Log.e("Couldn't create directory " + parentFile.getAbsolutePath());
                     return false;
                 }
 
-                FileOutputStream fos = new FileOutputStream(newFile, false);
+                final FileOutputStream fos = new FileOutputStream(newFile, false);
 
                 int currentRead;
                 while ((currentRead = is.read(buffer)) > 0)
@@ -98,7 +120,7 @@ public class FileUtil
             is.close();
             return true;
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             Log.e("Couldn't extract vcmi data to internal dir", e);
             return false;

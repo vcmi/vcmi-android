@@ -17,6 +17,7 @@ public class PointerModeSettingDialog extends LauncherSettingDialog<PointerModeS
     static
     {
         POINTER_MODES.add(PointerModeSettingController.PointerMode.NORMAL);
+        POINTER_MODES.add(PointerModeSettingController.PointerMode.NORMAL_WITH_SWIPE);
         POINTER_MODES.add(PointerModeSettingController.PointerMode.RELATIVE);
     }
 
@@ -33,6 +34,8 @@ public class PointerModeSettingDialog extends LauncherSettingDialog<PointerModeS
                 return "";
             case NORMAL:
                 return ctx.getString(R.string.misc_pointermode_normal);
+            case NORMAL_WITH_SWIPE:
+                return ctx.getString(R.string.misc_pointermode_swipe);
             case RELATIVE:
                 return ctx.getString(R.string.misc_pointermode_relative);
         }

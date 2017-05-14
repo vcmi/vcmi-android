@@ -16,6 +16,7 @@ public class Config
     public String mCodepage;
     public int mResolutionWidth;
     public int mResolutionHeight;
+    public boolean mSwipeEnabled;
     private JSONObject mRawObject;
 
     private static JSONObject accessGeneralNode(final JSONObject baseObj)
@@ -66,17 +67,18 @@ public class Config
 
     private String toJson() throws JSONException
     {
-        final JSONObject videoNode = accessGeneralNode(mRawObject);
+        final JSONObject generalNode = accessGeneralNode(mRawObject);
         final JSONObject screenResNode = accessScreenResNode(mRawObject);
 
-        JSONObject root = new JSONObject();
-        JSONObject general = new JSONObject();
-        JSONObject video = new JSONObject();
-        JSONObject screenRes = new JSONObject();
+        final JSONObject root = new JSONObject();
+        final JSONObject general = generalNode == null ? new JSONObject() : generalNode;
+        final JSONObject video = new JSONObject();
+        final JSONObject screenRes = screenResNode == null ? new JSONObject() : screenResNode;
         if (mCodepage != null)
         {
             general.put("encoding", mCodepage);
         }
+        general.put("swipe", mSwipeEnabled);
         root.put("general", general);
 
         if (mResolutionHeight > 0 && mResolutionWidth > 0)

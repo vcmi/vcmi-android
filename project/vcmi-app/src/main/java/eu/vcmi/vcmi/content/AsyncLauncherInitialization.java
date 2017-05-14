@@ -16,6 +16,7 @@ import eu.vcmi.vcmi.Const;
 import eu.vcmi.vcmi.R;
 import eu.vcmi.vcmi.util.FileUtil;
 import eu.vcmi.vcmi.util.Log;
+import eu.vcmi.vcmi.util.SharedPrefs;
 
 /**
  * @author F
@@ -23,7 +24,7 @@ import eu.vcmi.vcmi.util.Log;
 public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLauncherInitialization.InitResult>
 {
     public static final int PERMISSIONS_REQ_CODE = 123;
-    private WeakReference<ILauncherCallbacks> mCallbackRef;
+    private final WeakReference<ILauncherCallbacks> mCallbackRef;
 
     public AsyncLauncherInitialization(final ILauncherCallbacks callback)
     {
@@ -89,7 +90,17 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
         final File testVcmiData = new File(vcmiInternalDir, "Mods/vcmi/mod.json");
         if (!testVcmiData.exists() && !FileUtil.unpackVcmiDataToInternalDir(vcmiInternalDir, ctx.getAssets()))
         {
-            return new InitResult(false, ctx.getString(R.string.launcher_error_vcmi_data_missing));
+            return new InitResult(false, ctx.getString(R.string.launcher_error_vcmi_data_internal_missing));
+        }
+
+        if (callbacks.prefs().load(SharedPrefs.KEY_CURRENT_INTERNAL_ASSET_VERSION, -1) != FileUtil.CURRENT_INTERNAL_ASSETS_VERSION)
+        {
+            // there was an update to internal assets so we need to replace the existing ones
+            if (!FileUtil.reloadVcmiDataToInternalDir(vcmiInternalDir, ctx.getAssets()))
+            {
+                return new InitResult(false, ctx.getString(R.string.launcher_error_vcmi_data_internal_update));
+            }
+            callbacks.prefs().save(SharedPrefs.KEY_CURRENT_INTERNAL_ASSET_VERSION, FileUtil.CURRENT_INTERNAL_ASSETS_VERSION);
         }
 
         return new InitResult(true, "");
@@ -153,6 +164,8 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
     public interface ILauncherCallbacks
     {
         Activity ctx();
+
+        SharedPrefs prefs();
 
         void onInitSuccess();
 
