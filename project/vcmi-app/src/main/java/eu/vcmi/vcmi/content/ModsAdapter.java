@@ -72,11 +72,12 @@ public class ModsAdapter extends RecyclerView.Adapter<ModsViewHolder>
 
     private int selectModStatusIcon(final boolean active)
     {
-        if (active) // TODO better icons...
+        // TODO distinguishing mods that aren't downloaded or have an update available
+        if (active)
         {
-            return android.R.drawable.btn_star_big_on;
+            return R.drawable.ic_star_full;
         }
-        return android.R.drawable.btn_star_big_off;
+        return R.drawable.ic_star_empty;
     }
 
     @Override
