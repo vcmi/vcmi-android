@@ -8,13 +8,16 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.annimon.stream.Stream;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.libsdl.app.SDLActivity;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +76,7 @@ public class ActivityLauncher extends ActivityBase implements AsyncLauncherIniti
     private void initSettingsGui()
     {
         mCtrlStart =
-            new StartGameController(this, v -> startActivity(new Intent(ActivityLauncher.this, SDLActivity.class))).init(R.id.launcher_btn_start);
+            new StartGameController(this, v -> onLaunchGameBtnPressed()).init(R.id.launcher_btn_start);
         new ModsBtnController(this, v -> startActivity(new Intent(ActivityLauncher.this, ActivityMods.class))).init(R.id.launcher_btn_mods);
         mCtrlScreenRes = new ScreenResSettingController(this).init(R.id.launcher_btn_res, mConfig);
         mCtrlCodepage = new CodepageSettingController(this).init(R.id.launcher_btn_cp, mConfig);
@@ -87,6 +90,19 @@ public class ActivityLauncher extends ActivityBase implements AsyncLauncherIniti
         mActualSettings.add(mCtrlPointerMulti);
 
         mCtrlStart.hide();
+    }
+
+    private void onLaunchGameBtnPressed()
+    {
+        try
+        {
+            mConfig.save(new File(FileUtil.configFileLocation()));
+        }
+        catch (final Exception e)
+        {
+            Toast.makeText(this, getString(R.string.launcher_error_config_saving_failed, e.getMessage()), Toast.LENGTH_LONG).show();
+        }
+        startActivity(new Intent(ActivityLauncher.this, SDLActivity.class));
     }
 
 

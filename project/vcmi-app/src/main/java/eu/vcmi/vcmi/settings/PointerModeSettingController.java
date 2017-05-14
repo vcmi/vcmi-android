@@ -28,8 +28,7 @@ public class PointerModeSettingController extends LauncherSettingWithDialogContr
     public void onItemChosen(final PointerMode item)
     {
         mConfig.mPrefs.saveEnum(SharedPrefs.KEY_POINTER_MODE, item);
-        mConfig.mConfig.mSwipeEnabled = item.supportsSwipe();
-        mConfig.mConfig.save(new File(FileUtil.configFileLocation()));
+        mConfig.mConfig.updateSwipe(item.supportsSwipe());
         updateContent();
     }
 
