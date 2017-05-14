@@ -2,11 +2,8 @@ package eu.vcmi.vcmi.settings;
 
 import android.support.v7.app.AppCompatActivity;
 
-import java.io.File;
-
 import eu.vcmi.vcmi.Config;
 import eu.vcmi.vcmi.R;
-import eu.vcmi.vcmi.util.FileUtil;
 
 /**
  * @author F
@@ -27,8 +24,7 @@ public class CodepageSettingController extends LauncherSettingWithDialogControll
     @Override
     public void onItemChosen(final String item)
     {
-        mConfig.mCodepage = item;
-        mConfig.save(new File(FileUtil.configFileLocation()));
+        mConfig.updateCodepage(item);
         updateContent();
     }
 

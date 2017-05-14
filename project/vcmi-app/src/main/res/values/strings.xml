@@ -24,6 +24,7 @@
     <string name="launcher_error_vcmi_data_internal_update">Could not update vcmi data from app resources (this shouldn\'t happen; you might need to reinstall the app)</string>
     <string name="launcher_error_permissions">This application needs write permissions to use the content stored in external storage</string>
     <string name="launcher_error_permission_broken">Could not resolve permissions correctly</string>
+    <string name="launcher_error_config_saving_failed">Could not save vcmi config; reason: %1$s</string>
     <string name="mods_item_author_template">by %1$s</string>
     <string name="misc_try_again">Try again</string>
     <string name="launcher_section_init">Game init</string>

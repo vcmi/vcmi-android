@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 
 import eu.vcmi.vcmi.util.FileUtil;
 import eu.vcmi.vcmi.util.Log;
@@ -18,6 +19,27 @@ public class Config
     public int mResolutionHeight;
     public boolean mSwipeEnabled;
     private JSONObject mRawObject;
+
+    private boolean mIsModified;
+
+    public void updateCodepage(final String s)
+    {
+        mCodepage = s;
+        mIsModified = true;
+    }
+
+    public void updateResolution(final int x, final int y)
+    {
+        mResolutionWidth = x;
+        mResolutionHeight = y;
+        mIsModified = true;
+    }
+
+    public void updateSwipe(final boolean b)
+    {
+        mSwipeEnabled = b;
+        mIsModified = true;
+    }
 
     private static JSONObject accessGeneralNode(final JSONObject baseObj)
     {
@@ -53,16 +75,29 @@ public class Config
         return config;
     }
 
-    public void save(final File location)
+    public void save(final File location) throws IOException, JSONException
     {
+        if (!needsSaving(location))
+        {
+            Log.d(this, "Config doesn't need saving");
+            return;
+        }
         try
         {
-            FileUtil.write(location, toJson());
+            final String configString = toJson();
+            FileUtil.write(location, configString);
+            Log.v(this, "Saved config: " + configString);
         }
         catch (final Exception e)
         {
             Log.e(this, "Could not save config", e);
+            throw e;
         }
+    }
+
+    private boolean needsSaving(final File location)
+    {
+        return mIsModified || !location.exists();
     }
 
     private String toJson() throws JSONException
