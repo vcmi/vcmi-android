@@ -20,6 +20,7 @@ import java.util.List;
 
 import eu.vcmi.vcmi.content.AsyncLauncherInitialization;
 import eu.vcmi.vcmi.settings.CodepageSettingController;
+import eu.vcmi.vcmi.settings.DoubleConfig;
 import eu.vcmi.vcmi.settings.LauncherSettingController;
 import eu.vcmi.vcmi.settings.ModsBtnController;
 import eu.vcmi.vcmi.settings.PointerModeSettingController;
@@ -41,7 +42,7 @@ public class ActivityLauncher extends ActivityBase implements AsyncLauncherIniti
     private Config mConfig;
     private LauncherSettingController<ScreenResSettingController.ScreenRes, Config> mCtrlScreenRes;
     private LauncherSettingController<String, Config> mCtrlCodepage;
-    private LauncherSettingController<PointerModeSettingController.PointerMode, SharedPrefs> mCtrlPointerMode;
+    private LauncherSettingController<PointerModeSettingController.PointerMode, DoubleConfig> mCtrlPointerMode;
     private LauncherSettingController<Void, Void> mCtrlStart;
     private List<LauncherSettingController<?, ?>> mActualSettings = new ArrayList<>();
     private LauncherSettingController<Float, SharedPrefs> mCtrlPointerMulti;
@@ -76,7 +77,7 @@ public class ActivityLauncher extends ActivityBase implements AsyncLauncherIniti
         new ModsBtnController(this, v -> startActivity(new Intent(ActivityLauncher.this, ActivityMods.class))).init(R.id.launcher_btn_mods);
         mCtrlScreenRes = new ScreenResSettingController(this).init(R.id.launcher_btn_res, mConfig);
         mCtrlCodepage = new CodepageSettingController(this).init(R.id.launcher_btn_cp, mConfig);
-        mCtrlPointerMode = new PointerModeSettingController(this).init(R.id.launcher_btn_pointer_mode, mPrefs);
+        mCtrlPointerMode = new PointerModeSettingController(this).init(R.id.launcher_btn_pointer_mode, new DoubleConfig(mConfig, mPrefs));
         mCtrlPointerMulti = new PointerMultiplierSettingController(this).init(R.id.launcher_btn_pointer_multi, mPrefs);
 
         mActualSettings.clear();
@@ -117,7 +118,7 @@ public class ActivityLauncher extends ActivityBase implements AsyncLauncherIniti
         }
         if (mCtrlPointerMode != null)
         {
-            mCtrlPointerMode.updateConfig(mPrefs);
+            mCtrlPointerMode.updateConfig(new DoubleConfig(mConfig, mPrefs));
         }
         if (mCtrlPointerMulti != null)
         {
@@ -148,6 +149,12 @@ public class ActivityLauncher extends ActivityBase implements AsyncLauncherIniti
     public Activity ctx()
     {
         return this;
+    }
+
+    @Override
+    public SharedPrefs prefs()
+    {
+        return mPrefs;
     }
 
     @Override
