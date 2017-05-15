@@ -134,7 +134,7 @@ public class Config
         final JSONObject generalNode = accessGeneralNode(mRawObject);
         final JSONObject screenResNode = accessScreenResNode(mRawObject);
 
-        final JSONObject root = new JSONObject();
+        final JSONObject root = mRawObject;
         final JSONObject general = generalNode == null ? new JSONObject() : generalNode;
         final JSONObject video = new JSONObject();
         final JSONObject screenRes = screenResNode == null ? new JSONObject() : screenResNode;

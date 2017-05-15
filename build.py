@@ -11,6 +11,7 @@ conf = vcmiconf.config
 PARAM_FIXES = 0
 PARAM_BUILD_EXT = 1
 PARAM_BUILD_CMAKE = 2
+PARAM_BUILD_APP = 3
 
 def copyLibs():
 	vcmiutil.copytree("./libs/", conf["extOutput"])
@@ -69,7 +70,13 @@ def buildFFMPEG():
 def buildCMakeExternals():	
 	os.chdir("project")
 	os.environ["JAVA_HOME"] = conf["javaRoot"]
-	cmd = "gradlew -a :vcmi-app:compileLibsOnlyDebugSources"
+	cmd = "gradlew -a :vcmi-app:compileLibsOnly{}Sources".format(conf["cmakeBuildMode"])
+	assertZero(os.system(cmd), cmd)
+	
+def buildApp():	
+	os.chdir("project")
+	os.environ["JAVA_HOME"] = conf["javaRoot"]
+	cmd = "gradlew -a :vcmi-app:assembleVcmiOnly{}".format(conf["cmakeBuildMode"])
 	assertZero(os.system(cmd), cmd)
 	
 def buildAllOptional():
@@ -91,10 +98,9 @@ def inputError():
 				
 args = len(sys.argv)
 if args < 2:
-	print("run with any of these: all, build, fixpaths")
-	sys.exit(1)
+	inputError()
 	
-parsedParams = [False, False, False]
+parsedParams = [False, False, False, False]
 for arg in sys.argv[1:]:
 	if arg == "all" or arg == "build-optional":
 		parsedParams[PARAM_BUILD_EXT] = True
@@ -102,6 +108,8 @@ for arg in sys.argv[1:]:
 		parsedParams[PARAM_BUILD_CMAKE] = True
 	if arg == "all" or arg == "fixpaths":
 		parsedParams[PARAM_FIXES] = True
+	if arg == "all" or arg == "build-app":
+		parsedParams[PARAM_BUILD_APP] = True
 		
 executedAnything = False
 if parsedParams[PARAM_FIXES]:
@@ -112,6 +120,9 @@ if parsedParams[PARAM_BUILD_EXT]:
 	executedAnything = True
 if parsedParams[PARAM_BUILD_CMAKE]:
 	buildAllCmake()
+	executedAnything = True
+if parsedParams[PARAM_BUILD_APP]:
+	timed(buildApp, "app")
 	executedAnything = True
 
 if executedAnything == False:
