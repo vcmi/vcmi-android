@@ -1,4 +1,4 @@
-needed: python, android studio + ndk
+needed: python, ndk, android studio (actually, android studio might be optional)
 
 * also needed: java 8 jdk (implied by android build)
 * git update submodules (vcmi definitely needed, ffmpeg/x264/iconv only if you want to build them)
@@ -14,7 +14,7 @@ if you want to build SDL, ffmpeg and iconv manually
 	* file ./ext/SDL2/SDL2-mixer/build.mk has hardcoded path to "smpeg2-2.0.0", so if there's some newer version, you might need to change it
 	* try to enter bash and check if "make" and "yasm" work (install them if not (sudo apt-get install or something like that))
 	* make sure that bash scripts (eg. ./ext/ff/ffmpeg/configure and ./ext/ff/x264/configure) have unix newlines (lf) otherwise building ffmpeg fails with cryptic errors
-	* run in main folder: python build.py all
+	* run in main folder: python build.py fixpaths build-optional build-cmake
 	* if it eventually finishes without errors, there should be libs in ./ext-output/(ARCH)
 		* ffmpeg is built in all possible configurations; if you don't like that, you can comment the lines in ./ext/ff/all.sh
 		* all other libs (iconv, SDL+addons, boost, minizip, fuzzylite) are built only in configurations declared in vcmiconf.in
@@ -25,9 +25,16 @@ else
 		* ("build-cmake" will execute gradle-configured-cmake build for boost libs and "external" vcmi libs of fuzzylite and minizip)
 }
 
-* start android studio project (in ./project)
-* make sure that current flavor (menu Build->Select build variant) is "vcmiOnlyDebug/Release" (it should be the default; other flavors can additionally build boost/fuzzylite/minizip but you already built them from the script)
-* try to build/run the project
+if using android studio
+{
+	* start android studio project (in ./project)
+	* make sure that current flavor (menu Build->Select build variant) is "vcmiOnlyDebug/Release" (it should be the default; other flavors can additionally build boost/fuzzylite/minizip but you already built them from the script)
+	* try to build/run the project
+}
+else 
+{
+	* alternatively, instead of using android studio, you can try running in main folder (should work but not tested on clean build extensively): python build.py build-app
+}
 
 * if boost locale breaks on x64 abis (with iconv errors), you might need to remove/rename this ndk header file: ndk/sources/android/support/include/iconv.h
   (looks like android built-in iconv is broken for x64, but still, this is a hack, so it may break some other things in ndk -- https://github.com/android-ndk/ndk/issues/236)
