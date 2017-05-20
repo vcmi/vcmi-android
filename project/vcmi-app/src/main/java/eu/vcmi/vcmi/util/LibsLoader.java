@@ -18,14 +18,13 @@ public final class LibsLoader
 
     private static void loadCommon()
     {
-        loadLib("c++_shared", true);
+        loadLib("gnustl_shared", true);
         loadLib("iconv", true);
         loadLib("boost-system", true);
         loadLib("boost-datetime", true);
         loadLib("boost-locale", true);
         loadLib("boost-filesystem", true);
         loadLib("boost-program-options", true);
-//        loadLib("boost-smartptr", true);
         loadLib("boost-thread", true);
         loadLib("SDL2", false);
         loadLib("smpeg2", true);

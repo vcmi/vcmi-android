@@ -32,11 +32,21 @@ public class Config
 
     private static JSONObject accessGeneralNode(final JSONObject baseObj)
     {
+        if (baseObj == null)
+        {
+            return null;
+        }
+
         return baseObj.optJSONObject("general");
     }
 
     private static JSONObject accessScreenResNode(final JSONObject baseObj)
     {
+        if (baseObj == null)
+        {
+            return null;
+        }
+
         final JSONObject video = baseObj.optJSONObject("video");
         if (video != null)
         {
@@ -134,7 +144,7 @@ public class Config
         final JSONObject generalNode = accessGeneralNode(mRawObject);
         final JSONObject screenResNode = accessScreenResNode(mRawObject);
 
-        final JSONObject root = mRawObject;
+        final JSONObject root = mRawObject == null ? new JSONObject() : mRawObject;
         final JSONObject general = generalNode == null ? new JSONObject() : generalNode;
         final JSONObject video = new JSONObject();
         final JSONObject screenRes = screenResNode == null ? new JSONObject() : screenResNode;

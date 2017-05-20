@@ -22,12 +22,12 @@ public class FileUtil
 
     public static String read(final File file) throws IOException
     {
-        try (FileReader modConfigReader = new FileReader(file))
+        try (FileReader reader = new FileReader(file))
         {
             final char[] buffer = new char[4096];
             int currentRead;
             final StringBuilder content = new StringBuilder();
-            while ((currentRead = modConfigReader.read(buffer, 0, 4096)) >= 0)
+            while ((currentRead = reader.read(buffer, 0, 4096)) >= 0)
             {
                 content.append(buffer, 0, currentRead);
             }
@@ -37,10 +37,36 @@ public class FileUtil
 
     public static void write(final File file, final String data) throws IOException
     {
-        final FileWriter fw = new FileWriter(file, false);
-        Log.v(null, "Saving data: " + data + " to " + file.getAbsolutePath());
-        fw.write(data);
-        fw.close();
+        if (!ensureWriteable(file))
+        {
+            Log.e("Couldn't write " + data + " to " + file);
+            return;
+        }
+        try (final FileWriter fw = new FileWriter(file, false))
+        {
+            Log.v(null, "Saving data: " + data + " to " + file.getAbsolutePath());
+            fw.write(data);
+        }
+    }
+
+    private static boolean ensureWriteable(final File file)
+    {
+        if (file == null)
+        {
+            Log.e("Broken path given to fileutil");
+            return false;
+        }
+        final File dir = file.getParentFile();
+        if (dir.exists())
+        {
+            return true;
+        }
+        if (dir.mkdirs())
+        {
+            return true;
+        }
+        Log.e("Couldn't create dir " + dir);
+        return false;
     }
 
     private static boolean clearDirectory(final File dir)
