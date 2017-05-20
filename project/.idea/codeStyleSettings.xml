@@ -3,6 +3,19 @@
   <component name="ProjectCodeStyleSettingsManager">
     <option name="PER_PROJECT_SETTINGS">
       <value>
+        <option name="OTHER_INDENT_OPTIONS">
+          <value>
+            <option name="INDENT_SIZE" value="4" />
+            <option name="CONTINUATION_INDENT_SIZE" value="8" />
+            <option name="TAB_SIZE" value="4" />
+            <option name="USE_TAB_CHARACTER" value="true" />
+            <option name="SMART_TABS" value="false" />
+            <option name="LABEL_INDENT_SIZE" value="0" />
+            <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+            <option name="USE_RELATIVE_INDENTS" value="false" />
+          </value>
+        </option>
+        <option name="LINE_SEPARATOR" value="&#10;" />
         <option name="FIELD_NAME_PREFIX" value="m" />
         <option name="STATIC_FIELD_NAME_PREFIX" value="s" />
         <option name="GENERATE_FINAL_LOCALS" value="true" />
@@ -34,7 +47,6 @@
             <emptyLine />
           </value>
         </option>
-        <option name="RIGHT_MARGIN" value="150" />
         <option name="JD_PARAM_DESCRIPTION_ON_NEW_LINE" value="true" />
         <option name="WRAP_COMMENTS" value="true" />
         <AndroidXmlCodeStyleSettings>
@@ -46,9 +58,18 @@
           </option>
         </AndroidXmlCodeStyleSettings>
         <Objective-C>
+          <option name="INDENT_PREPROCESSOR_DIRECTIVE" value="4" />
+          <option name="INDENT_DIRECTIVE_AS_CODE" value="true" />
+          <option name="KEEP_CASE_EXPRESSIONS_IN_ONE_LINE" value="true" />
           <option name="NAMESPACE_BRACE_PLACEMENT" value="2" />
-          <option name="FUNCTION_BRACE_PLACEMENT" value="5" />
-          <option name="BLOCK_BRACE_PLACEMENT" value="5" />
+          <option name="FUNCTION_BRACE_PLACEMENT" value="2" />
+          <option name="BLOCK_BRACE_PLACEMENT" value="2" />
+          <option name="FUNCTION_NON_TOP_AFTER_RETURN_TYPE_WRAP" value="0" />
+          <option name="FUNCTION_TOP_AFTER_RETURN_TYPE_WRAP" value="0" />
+          <option name="FUNCTION_CALL_ARGUMENTS_ALIGN_MULTILINE" value="false" />
+          <option name="SPACE_BEFORE_INIT_LIST" value="true" />
+          <option name="SPACE_AFTER_POINTER_IN_DECLARATION" value="true" />
+          <option name="SPACE_AFTER_REFERENCE_IN_DECLARATION" value="true" />
         </Objective-C>
         <Objective-C-extensions>
           <file>
@@ -85,6 +106,7 @@
           <option name="ENABLED" value="false" />
         </editorconfig>
         <codeStyleSettings language="JAVA">
+          <option name="RIGHT_MARGIN" value="150" />
           <option name="BRACE_STYLE" value="2" />
           <option name="CLASS_BRACE_STYLE" value="2" />
           <option name="METHOD_BRACE_STYLE" value="2" />
@@ -116,9 +138,24 @@
           </indentOptions>
         </codeStyleSettings>
         <codeStyleSettings language="ObjectiveC">
-          <option name="BRACE_STYLE" value="5" />
+          <option name="KEEP_CONTROL_STATEMENT_IN_ONE_LINE" value="false" />
+          <option name="BLANK_LINES_AROUND_METHOD_IN_INTERFACE" value="0" />
+          <option name="BRACE_STYLE" value="2" />
           <option name="CLASS_BRACE_STYLE" value="2" />
+          <option name="ELSE_ON_NEW_LINE" value="true" />
+          <option name="WHILE_ON_NEW_LINE" value="true" />
+          <option name="CATCH_ON_NEW_LINE" value="true" />
+          <option name="INDENT_CASE_FROM_SWITCH" value="false" />
+          <option name="SPACE_BEFORE_IF_PARENTHESES" value="false" />
+          <option name="SPACE_BEFORE_WHILE_PARENTHESES" value="false" />
+          <option name="SPACE_BEFORE_FOR_PARENTHESES" value="false" />
+          <option name="SPACE_BEFORE_CATCH_PARENTHESES" value="false" />
+          <option name="SPACE_BEFORE_SWITCH_PARENTHESES" value="false" />
+          <option name="KEEP_SIMPLE_BLOCKS_IN_ONE_LINE" value="false" />
+          <option name="KEEP_SIMPLE_METHODS_IN_ONE_LINE" value="false" />
+          <option name="DOWHILE_BRACE_FORCE" value="3" />
           <indentOptions>
+            <option name="CONTINUATION_INDENT_SIZE" value="4" />
             <option name="USE_TAB_CHARACTER" value="true" />
           </indentOptions>
         </codeStyleSettings>

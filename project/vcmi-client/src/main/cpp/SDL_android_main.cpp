@@ -9,7 +9,7 @@ extern "C" {
 }
 
 #include <SDL_mouse.h>
-#include "lib/AndroidVMHelper.h"
+#include "lib/CAndroidVMHelper.h"
 
 /*******************************************************************************
                  Functions called by JNI
@@ -17,27 +17,28 @@ extern "C" {
 
 extern "C" {
 /* Called before SDL_main() to initialize JNI bindings in SDL library */
-extern void SDL_Android_Init(JNIEnv *env, jclass cls);
+extern void SDL_Android_Init(JNIEnv * env, jclass cls);
 
 /* This prototype is needed to prevent a warning about the missing prototype for global function below */
-JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv *env, jclass cls,
+JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv * env, jclass cls,
 																 jobjectArray array);
-JNIEXPORT void JNICALL Java_org_libsdl_app_SurfaceTouchHandler_retrieveCursorPositions(JNIEnv *env, jclass cls, jintArray outValues);
+JNIEXPORT void JNICALL Java_org_libsdl_app_SurfaceTouchHandler_retrieveCursorPositions(JNIEnv * env, jclass cls,
+																					   jintArray outValues);
 }
 //JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeQuit(JNIEnv* env, jclass cls)
 //{
 //	return 0;
 //}
 /* Start up the SDL app */
-JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv *env, jclass cls, jobjectArray array)
+JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv * env, jclass cls, jobjectArray array)
 {
 	int i;
 	int argc;
 	int status;
 	int len;
-	char **argv;
+	char ** argv;
 
-	AndroidVMHelper::cacheVM(env);
+	CAndroidVMHelper::cacheVM(env);
 
 	/* This interface could expand with ABI negotiation, callbacks, etc. */
 	SDL_Android_Init(env, cls);
@@ -53,22 +54,22 @@ JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv *env, jc
 	   https://bitbucket.org/MartinFelis/love-android-sdl2/issue/23/release-build-crash-on-start
 	 */
 	argv[argc++] = SDL_strdup("app_process");
-	for (i = 0; i < len; ++i)
+	for(i = 0; i < len; ++i)
 	{
-		const char *utf;
-		char *arg = NULL;
+		const char * utf;
+		char * arg = NULL;
 		jstring string = (jstring) env->GetObjectArrayElement(array, i);
-		if (string)
+		if(string)
 		{
 			utf = env->GetStringUTFChars(string, 0);
-			if (utf)
+			if(utf)
 			{
 				arg = SDL_strdup(utf);
 				env->ReleaseStringUTFChars(string, utf);
 			}
 			env->DeleteLocalRef(string);
 		}
-		if (!arg)
+		if(!arg)
 		{
 			arg = SDL_strdup("");
 		}
@@ -81,7 +82,7 @@ JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv *env, jc
 	status = SDL_main(argc, argv);
 	/* Release the arguments. */
 
-	for (i = 0; i < argc; ++i)
+	for(i = 0; i < argc; ++i)
 	{
 		SDL_free(argv[i]);
 	}
@@ -92,10 +93,11 @@ JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv *env, jc
 	return status;
 }
 
-JNIEXPORT void JNICALL Java_org_libsdl_app_SurfaceTouchHandler_retrieveCursorPositions(JNIEnv *env, jclass cls, jintArray outValues)
+JNIEXPORT void JNICALL Java_org_libsdl_app_SurfaceTouchHandler_retrieveCursorPositions(JNIEnv * env, jclass cls,
+																					   jintArray outValues)
 {
 	auto len = env->GetArrayLength(outValues);
-	if (len != 2)
+	if(len != 2)
 	{
 		return;
 	}
