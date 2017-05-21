@@ -29,7 +29,8 @@ android {
         }
 
         ndk {
-            abiFilters = new HashSet<>(VCMI_ABIS)
+            abiFilters = new HashSet<>()
+            abiFilters.addAll(VCMI_ABIS)
         }
     }
     externalNativeBuild {
