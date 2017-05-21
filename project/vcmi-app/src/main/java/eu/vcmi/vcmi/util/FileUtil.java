@@ -2,12 +2,14 @@ package eu.vcmi.vcmi.util;
 
 import android.content.res.AssetManager;
 import android.os.Environment;
+import android.text.TextUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -18,8 +20,6 @@ import eu.vcmi.vcmi.Const;
  */
 public class FileUtil
 {
-    public static final int CURRENT_INTERNAL_ASSETS_VERSION = 4;
-
     public static String read(final File file) throws IOException
     {
         try (FileReader reader = new FileReader(file))
@@ -156,5 +156,23 @@ public class FileUtil
     public static String configFileLocation()
     {
         return Environment.getExternalStorageDirectory() + "/" + Const.VCMI_DATA_ROOT_FOLDER_NAME + "/config/settings.json";
+    }
+
+    public static String readAssetsStream(final AssetManager assets, final String assetPath)
+    {
+        if (assets == null || TextUtils.isEmpty(assetPath))
+        {
+            return null;
+        }
+
+        try (java.util.Scanner s = new java.util.Scanner(assets.open(assetPath), "UTF-8").useDelimiter("\\A"))
+        {
+            return s.hasNext() ? s.next() : null;
+        }
+        catch (final IOException e)
+        {
+            Log.e("Couldn't read stream data", e);
+            return null;
+        }
     }
 }

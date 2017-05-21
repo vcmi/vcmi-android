@@ -93,18 +93,17 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
             return new InitResult(false, ctx.getString(R.string.launcher_error_vcmi_data_internal_missing));
         }
 
-        if (callbacks.prefs().load(SharedPrefs.KEY_CURRENT_INTERNAL_ASSET_VERSION, -1) != FileUtil.CURRENT_INTERNAL_ASSETS_VERSION)
+        final String previousInternalDataHash = callbacks.prefs().load(SharedPrefs.KEY_CURRENT_INTERNAL_ASSET_HASH, null);
+        final String currentInternalDataHash = FileUtil.readAssetsStream(ctx.getAssets(), "internalDataHash.txt");
+        if (currentInternalDataHash == null || previousInternalDataHash == null || !currentInternalDataHash.equals(previousInternalDataHash))
         {
-            Log.i(this, "Internal data needs update; new version is "
-                        + FileUtil.CURRENT_INTERNAL_ASSETS_VERSION
-                        + ", and current is "
-                        + callbacks.prefs().load(SharedPrefs.KEY_CURRENT_INTERNAL_ASSET_VERSION, -1));
-            // there was an update to internal assets so we need to replace the existing ones
+            Log.i(this, "Internal data needs to be created/updated; old hash=" + previousInternalDataHash
+                        + ", new hash=" + currentInternalDataHash);
             if (!FileUtil.reloadVcmiDataToInternalDir(vcmiInternalDir, ctx.getAssets()))
             {
                 return new InitResult(false, ctx.getString(R.string.launcher_error_vcmi_data_internal_update));
             }
-            callbacks.prefs().save(SharedPrefs.KEY_CURRENT_INTERNAL_ASSET_VERSION, FileUtil.CURRENT_INTERNAL_ASSETS_VERSION);
+            callbacks.prefs().save(SharedPrefs.KEY_CURRENT_INTERNAL_ASSET_HASH, currentInternalDataHash);
         }
 
         return new InitResult(true, "");
@@ -125,7 +124,7 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
                 return new InitResult(true, "");
             }
         }
-        catch (RuntimeException ignored)
+        catch (final RuntimeException ignored)
         {
             return new InitResult(Build.VERSION.SDK_INT < Build.VERSION_CODES.M,
                 act.getString(R.string.launcher_error_permission_broken));
@@ -135,7 +134,7 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
 
         // if permissions failed, that means we started system permissions request; we'll wait for user action and will rerun init() after that
         // if it succeeds or call onInitError() otherwise
-        InitResult initResult = new InitResult(false, "");
+        final InitResult initResult = new InitResult(false, "");
         initResult.mFailSilently = true;
         return initResult;
     }

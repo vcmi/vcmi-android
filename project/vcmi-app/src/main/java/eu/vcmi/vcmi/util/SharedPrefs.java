@@ -13,13 +13,24 @@ public class SharedPrefs
 {
     public static final String KEY_POINTER_MODE = "KEY_POINTER_MODE"; // [int]
     public static final String KEY_POINTER_MULTIPLIER = "KEY_POINTER_MULTIPLIER"; // [float]
-    public static final String KEY_CURRENT_INTERNAL_ASSET_VERSION = "KEY_CURRENT_INTERNAL_ASSET_VERSION"; // [int]
+    public static final String KEY_CURRENT_INTERNAL_ASSET_HASH = "KEY_CURRENT_INTERNAL_ASSET_HASH"; // [string]
     private static final String VCMI_PREFS_NAME = "VCMIPrefs";
     private final SharedPreferences mPrefs;
 
     public SharedPrefs(final Context ctx)
     {
         mPrefs = ctx.getSharedPreferences(VCMI_PREFS_NAME, Context.MODE_PRIVATE);
+    }
+
+    public void save(final String name, final String value)
+    {
+        mPrefs.edit().putString(name, value).apply();
+        log(name, value, true);
+    }
+
+    public String load(final String name, final String defaultValue)
+    {
+        return log(name, mPrefs.getString(name, defaultValue), false);
     }
 
     public void save(final String name, final int value)
