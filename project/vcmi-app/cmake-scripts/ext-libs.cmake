@@ -71,8 +71,7 @@ function(build_libs)
 	add_definitions(
 		-DBOOST_ERROR_CODE_HEADER_ONLY 
 		-DBOOST_SYSTEM_NO_DEPRECATED
-		-DIOAPI_NO_64 
-		-DIOAPI64_ANDROID_HACK) # circumvents android problem in ndk r15, where system libs try to rename ftello/fseeko back to *64 versions
+		-DIOAPI_NO_64)
 			
 	build_boost()
 	build_minizip()
