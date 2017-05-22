@@ -1,0 +1,21 @@
+language: android
+sudo: true
+jdk:
+  - oraclejdk8
+android:
+  components:
+    - tools
+    - platform-tools
+    - build-tools-25.0.2
+    - android-25
+    - extra-android-m2repository
+before_install:
+  - git clone https://github.com/urho3d/android-ndk.git $HOME/android-ndk-root
+  - export ANDROID_NDK_HOME=$HOME/android-ndk-root
+  - python ./travis-extras/create_travis_conf.py
+  - wget -O ./boost.tar.gz https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.gz
+  - tar xzvf boost.tar.gz -C ./ext/boost/
+script:
+  - python ./build.py fixpaths
+  - python ./build.py build-cmake
+  - python ./build.py build-app

@@ -117,10 +117,10 @@ def LoadSigningConfig(final basePath) {
         props.load(new FileInputStream(propFile))
 
         if (props != null
-            && props.containsKey('STORE_FILE')
-            && props.containsKey('STORE_PASSWORD')
-            && props.containsKey('KEY_ALIAS')
-            && props.containsKey('KEY_PASSWORD')) {
+                && props.containsKey('STORE_FILE')
+                && props.containsKey('STORE_PASSWORD')
+                && props.containsKey('KEY_ALIAS')
+                && props.containsKey('KEY_PASSWORD')) {
 
             android.signingConfigs.releaseSigning.storeFile = file(basePath + "/../" + props['STORE_FILE'])
             android.signingConfigs.releaseSigning.storePassword = props['STORE_PASSWORD']

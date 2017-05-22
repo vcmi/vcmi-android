@@ -1,0 +1,15 @@
+{
+	"bash" :
+	{
+		"projectRoot" : "$PROJECT_ROOT",
+		"ndkRoot" : "$NDK_ROOT"
+	},
+	"projectRoot" : "$PROJECT_ROOT",
+	"ndkRoot" : "$NDK_ROOT",
+	"sdkRoot" : "$SDK_ROOT",
+	"javaRoot": "$JAVA_HOME",
+	"abis" : "armeabi-v7a",
+	"boostFolderName" : "boost_1_64_0",
+	"androidApi" : 16,
+	"cmakeBuildMode" : "Debug"
+}

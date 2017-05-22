@@ -6,6 +6,11 @@ def updateProjectProps():
 	replacements = [ vcmiutil.ReplacementEntry("PROJECT_PATH_BASE", "PROJECT_PATH_BASE = " + config["projectRoot"]) ]	
 	vcmiutil.fixFile("./project/gradle.properties", replacements, False)
 	
+def createLocalProps():
+	vcmiutil.rewriteFile("./project/local.properties", 
+		"sdk.dir=" + config["sdkRoot"].replace(":", "\\:") 
+		+ "\nndk.dir=" + config["ndkRoot"].replace(":", "\\:"))
+	
 config = []
 with open("./vcmiconf.json", "r") as confFile:
 	try:

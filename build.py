@@ -43,6 +43,7 @@ def callBuild(path, modulesShared, modulesStatic, isCpp11):
 	copyLibs()
 	
 def fixLibsFiles():
+	vcmiconf.createLocalProps()
 	vcmiconf.updateProjectProps()
 	import fix_boost_files
 	import fix_sdl_makefiles
