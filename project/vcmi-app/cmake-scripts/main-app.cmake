@@ -20,7 +20,6 @@ function(build_vcmi)
 
 	add_definitions(
 		-DIOAPI_NO_64 
-		-DNO_STD_TOSTRING
 		-DFL_CPP11)
 	add_definitions(-DBOOST_DISABLE_ASSERTS) # there's a problem in vcmi where mutexes can't be cleaned up correctly on exit (asserting on EBUSY result from pthread_mutex_destroy); I can't really debug it easily so just try to ignore it (we try to quit the app anyway)
 		
