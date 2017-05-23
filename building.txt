@@ -39,4 +39,4 @@ else
 * if boost locale breaks on x64 abis (with iconv errors), you might need to remove/rename this ndk header file: ndk/sources/android/support/include/iconv.h
   (looks like android built-in iconv is broken for x64, but still, this is a hack, so it may break some other things in ndk -- https://github.com/android-ndk/ndk/issues/236)
   
-Note that the current build might not work on armeabi (due to clang crashing during SDL build) or api <21 (due to some boost<->ndk problems that I can't really pinpoint atm); these might be related to the fact I used preview ndk version (r15 beta1)
+Note that the current build will not work on armeabi (arm relocations overflow); 
