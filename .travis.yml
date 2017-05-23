@@ -16,7 +16,7 @@ addons:
       - deadsnakes
     packages:
       - python3.5
-      - libstdc++6-4.9-dev
+      - libstdc++-4.9-dev
 before_install:
   - bash ./travis-extras/android_licenses_fix.sh
   - git clone https://github.com/urho3d/android-ndk.git $HOME/android-ndk-root
