@@ -71,13 +71,13 @@ def buildFFMPEG():
 def buildCMakeExternals():	
 	os.chdir("project")
 	os.environ["JAVA_HOME"] = conf["javaRoot"]
-	cmd = "gradlew -a :vcmi-app:compileLibsOnly{}Sources".format(conf["cmakeBuildMode"])
+	cmd = "./gradlew -a :vcmi-app:compileLibsOnly{}Sources".format(conf["cmakeBuildMode"])
 	assertZero(os.system(cmd), cmd)
 	
 def buildApp():	
 	os.chdir("project")
 	os.environ["JAVA_HOME"] = conf["javaRoot"]
-	cmd = "gradlew -a :vcmi-app:assembleVcmiOnly{}".format(conf["cmakeBuildMode"])
+	cmd = "./gradlew -a :vcmi-app:assembleVcmiOnly{}".format(conf["cmakeBuildMode"])
 	assertZero(os.system(cmd), cmd)
 	
 def buildAllOptional():
