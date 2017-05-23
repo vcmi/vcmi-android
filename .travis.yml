@@ -21,6 +21,7 @@ before_install:
   - python3.5 --version
   - python3.5 ./travis-extras/create_travis_conf.py
   - wget -O ./boost.tar.gz https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.gz
+  - mkdir -p ext/boost/
   - tar xzvf boost.tar.gz -C ./ext/boost/
 script:
   - python3.5 ./build.py fixpaths
