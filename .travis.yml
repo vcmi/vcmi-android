@@ -16,6 +16,7 @@ addons:
     packages:
       - python3.5
 before_install:
+  - bash ./travis-extras/android_licenses_fix.sh
   - git clone https://github.com/urho3d/android-ndk.git $HOME/android-ndk-root
   - export ANDROID_NDK_HOME=$HOME/android-ndk-root
   - python3.5 ./travis-extras/create_travis_conf.py
