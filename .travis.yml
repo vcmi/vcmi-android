@@ -18,12 +18,11 @@ addons:
 before_install:
   - git clone https://github.com/urho3d/android-ndk.git $HOME/android-ndk-root
   - export ANDROID_NDK_HOME=$HOME/android-ndk-root
-  - python --version
-  - python3 --version
-  - python3 ./travis-extras/create_travis_conf.py
+  - python3.5 --version
+  - python3.5 ./travis-extras/create_travis_conf.py
   - wget -O ./boost.tar.gz https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.gz
   - tar xzvf boost.tar.gz -C ./ext/boost/
 script:
-  - python3 ./build.py fixpaths
-  - python3 ./build.py build-cmake
-  - python3 ./build.py build-app
+  - python3.5 ./build.py fixpaths
+  - python3.5 ./build.py build-cmake
+  - python3.5 ./build.py build-app
