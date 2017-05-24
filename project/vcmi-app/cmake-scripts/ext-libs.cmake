@@ -34,9 +34,6 @@ function(build_minizip)
 endfunction(build_minizip)
 
 function(build_boost)
-	if (${ANDROID_NATIVE_API_LEVEL} LESS 21)
-		add_definitions("-Depoll_create1(x)=-1;errno=EINVAL")
-	endif()
 	add_definitions(-DBOOST_DISABLE_ASSERTS)
 
 	add_library(iconv SHARED IMPORTED)

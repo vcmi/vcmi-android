@@ -13,6 +13,13 @@ PARAM_BUILD_EXT = 1
 PARAM_BUILD_CMAKE = 2
 PARAM_BUILD_APP = 3
 
+#TODO seriously, is there no portable way of calling an executable?
+def gradleCommand():
+	if os.name == "posix":
+		return "./gradlew"
+	else:
+		return "gradlew"
+
 def copyLibs():
 	vcmiutil.copytree("./libs/", conf["extOutput"])
 	
@@ -71,13 +78,13 @@ def buildFFMPEG():
 def buildCMakeExternals():	
 	os.chdir("project")
 	os.environ["JAVA_HOME"] = conf["javaRoot"]
-	cmd = "./gradlew -a :vcmi-app:compileLibsOnly{}Sources".format(conf["cmakeBuildMode"])
+	cmd = gradleCommand() + " -a :vcmi-app:compileLibsOnly{}Sources".format(conf["cmakeBuildMode"])
 	assertZero(os.system(cmd), cmd)
 	
 def buildApp():	
 	os.chdir("project")
 	os.environ["JAVA_HOME"] = conf["javaRoot"]
-	cmd = "./gradlew -a :vcmi-app:assembleVcmiOnly{}".format(conf["cmakeBuildMode"])
+	cmd = gradleCommand() + " -a :vcmi-app:assembleVcmiOnly{}".format(conf["cmakeBuildMode"])
 	assertZero(os.system(cmd), cmd)
 	
 def buildAllOptional():
