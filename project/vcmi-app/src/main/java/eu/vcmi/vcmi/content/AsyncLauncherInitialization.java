@@ -79,9 +79,9 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
                     return new InitResult(false, ctx.getString(R.string.launcher_error_vcmi_data_root_created,
                         Const.VCMI_DATA_ROOT_FOLDER_NAME, vcmiDir.getAbsolutePath()));
                 }
-                //else: we managed to copy the legacy data from old vcmi version
+                //else: we managed to copy the legacy data from old vcmi version (TODO should we tell the user that we moved the data?)
             }
-            else
+            else // we can't really do anything more if, for some reason, we couldn't create root folders (read-only or corrupted filesystem?)
             {
                 return new InitResult(false, ctx.getString(R.string.launcher_error_vcmi_data_root_failed, vcmiDir.getAbsolutePath()));
             }
@@ -89,13 +89,16 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
 
         if (!testH3DataFolder(vcmiDir))
         {
+            // no h3 data present -> instruct user where to put it
             new InitResult(false,
                 ctx.getString(R.string.launcher_error_h3_data_missing, vcmiDir.getAbsolutePath(), Const.VCMI_DATA_ROOT_FOLDER_NAME));
         }
 
         final File testVcmiData = new File(vcmiInternalDir, "Mods/vcmi/mod.json");
-        if (!testVcmiData.exists() && !FileUtil.unpackVcmiDataToInternalDir(vcmiInternalDir, ctx.getAssets()))
+        final boolean internalVcmiDataExisted = testVcmiData.exists();
+        if (!internalVcmiDataExisted && !FileUtil.unpackVcmiDataToInternalDir(vcmiInternalDir, ctx.getAssets()))
         {
+            // unpacking internal data normally shouldn't fail, probably only sensible reason is no space left on device
             return new InitResult(false, ctx.getString(R.string.launcher_error_vcmi_data_internal_missing));
         }
 
@@ -103,11 +106,15 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
         final String currentInternalDataHash = FileUtil.readAssetsStream(ctx.getAssets(), "internalDataHash.txt");
         if (currentInternalDataHash == null || previousInternalDataHash == null || !currentInternalDataHash.equals(previousInternalDataHash))
         {
-            Log.i(this, "Internal data needs to be created/updated; old hash=" + previousInternalDataHash
-                        + ", new hash=" + currentInternalDataHash);
-            if (!FileUtil.reloadVcmiDataToInternalDir(vcmiInternalDir, ctx.getAssets()))
+            // we should update the data only if it existed previously (hash is bound to be empty if we have just created the data)
+            if (internalVcmiDataExisted)
             {
-                return new InitResult(false, ctx.getString(R.string.launcher_error_vcmi_data_internal_update));
+                Log.i(this, "Internal data needs to be created/updated; old hash=" + previousInternalDataHash
+                            + ", new hash=" + currentInternalDataHash);
+                if (!FileUtil.reloadVcmiDataToInternalDir(vcmiInternalDir, ctx.getAssets()))
+                {
+                    return new InitResult(false, ctx.getString(R.string.launcher_error_vcmi_data_internal_update));
+                }
             }
             callbacks.prefs().save(SharedPrefs.KEY_CURRENT_INTERNAL_ASSET_HASH, currentInternalDataHash);
         }
@@ -123,13 +130,13 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
 
     private boolean tryToRetrieveH3DataFromLegacyDir(final Context ctx, final File vcmiRoot)
     {
-        final LegacyConfigReader.Config config = LegacyConfigReader.Load(ctx.getFilesDir());
-        if (config == null)
+        final LegacyConfigReader.Config config = LegacyConfigReader.load(ctx.getFilesDir());
+        if (config == null) // it wasn't possible to correctly read the config
         {
             return false;
         }
 
-        if (!testH3DataFolder(new File(config.mDataPath)))
+        if (!testH3DataFolder(new File(config.mDataPath))) // make sure that folder that we found actually contains h3 data
         {
             Log.i(this, "Legacy folder doesn't contain valid H3 data");
             return false;
@@ -155,7 +162,7 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
                 if (!FileUtil.copyFile(srcFile, dstFile))
                 {
                     Log.w(this, "Broke while copying " + srcFile);
-                    return false;
+                    return false; // TODO data might've been partially copied; should we inform the user about it?
                 }
                 copiedLegacyFiles.add(srcFile);
             }

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
 
+import eu.vcmi.vcmi.BuildConfig;
 import eu.vcmi.vcmi.Const;
 
 /**
@@ -16,7 +17,7 @@ import eu.vcmi.vcmi.Const;
 
 public class Log
 {
-    private static final boolean LOGGING_ENABLED_CONSOLE = true;
+    private static final boolean LOGGING_ENABLED_CONSOLE = BuildConfig.DEBUG;
     private static final boolean LOGGING_ENABLED_FILE = true;
     private static final String FILELOG_PATH = "/" + Const.VCMI_DATA_ROOT_FOLDER_NAME + "/cache/VCMI_launcher.log";
     private static final String TAG_PREFIX = "VCMI/";

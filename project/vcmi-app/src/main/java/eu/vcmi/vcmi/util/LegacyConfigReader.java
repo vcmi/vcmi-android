@@ -34,7 +34,7 @@ public final class LegacyConfigReader
     }
 
     @TargetApi(Const.SUPPRESS_TRY_WITH_RESOURCES_WARNING)
-    public static Config Load(final File basePath)
+    public static Config load(final File basePath)
     {
         final File settingsFile = new File(basePath, "/libsdl-settings.cfg");
         if (!settingsFile.exists())

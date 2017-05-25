@@ -137,7 +137,7 @@ public class FileUtil
         try
         {
             int unpackedEntries = 0;
-            final byte[] buffer = new byte[4096];
+            final byte[] buffer = new byte[BUFFER_SIZE];
             final ZipInputStream is = new ZipInputStream(assets.open("internalData.zip"));
             ZipEntry zipEntry;
             while ((zipEntry = is.getNextEntry()) != null)
