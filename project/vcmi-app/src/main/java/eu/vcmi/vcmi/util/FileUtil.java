@@ -1,15 +1,18 @@
 package eu.vcmi.vcmi.util;
 
+import android.annotation.TargetApi;
 import android.content.res.AssetManager;
+import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -18,20 +21,28 @@ import eu.vcmi.vcmi.Const;
 /**
  * @author F
  */
+@TargetApi(Const.SUPPRESS_TRY_WITH_RESOURCES_WARNING)
 public class FileUtil
 {
+    private static final int BUFFER_SIZE = 4096;
+
     public static String read(final File file) throws IOException
     {
         try (FileReader reader = new FileReader(file))
         {
-            final char[] buffer = new char[4096];
+            final char[] buffer = new char[BUFFER_SIZE];
             int currentRead;
             final StringBuilder content = new StringBuilder();
-            while ((currentRead = reader.read(buffer, 0, 4096)) >= 0)
+            while ((currentRead = reader.read(buffer, 0, BUFFER_SIZE)) >= 0)
             {
                 content.append(buffer, 0, currentRead);
             }
             return content.toString();
+        }
+        catch (final FileNotFoundException ignored)
+        {
+            Log.w("Could not load file: " + file);
+            return null;
         }
     }
 
@@ -83,6 +94,36 @@ public class FileUtil
             }
         }
         return true;
+    }
+
+    public static boolean copyFile(final File srcFile, final File dstFile)
+    {
+        final File dstDir = dstFile.getParentFile();
+        if (!dstDir.exists())
+        {
+            if (!dstDir.mkdirs())
+            {
+                Log.w("Couldn't create dir to copy file: " + dstFile);
+                return false;
+            }
+        }
+
+        try (final FileInputStream input = new FileInputStream(srcFile);
+             final FileOutputStream output = new FileOutputStream(dstFile))
+        {
+            final byte[] buffer = new byte[BUFFER_SIZE];
+            int read;
+            while ((read = input.read(buffer)) != -1)
+            {
+                output.write(buffer, 0, read);
+            }
+            return true;
+        }
+        catch (final Exception ex)
+        {
+            Log.e("Couldn't copy " + srcFile + " to " + dstFile, ex);
+            return false;
+        }
     }
 
     // (when internal data have changed)

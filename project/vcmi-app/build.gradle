@@ -11,7 +11,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "eu.vcmi.vcmi"
+        applicationId "is.xyz.vcmi"
         minSdkVersion VCMI_PLATFORM
         targetSdkVersion VCMI_COMPILE_SDK
         versionCode Integer.parseInt(APP_VERSION_CODE)

@@ -11,10 +11,13 @@ import android.support.v4.app.ActivityCompat;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 import eu.vcmi.vcmi.Const;
 import eu.vcmi.vcmi.R;
 import eu.vcmi.vcmi.util.FileUtil;
+import eu.vcmi.vcmi.util.LegacyConfigReader;
 import eu.vcmi.vcmi.util.Log;
 import eu.vcmi.vcmi.util.SharedPrefs;
 
@@ -71,8 +74,12 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
 
             if (allCreated)
             {
-                return new InitResult(false, ctx.getString(R.string.launcher_error_vcmi_data_root_created,
-                    Const.VCMI_DATA_ROOT_FOLDER_NAME, vcmiDir.getAbsolutePath()));
+                if (!tryToRetrieveH3DataFromLegacyDir(ctx, vcmiDir))
+                {
+                    return new InitResult(false, ctx.getString(R.string.launcher_error_vcmi_data_root_created,
+                        Const.VCMI_DATA_ROOT_FOLDER_NAME, vcmiDir.getAbsolutePath()));
+                }
+                //else: we managed to copy the legacy data from old vcmi version
             }
             else
             {
@@ -80,11 +87,10 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
             }
         }
 
-        final File testH3Data = new File(vcmiDir, "Data");
-        if (!testH3Data.exists())
+        if (!testH3DataFolder(vcmiDir))
         {
-            return new InitResult(false,
-                ctx.getString(R.string.launcher_error_h3_data_missing, testH3Data.getAbsolutePath(), Const.VCMI_DATA_ROOT_FOLDER_NAME));
+            new InitResult(false,
+                ctx.getString(R.string.launcher_error_h3_data_missing, vcmiDir.getAbsolutePath(), Const.VCMI_DATA_ROOT_FOLDER_NAME));
         }
 
         final File testVcmiData = new File(vcmiInternalDir, "Mods/vcmi/mod.json");
@@ -107,6 +113,64 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
         }
 
         return new InitResult(true, "");
+    }
+
+    private boolean testH3DataFolder(final File baseDir)
+    {
+        final File testH3Data = new File(baseDir, "Data");
+        return testH3Data.exists();
+    }
+
+    private boolean tryToRetrieveH3DataFromLegacyDir(final Context ctx, final File vcmiRoot)
+    {
+        final LegacyConfigReader.Config config = LegacyConfigReader.Load(ctx.getFilesDir());
+        if (config == null)
+        {
+            return false;
+        }
+
+        if (!testH3DataFolder(new File(config.mDataPath)))
+        {
+            Log.i(this, "Legacy folder doesn't contain valid H3 data");
+            return false;
+        }
+
+        final List<File> copiedLegacyFiles = new ArrayList<>();
+        final String[] userFolders = new String[] {"Data", "Saves", "Maps", "Mp3"};
+        for (final String folder : userFolders)
+        {
+            final File targetPath = new File(vcmiRoot, folder);
+            final File path = new File(config.mDataPath, folder);
+            final String[] contents = path.list();
+            if (contents == null)
+            {
+                continue;
+            }
+
+            for (final String filename : contents)
+            {
+                final File srcFile = new File(path, filename);
+                final File dstFile = new File(targetPath, filename);
+                Log.v(this, "Copying legacy data " + srcFile + " -> " + dstFile);
+                if (!FileUtil.copyFile(srcFile, dstFile))
+                {
+                    Log.w(this, "Broke while copying " + srcFile);
+                    return false;
+                }
+                copiedLegacyFiles.add(srcFile);
+            }
+        }
+
+        for (final File copiedLegacyFile : copiedLegacyFiles)
+        {
+            if (!copiedLegacyFile.delete())
+            {
+                // ignore the error (we could display some info about it to the user, because it leaves unneeded files on the phone)
+                Log.w(this, "Couldn't delete " + copiedLegacyFile);
+            }
+        }
+
+        return true;
     }
 
     private InitResult handlePermissions()
