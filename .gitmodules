@@ -1,7 +1,7 @@
 [submodule "ext/vcmi"]
 	path = ext/vcmi
-	url = https://github.com/Fayth/vcmi.git
-	branch = android-support
+	url = https://github.com/vcmi/vcmi.git
+	branch = develop
 [submodule "ext/ff/ffmpeg"]
 	path = ext/ff/ffmpeg
 	url = https://git.ffmpeg.org/ffmpeg.git
