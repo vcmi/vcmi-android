@@ -168,6 +168,16 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
             }
         }
 
+        final File settingsFile = new File(new File(config.mDataPath, "config"), "settings.json");
+        if (settingsFile.exists())
+        {
+            final File settingsTargetFile = new File(new File(vcmiRoot, "config"), "settings.json");
+            if (!FileUtil.copyFile(settingsFile, settingsTargetFile))
+            {
+                Log.w(this, "Broke while copying " + settingsFile); // not that important -> ignore
+            }
+        }
+
         for (final File copiedLegacyFile : copiedLegacyFiles)
         {
             if (!copiedLegacyFile.delete())
@@ -177,7 +187,7 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
             }
         }
 
-        return true;
+        return true; // TODO should we try to delete everything else in the old directory?
     }
 
     private InitResult handlePermissions()

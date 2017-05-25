@@ -2,7 +2,6 @@ package eu.vcmi.vcmi.util;
 
 import android.annotation.TargetApi;
 import android.content.res.AssetManager;
-import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
 
@@ -98,6 +97,11 @@ public class FileUtil
 
     public static boolean copyFile(final File srcFile, final File dstFile)
     {
+        if (!srcFile.exists())
+        {
+            return false;
+        }
+        
         final File dstDir = dstFile.getParentFile();
         if (!dstDir.exists())
         {
