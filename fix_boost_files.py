@@ -13,6 +13,12 @@ def fixBrokenFeatureDetectionInPthreadMutex():
 	
 	vcmiutil.fixFile("./ext/boost/" + vcmiconf.config["boostFolderName"] + "/boost/thread/pthread/mutex.hpp", replacements)
 	vcmiutil.fixFile("./ext/boost/" + vcmiconf.config["boostFolderName"] + "/boost/thread/pthread/recursive_mutex.hpp", replacements2)
+	
+def fixBrokenEpollDetectionOnOldApi():
+	replacements = [ vcmiutil.ReplacementEntry("#if defined(EPOLL_CLOEXEC)", "#if defined(EPOLL_CLOEXEC) && __ANDROID_API__ >= 21") ]
+	
+	vcmiutil.fixFile("./ext/boost/" + vcmiconf.config["boostFolderName"] + "/boost/asio/detail/impl/epoll_reactor.ipp", replacements)
 
 fixBrokenFeatureDetectionInPthreadMutex()
 fixReaddirRUsage()
+fixBrokenEpollDetectionOnOldApi()
