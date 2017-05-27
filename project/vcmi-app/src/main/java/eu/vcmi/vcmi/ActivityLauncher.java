@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -115,6 +117,24 @@ public class ActivityLauncher extends ActivityBase
     {
         saveConfig();
         super.onBackPressed();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.menu_launcher, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item)
+    {
+        if (item.getItemId() == R.id.menu_launcher_about)
+        {
+//            startActivity(); // TODO about activity
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initSettingsGui()

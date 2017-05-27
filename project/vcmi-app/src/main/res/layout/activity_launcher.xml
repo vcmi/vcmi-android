@@ -45,7 +45,7 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/launcher_error"
                     style="@style/VCMI.Text"
-                    android:drawableStart="@drawable/ic_error"
+                    android:drawableLeft="@drawable/ic_error"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
                     android:minHeight="80dp"

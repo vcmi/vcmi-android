@@ -36,4 +36,5 @@
     <string name="misc_pointermode_normal">Normal</string>
     <string name="misc_pointermode_swipe">Normal with map swipe</string>
     <string name="misc_pointermode_relative">Relative</string>
+    <string name="menu_launcher_about">About</string>
 </resources>
