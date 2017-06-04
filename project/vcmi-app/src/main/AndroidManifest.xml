@@ -31,6 +31,9 @@
         <activity
             android:name=".ActivityMods"
             android:screenOrientation="landscape" />
+        <activity
+            android:name=".ActivityAbout"
+            android:screenOrientation="landscape" />
 
         <activity
             android:name="org.libsdl.app.SDLActivity"

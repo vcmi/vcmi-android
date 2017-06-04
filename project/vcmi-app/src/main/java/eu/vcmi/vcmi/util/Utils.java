@@ -20,15 +20,15 @@ public final class Utils
     {
         if (sAppVersionCache == null)
         {
-            PackageManager pm = ctx.getPackageManager();
+            final PackageManager pm = ctx.getPackageManager();
             try
             {
-                PackageInfo info = pm.getPackageInfo(ctx.getPackageName(), PackageManager.GET_META_DATA);
+                final PackageInfo info = pm.getPackageInfo(ctx.getPackageName(), PackageManager.GET_META_DATA);
                 return sAppVersionCache = info.versionName;
             }
-            catch (PackageManager.NameNotFoundException e)
+            catch (final PackageManager.NameNotFoundException e)
             {
-                e.printStackTrace();
+                Log.e(ctx, "Couldn't resolve app version", e);
             }
         }
         return sAppVersionCache;

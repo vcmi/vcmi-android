@@ -14,12 +14,10 @@ import android.widget.Toast;
 
 import com.annimon.stream.Stream;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.libsdl.app.SDLActivity;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +42,7 @@ import eu.vcmi.vcmi.util.SharedPrefs;
  */
 public class ActivityLauncher extends ActivityBase
 {
+    private final List<LauncherSettingController<?, ?>> mActualSettings = new ArrayList<>();
     private View mProgress;
     private TextView mErrorMessage;
     private Config mConfig;
@@ -54,7 +53,6 @@ public class ActivityLauncher extends ActivityBase
     private LauncherSettingController<Float, SharedPrefs> mCtrlPointerMulti;
     private LauncherSettingController<Integer, Config> mCtrlSoundVol;
     private LauncherSettingController<Integer, Config> mCtrlMusicVol;
-    private final List<LauncherSettingController<?, ?>> mActualSettings = new ArrayList<>();
     private final AsyncLauncherInitialization.ILauncherCallbacks mInitCallbacks = new AsyncLauncherInitialization.ILauncherCallbacks()
     {
         @Override
@@ -131,7 +129,7 @@ public class ActivityLauncher extends ActivityBase
     {
         if (item.getItemId() == R.id.menu_launcher_about)
         {
-//            startActivity(); // TODO about activity
+            startActivity(new Intent(this, ActivityAbout.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -139,8 +137,7 @@ public class ActivityLauncher extends ActivityBase
 
     private void initSettingsGui()
     {
-        mCtrlStart =
-            new StartGameController(this, v -> onLaunchGameBtnPressed()).init(R.id.launcher_btn_start);
+        mCtrlStart = new StartGameController(this, v -> onLaunchGameBtnPressed()).init(R.id.launcher_btn_start);
         new ModsBtnController(this, v -> startActivity(new Intent(ActivityLauncher.this, ActivityMods.class))).init(R.id.launcher_btn_mods);
         mCtrlScreenRes = new ScreenResSettingController(this).init(R.id.launcher_btn_res, mConfig);
         mCtrlCodepage = new CodepageSettingController(this).init(R.id.launcher_btn_cp, mConfig);
@@ -157,7 +154,7 @@ public class ActivityLauncher extends ActivityBase
         mActualSettings.add(mCtrlSoundVol);
         mActualSettings.add(mCtrlMusicVol);
 
-        mCtrlStart.hide();
+        mCtrlStart.hide(); // start is initially hidden, until we confirm that everything is okay via AsyncLauncherInitialization
     }
 
     private void onLaunchGameBtnPressed()
@@ -192,7 +189,7 @@ public class ActivityLauncher extends ActivityBase
                 FileUtil.read(new File(FileUtil.configFileLocation()));
             mConfig = Config.load(new JSONObject(settingsFileContent));
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             Log.e(this, "Could not load config file", e);
             mConfig = new Config();
@@ -241,7 +238,7 @@ public class ActivityLauncher extends ActivityBase
         Log.d(this, "Init failed with " + initResult);
         if (disableAccess)
         {
-            Intent intent = new Intent(this, ActivityError.class);
+            final Intent intent = new Intent(this, ActivityError.class);
             intent.putExtra(ActivityError.ARG_ERROR_MSG, initResult.mMessage);
             startActivity(intent);
             finish();

@@ -1,16 +1,22 @@
 package eu.vcmi.vcmi.util;
 
+import android.annotation.TargetApi;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
+
+import eu.vcmi.vcmi.Const;
 
 /**
  * @author F
  */
 public abstract class AsyncRequest<T> extends AsyncTask<String, Void, ServerResponse<T>>
 {
+    @TargetApi(Const.SUPPRESS_TRY_WITH_RESOURCES_WARNING)
     protected ServerResponse<T> sendRequest(final String url)
     {
 

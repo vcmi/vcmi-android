@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="url_project_page" translatable="false">http://vcmi.eu</string>
+    <string name="url_project_repo" translatable="false">http://github.com/vcmi/vcmi</string>
+    <string name="url_launcher_repo" translatable="false">http://github.com/vcmi/vcmi-launcher</string>
+
     <string name="app_name">VCMI</string>
     <string name="launcher_title">VCMI Launcher</string>
     <string name="launcher_btn_res_title">Change game native resolution</string>
@@ -37,4 +41,17 @@
     <string name="misc_pointermode_swipe">Normal with map swipe</string>
     <string name="misc_pointermode_relative">Relative</string>
     <string name="menu_launcher_about">About</string>
+
+    <string name="about_version_app">App version: %1$s</string>
+    <string name="about_version_launcher">Launcher version: %1$s</string>
+    <string name="about_section_project">Project</string>
+    <string name="about_section_legal">Legal</string>
+    <string name="about_links_main">Main page: %1$s</string>
+    <string name="about_links_repo">Project repository: %1$s</string>
+    <string name="about_links_repo_launcher">Launcher repository: %1$s</string>
+    <string name="about_btn_authors">Authors</string>
+    <string name="about_btn_libs">Third party libraries</string>
+    <string name="about_btn_privacy">Privacy policy (TBD?)</string>
+
+    <string name="about_error_opening_url">Could not open the webpage (no suitable application found)</string>
 </resources>
