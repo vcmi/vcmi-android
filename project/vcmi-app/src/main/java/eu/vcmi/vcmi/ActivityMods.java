@@ -38,7 +38,7 @@ import eu.vcmi.vcmi.util.Log;
 /**
  * @author F
  */
-public class ActivityMods extends ActivityBase
+public class ActivityMods extends ActivityWithToolbar
 {
     private static final boolean ENABLE_REPO_DOWNLOADING = false;
     private static final String REPO_URL = "http://download.vcmi.eu/mods/repository/repository.json";
@@ -55,11 +55,7 @@ public class ActivityMods extends ActivityBase
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mods);
-
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Detected mods");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        initToolbar(R.string.mods_title);
 
         mRepo = new VCMIModsRepo();
 
@@ -128,11 +124,6 @@ public class ActivityMods extends ActivityBase
     @Override
     public boolean onOptionsItemSelected(final MenuItem item)
     {
-        if (item.getItemId() == android.R.id.home)
-        {
-            finish();
-            return true;
-        }
         if (item.getItemId() == R.id.menu_mods_download_repo)
         {
             Log.i(this, "Should download repo now...");

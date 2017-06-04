@@ -1,86 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_below="@+id/toolbar_include">
 
-    <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar_include">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/side_margin">
-
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/VCMI.Text.Header"
-                    android:text="@string/app_name" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/about_version_app"
-                    style="@style/VCMI.Text"
-                    android:text="@string/about_version_app" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/about_version_launcher"
-                    style="@style/VCMI.Text"
-                    android:text="@string/about_version_launcher" />
-            </LinearLayout>
-
-            <include layout="@layout/inc_separator" />
+            android:orientation="vertical"
+            android:padding="@dimen/side_margin">
 
             <android.support.v7.widget.AppCompatTextView
-                style="@style/VCMI.Text.LauncherSection"
-                android:text="@string/about_section_project" />
+                style="@style/VCMI.Text.Header"
+                android:text="@string/app_name" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/about_link_portal"
-                style="@style/VCMI.Entry.Clickable.AboutSimpleEntry"
-                android:text="@string/about_links_main" />
+                android:id="@+id/about_version_app"
+                style="@style/VCMI.Text"
+                android:text="@string/about_version_app" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/about_link_repo_main"
-                style="@style/VCMI.Entry.Clickable.AboutSimpleEntry"
-                android:text="@string/about_links_repo" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/about_link_repo_launcher"
-                style="@style/VCMI.Entry.Clickable.AboutSimpleEntry"
-                android:text="@string/about_links_repo_launcher" />
-
-            <include layout="@layout/inc_separator" />
-
-            <android.support.v7.widget.AppCompatTextView
-                style="@style/VCMI.Text.LauncherSection"
-                android:text="@string/about_section_legal" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/about_btn_authors"
-                style="@style/VCMI.Entry.Clickable.AboutSimpleEntry"
-                android:text="@string/about_btn_authors" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/about_btn_libs"
-                style="@style/VCMI.Entry.Clickable.AboutSimpleEntry"
-                android:text="@string/about_btn_libs" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/about_btn_privacy"
-                style="@style/VCMI.Entry.Clickable.AboutSimpleEntry"
-                android:text="@string/about_btn_privacy" />
+                android:id="@+id/about_version_launcher"
+                style="@style/VCMI.Text"
+                android:text="@string/about_version_launcher" />
         </LinearLayout>
-    </ScrollView>
 
-    <include
-        android:id="@+id/toolbar_include"
-        layout="@layout/inc_toolbar" />
-</RelativeLayout>
+        <include layout="@layout/inc_separator" />
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/VCMI.Text.LauncherSection"
+            android:text="@string/about_section_project" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/about_link_portal"
+            style="@style/VCMI.Entry.Clickable.AboutSimpleEntry"
+            android:text="@string/about_links_main" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/about_link_repo_main"
+            style="@style/VCMI.Entry.Clickable.AboutSimpleEntry"
+            android:text="@string/about_links_repo" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/about_link_repo_launcher"
+            style="@style/VCMI.Entry.Clickable.AboutSimpleEntry"
+            android:text="@string/about_links_repo_launcher" />
+
+        <include layout="@layout/inc_separator" />
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/VCMI.Text.LauncherSection"
+            android:text="@string/about_section_legal" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/about_btn_authors"
+            style="@style/VCMI.Entry.Clickable.AboutSimpleEntry"
+            android:text="@string/about_btn_authors" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/about_btn_libs"
+            style="@style/VCMI.Entry.Clickable.AboutSimpleEntry"
+            android:text="@string/about_btn_libs" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/about_btn_privacy"
+            style="@style/VCMI.Entry.Clickable.AboutSimpleEntry"
+            android:text="@string/about_btn_privacy" />
+    </LinearLayout>
+</ScrollView>

@@ -9,7 +9,7 @@ import android.widget.TextView;
 /**
  * @author F
  */
-public class ActivityError extends ActivityBase
+public class ActivityError extends ActivityWithToolbar
 {
     public static final String ARG_ERROR_MSG = "ActivityError.msg";
 
@@ -18,6 +18,7 @@ public class ActivityError extends ActivityBase
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_error);
+        initToolbar(R.string.launcher_title);
 
         final View btnTryAgain = findViewById(R.id.error_btn_try_again);
         btnTryAgain.setOnClickListener(new OnErrorRetryPressed());

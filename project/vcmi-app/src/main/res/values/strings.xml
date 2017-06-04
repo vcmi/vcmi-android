@@ -42,6 +42,9 @@
     <string name="misc_pointermode_relative">Relative</string>
     <string name="menu_launcher_about">About</string>
 
+    <string name="mods_title">Detected mods</string>
+
+    <string name="about_title">About application</string>
     <string name="about_version_app">App version: %1$s</string>
     <string name="about_version_launcher">Launcher version: %1$s</string>
     <string name="about_section_project">Project</string>

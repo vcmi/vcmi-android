@@ -6,11 +6,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,16 +21,14 @@ import eu.vcmi.vcmi.util.Utils;
 /**
  * @author F
  */
-public class ActivityAbout extends ActivityBase
+public class ActivityAbout extends ActivityWithToolbar
 {
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        initToolbar(R.string.about_title);
 
         initControl(R.id.about_version_app, getString(R.string.about_version_app, GeneratedVersion.VCMI_VERSION));
         initControl(R.id.about_version_launcher, getString(R.string.about_version_launcher, Utils.appVersionName(this)));

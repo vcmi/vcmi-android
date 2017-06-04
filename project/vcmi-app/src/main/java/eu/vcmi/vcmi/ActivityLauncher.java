@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,7 +39,7 @@ import eu.vcmi.vcmi.util.SharedPrefs;
 /**
  * @author F
  */
-public class ActivityLauncher extends ActivityBase
+public class ActivityLauncher extends ActivityWithToolbar
 {
     private final List<LauncherSettingController<?, ?>> mActualSettings = new ArrayList<>();
     private View mProgress;
@@ -97,13 +96,11 @@ public class ActivityLauncher extends ActivityBase
         }
         Log.i(this, "Starting launcher");
         setContentView(R.layout.activity_launcher);
+        initToolbar(R.string.launcher_title, true);
 
         mProgress = findViewById(R.id.launcher_progress);
         mErrorMessage = (TextView) findViewById(R.id.launcher_error);
         mErrorMessage.setVisibility(View.GONE);
-
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         ((TextView) findViewById(R.id.launcher_version_info)).setText(getString(R.string.launcher_version, BuildConfig.VERSION_NAME));
         initSettingsGui();
@@ -250,5 +247,4 @@ public class ActivityLauncher extends ActivityBase
         mErrorMessage.setVisibility(View.VISIBLE);
         mErrorMessage.setText(initResult.mMessage);
     }
-
 }
