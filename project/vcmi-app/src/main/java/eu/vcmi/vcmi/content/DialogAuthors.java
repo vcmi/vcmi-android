@@ -28,19 +28,21 @@ public class DialogAuthors extends DialogFragment
         final LayoutInflater inflater = LayoutInflater.from(getActivity());
         @SuppressLint("InflateParams") final View inflated = inflater.inflate(R.layout.dialog_authors, null, false);
         final TextView vcmiAuthorsView = (TextView) inflated.findViewById(R.id.dialog_authors_vcmi);
-        loadAuthorsContent(vcmiAuthorsView);
+        final TextView launcherAuthorsView = (TextView) inflated.findViewById(R.id.dialog_authors_launcher);
+        loadAuthorsContent(vcmiAuthorsView, launcherAuthorsView);
         return new AlertDialog.Builder(getActivity())
             .setView(inflated)
             .create();
     }
 
-    private void loadAuthorsContent(final TextView vcmiAuthorsView)
+    private void loadAuthorsContent(final TextView vcmiAuthorsView, final TextView launcherAuthorsView)
     {
         try
         {
             // to be checked if this should be converted to async load (not really a file operation so it should be okay)
             final String authorsContent = FileUtil.read(getResources().openRawResource(R.raw.authors));
             vcmiAuthorsView.setText(authorsContent);
+            launcherAuthorsView.setText("Fay"); // TODO hardcoded for now
         }
         catch (final IOException e)
         {

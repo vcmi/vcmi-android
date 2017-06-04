@@ -11,7 +11,7 @@
 
         <android.support.v7.widget.AppCompatTextView
             style="@style/VCMI.Text.LauncherSection"
-            android:text="VCMI authors" />
+            android:text="@string/dialog_authors_vcmi" />
 
 
         <android.support.v7.widget.AppCompatTextView
@@ -24,12 +24,11 @@
         <!-- TODO should this be separate or just merged with vcmi authors? -->
         <android.support.v7.widget.AppCompatTextView
             style="@style/VCMI.Text.LauncherSection"
-            android:text="Launcher authors" />
+            android:text="@string/dialog_authors_launcher" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/dialog_authors_launcher"
             style="@style/VCMI.Text"
-            android:padding="@dimen/side_margin"
-            android:text="Fay" />
+            android:padding="@dimen/side_margin" />
     </LinearLayout>
 </ScrollView>
