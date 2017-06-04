@@ -1,0 +1,50 @@
+package eu.vcmi.vcmi.content;
+
+import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
+
+import java.io.IOException;
+
+import eu.vcmi.vcmi.R;
+import eu.vcmi.vcmi.util.FileUtil;
+import eu.vcmi.vcmi.util.Log;
+
+/**
+ * @author F
+ */
+public class DialogAuthors extends DialogFragment
+{
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(final Bundle savedInstanceState)
+    {
+        final LayoutInflater inflater = LayoutInflater.from(getActivity());
+        @SuppressLint("InflateParams") final View inflated = inflater.inflate(R.layout.dialog_authors, null, false);
+        final TextView vcmiAuthorsView = (TextView) inflated.findViewById(R.id.dialog_authors_vcmi);
+        loadAuthorsContent(vcmiAuthorsView);
+        return new AlertDialog.Builder(getActivity())
+            .setView(inflated)
+            .create();
+    }
+
+    private void loadAuthorsContent(final TextView vcmiAuthorsView)
+    {
+        try
+        {
+            // to be checked if this should be converted to async load (not really a file operation so it should be okay)
+            final String authorsContent = FileUtil.read(getResources().openRawResource(R.raw.authors));
+            vcmiAuthorsView.setText(authorsContent);
+        }
+        catch (final IOException e)
+        {
+            Log.e(this, "Could not load authors content", e);
+        }
+    }
+}

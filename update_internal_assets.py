@@ -2,6 +2,7 @@ import zipfile
 import os
 import sys
 import hashlib
+import shutil
 
 p = os.path
 
@@ -43,3 +44,9 @@ with zipfile.ZipFile(pathOutInternalData, "w", zipfile.ZIP_DEFLATED) as zf:
 		writeFolder(zf, path[0], path[1])
 		
 createHash(pathOutInternalData, pathOutHash)
+
+#copy authors file into app resources so that we can display it in about view 
+try:
+	shutil.copy2(dir + "/ext/vcmi/AUTHORS", dir + "/project/vcmi-app/src/main/res/raw/authors.txt")
+except IOError as e:
+	print("Could not update authors file: " + e.strerror)

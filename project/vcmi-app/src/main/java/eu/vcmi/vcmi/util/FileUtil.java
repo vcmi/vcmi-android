@@ -12,6 +12,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -25,24 +27,37 @@ public class FileUtil
 {
     private static final int BUFFER_SIZE = 4096;
 
+    public static String read(final InputStream stream) throws IOException
+    {
+        try (InputStreamReader reader = new InputStreamReader(stream))
+        {
+            return readInternal(reader);
+        }
+    }
+
     public static String read(final File file) throws IOException
     {
         try (FileReader reader = new FileReader(file))
         {
-            final char[] buffer = new char[BUFFER_SIZE];
-            int currentRead;
-            final StringBuilder content = new StringBuilder();
-            while ((currentRead = reader.read(buffer, 0, BUFFER_SIZE)) >= 0)
-            {
-                content.append(buffer, 0, currentRead);
-            }
-            return content.toString();
+            return readInternal(reader);
         }
         catch (final FileNotFoundException ignored)
         {
             Log.w("Could not load file: " + file);
             return null;
         }
+    }
+
+    private static String readInternal(final InputStreamReader reader) throws IOException
+    {
+        final char[] buffer = new char[BUFFER_SIZE];
+        int currentRead;
+        final StringBuilder content = new StringBuilder();
+        while ((currentRead = reader.read(buffer, 0, BUFFER_SIZE)) >= 0)
+        {
+            content.append(buffer, 0, currentRead);
+        }
+        return content.toString();
     }
 
     public static void write(final File file, final String data) throws IOException
@@ -101,7 +116,7 @@ public class FileUtil
         {
             return false;
         }
-        
+
         final File dstDir = dstFile.getParentFile();
         if (!dstDir.exists())
         {

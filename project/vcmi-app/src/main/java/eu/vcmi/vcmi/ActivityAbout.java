@@ -10,11 +10,11 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import eu.vcmi.vcmi.content.DialogAuthors;
 import eu.vcmi.vcmi.util.GeneratedVersion;
 import eu.vcmi.vcmi.util.Utils;
 
@@ -23,6 +23,8 @@ import eu.vcmi.vcmi.util.Utils;
  */
 public class ActivityAbout extends ActivityWithToolbar
 {
+    private static final String DIALOG_AUTHORS_TAG = "DIALOG_AUTHORS_TAG";
+
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState)
     {
@@ -70,7 +72,8 @@ public class ActivityAbout extends ActivityWithToolbar
 
     private void onBtnAuthorsPressed(final View v)
     {
-        // TODO authors view (dialog?)
+        final DialogAuthors dialogAuthors = new DialogAuthors();
+        dialogAuthors.show(getSupportFragmentManager(), DIALOG_AUTHORS_TAG);
     }
 
     private void onBtnLibsPressed(final View v)
