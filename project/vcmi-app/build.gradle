@@ -16,7 +16,7 @@ android {
         targetSdkVersion VCMI_COMPILE_SDK
         versionCode Integer.parseInt(APP_VERSION_CODE)
         versionName APP_VERSION
-        setProperty("archivesBaseName", "VCMI-${APP_VERSION}-api${VCMI_PLATFORM}")
+        setProperty("archivesBaseName", "vcmi")
 
         externalNativeBuild {
             cmake {
@@ -100,14 +100,50 @@ android {
     applicationVariants.all { final variant -> RenameOutput(project.archivesBaseName, variant) }
 }
 
-static def RenameOutput(final baseName, final variant) {
+def RenameOutput(final baseName, final variant) {
     final def apkPath = variant.outputs[0].outputFile.parent
-    def name = baseName + "-" + new Date().format("yyyyMMdd")
+    final def travisId = System.getenv("TRAVIS_JOB_ID")
+    ResolveGitInfo()
+    def name = baseName + "-" + ext.gitInfoLauncher + "-" + ext.gitInfoVcmi
 
-    if (variant.name != 'release') {
+    if (travisId != null && !travisId.isEmpty()) {
+        name = travisId + "-" + name
+    }
+
+    if (!variant.buildType.name != "release") {
         name += "-" + variant.buildType.name
     }
+
     variant.outputs*.outputFile = new File(apkPath, name + ".apk")
+}
+
+def CommandOutput(final cmd, final arguments, final cwd) {
+    try {
+        new ByteArrayOutputStream().withStream { final os ->
+            exec {
+                executable cmd
+                args arguments
+                workingDir cwd
+                standardOutput os
+            }
+            return os.toString().trim()
+        }
+    }
+    catch (final Exception ex) {
+        print("Broken: " + cmd + " " + arguments + " in " + cwd + " :: " + ex.toString())
+        return ""
+    }
+}
+
+def ResolveGitInfo() {
+    if (ext.gitInfoLauncher != "none" && ext.gitInfoVcmi != "none") {
+        return
+    }
+    ext.gitInfoLauncher = CommandOutput("git", ["describe", "--match=", "--always", "--abbrev=7"], PROJECT_PATH_BASE)
+    ext.gitInfoVcmi =
+            CommandOutput("git", ["rev-parse", "--abbrev-ref", "HEAD"], PROJECT_PATH_BASE + "/ext/vcmi").replaceAll("[^a-zA-Z0-9\\-_]", "_") +
+            "-" +
+            CommandOutput("git", ["describe", "--match=", "--always", "--abbrev=7"], PROJECT_PATH_BASE + "/ext/vcmi")
 }
 
 def LoadSigningConfig(final basePath) {
