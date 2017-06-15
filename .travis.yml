@@ -1,32 +1,40 @@
 language: android
 sudo: true
 jdk:
-  - oraclejdk8
+- oraclejdk8
+
 android:
   components:
-    - tools
-    - platform-tools
-    - build-tools-25.0.2
-    - android-25
-    - extra-android-m2repository
+  - tools
+  - platform-tools
+  - build-tools-25.0.2
+  - android-25
+  - extra-android-m2repository
+
 addons:
   apt:
     sources:
-      - ubuntu-toolchain-r-test
-      - deadsnakes
+    - ubuntu-toolchain-r-test
+    - deadsnakes
     packages:
-      - python3.5
-      - libstdc++-4.9-dev
+    - python3.5
+    - libstdc++-4.9-dev
+
 before_install:
-  - bash ./travis-extras/android_licenses_fix.sh
-  - git clone https://github.com/urho3d/android-ndk.git $HOME/android-ndk-root
-  - export ANDROID_NDK_HOME=$HOME/android-ndk-root
-  - python3.5 ./travis-extras/create_travis_conf.py
-  - wget -O ./boost.tar.gz https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.gz
-  - mkdir -p ext/boost/
-  - tar xzvf boost.tar.gz -C ./ext/boost/ >/dev/null
-  - chmod +x ./project/gradlew
+- wget https://dependencies.vcmi.download/android/ext-output.zip
+- unzip ext-output.zip
+- . ./CI/android_licenses_fix.sh
+- git clone https://github.com/urho3d/android-ndk.git $HOME/android-ndk-root
+- export ANDROID_NDK_HOME=$HOME/android-ndk-root
+- python3.5 ./CI/create_travis_conf.py
+- wget -O ./boost.tar.gz https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.gz
+- mkdir -p ext/boost/
+- tar xzvf boost.tar.gz -C ./ext/boost/ >/dev/null
+- chmod +x ./project/gradlew
 script:
-  - python3.5 ./build.py fixpaths
-  - python3.5 ./build.py build-cmake
-  - python3.5 ./build.py build-app
+- python3.5 ./build.py fixpaths
+- python3.5 ./build.py build-cmake
+- python3.5 ./build.py build-app
+
+after_success:
+- . $TRAVIS_BUILD_DIR/CI/upload_package.sh
