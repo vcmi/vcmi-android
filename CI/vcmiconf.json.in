@@ -11,5 +11,5 @@
 	"abis" : "armeabi-v7a",
 	"boostFolderName" : "boost_1_64_0",
 	"androidApi" : 16,
-	"cmakeBuildMode" : "Debug"
+	"cmakeBuildMode" : "Release"
 }

@@ -21,6 +21,7 @@ if you want to build SDL, ffmpeg and iconv manually
 }
 else
 {
+	* download binaries from https://dependencies.vcmi.download/android/ext-output.zip and unpack them so that ./ext-output/armeabi-v7a/libavcodec.so exists
 	* run in main folder: python build.py fixpaths build-cmake
 		* ("build-cmake" will execute gradle-configured-cmake build for boost libs and "external" vcmi libs of fuzzylite and minizip)
 }

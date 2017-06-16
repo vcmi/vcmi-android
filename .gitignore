@@ -4,6 +4,7 @@
 /ext/SDL2/SDL2-image/code/
 /ext/SDL2/SDL2-mixer/code/
 /ext/SDL2/SDL2-ttf/code/
+/ext-output/
 /obj
 /libs
 /project/jni/vcmi-app/

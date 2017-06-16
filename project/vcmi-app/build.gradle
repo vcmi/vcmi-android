@@ -142,13 +142,29 @@ def ResolveGitInfo() {
     ext.gitInfoLauncher = CommandOutput("git", ["describe", "--match=", "--always", "--abbrev=7"], PROJECT_PATH_BASE)
     ext.gitInfoVcmi =
             CommandOutput("git", ["rev-parse", "--abbrev-ref", "HEAD"], PROJECT_PATH_BASE + "/ext/vcmi").replaceAll("[^a-zA-Z0-9\\-_]", "_") +
-            "-" +
-            CommandOutput("git", ["describe", "--match=", "--always", "--abbrev=7"], PROJECT_PATH_BASE + "/ext/vcmi")
+                    "-" +
+                    CommandOutput("git", ["describe", "--match=", "--always", "--abbrev=7"], PROJECT_PATH_BASE + "/ext/vcmi")
+}
+
+def SigningPropertiesPath(final basePath) {
+    final def travis = System.getenv("TRAVIS")
+    if (travis != null && !travis.isEmpty()) {
+        return file(basePath + "/CI/signing.properties")
+    }
+    return file(basePath + "/../signing.properties")
+}
+
+def SigningKeystorePath(final basePath, final keystoreFileName) {
+    final def travis = System.getenv("TRAVIS")
+    if (travis != null && !travis.isEmpty()) {
+        return file(basePath + "/CI/" + keystoreFileName)
+    }
+    return file(basePath + "/../" + keystoreFileName)
 }
 
 def LoadSigningConfig(final basePath) {
     final def props = new Properties()
-    final def propFile = file(basePath + "/../signing.properties")
+    final def propFile = SigningPropertiesPath(basePath)
     if (propFile.canRead()) {
         props.load(new FileInputStream(propFile))
 
@@ -158,7 +174,7 @@ def LoadSigningConfig(final basePath) {
                 && props.containsKey('KEY_ALIAS')
                 && props.containsKey('KEY_PASSWORD')) {
 
-            android.signingConfigs.releaseSigning.storeFile = file(basePath + "/../" + props['STORE_FILE'])
+            android.signingConfigs.releaseSigning.storeFile = SigningKeystorePath(basePath, props['STORE_FILE'])
             android.signingConfigs.releaseSigning.storePassword = props['STORE_PASSWORD']
             android.signingConfigs.releaseSigning.keyAlias = props['KEY_ALIAS']
             android.signingConfigs.releaseSigning.keyPassword = props['KEY_PASSWORD']
