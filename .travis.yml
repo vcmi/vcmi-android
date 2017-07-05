@@ -32,6 +32,7 @@ before_install:
 - tar xzvf boost.tar.gz -C ./ext/boost/ >/dev/null
 - chmod +x ./project/gradlew
 - git submodule update --remote $TRAVIS_BUILD_DIR/ext/vcmi
+- python3.5 ./update_internal_assets.py
 script:
 - python3.5 ./build.py fixpaths
 - python3.5 ./build.py build-cmake
