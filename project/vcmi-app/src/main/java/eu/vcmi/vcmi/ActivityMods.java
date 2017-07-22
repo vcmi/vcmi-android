@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import eu.vcmi.vcmi.content.ModBaseViewHolder;
 import eu.vcmi.vcmi.content.ModsAdapter;
 import eu.vcmi.vcmi.content.ModsViewHolder;
 import eu.vcmi.vcmi.mods.VCMIModContainer;
@@ -241,7 +242,7 @@ public class ActivityMods extends ActivityWithToolbar
         }
 
         @Override
-        public void onTogglePressed(final ModsAdapter.ModItem item, final ModsViewHolder holder)
+        public void onTogglePressed(final ModsAdapter.ModItem item, final ModBaseViewHolder holder)
         {
             item.mMod.mActive = !item.mMod.mActive;
             mModsAdapter.notifyItemChanged(holder.getAdapterPosition());

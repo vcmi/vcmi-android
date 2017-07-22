@@ -43,6 +43,7 @@
     <string name="menu_launcher_about">About</string>
 
     <string name="mods_title">Detected mods</string>
+    <string name="mods_failed_mod_loading">Could not load the mod in \'%1$s\' folder</string>
 
     <string name="about_title">About application</string>
     <string name="about_version_app">App version: %1$s</string>

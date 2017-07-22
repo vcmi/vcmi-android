@@ -40,6 +40,9 @@ public class VCMIMod
     public boolean mValidated;
     public String mChecksum;
 
+    // internal
+    public boolean mLoadedCorrectly;
+
     protected VCMIMod()
     {
         mSubmods = new HashMap<>();
@@ -57,6 +60,7 @@ public class VCMIMod
         mod.mModType = obj.optString("modType");
         mod.mArchiveUrl = obj.optString("download");
         mod.mSize = obj.optLong("size");
+        mod.mLoadedCorrectly = true;
         return mod;
     }
 
@@ -72,8 +76,9 @@ public class VCMIMod
         final VCMIMod mod = new VCMIMod();
         if (!mod.updateFromModInfo(modPath))
         {
-            return null;
+            return mod;
         }
+        mod.mLoadedCorrectly = true;
         mod.mActive = true; // active by default
         return mod;
     }
@@ -138,24 +143,34 @@ public class VCMIMod
         if (!modInfoFile.exists())
         {
             Log.w(this, "Mod info doesn't exist");
+            mName = modPath.getAbsolutePath();
             return false;
         }
-        final JSONObject modInfoContent = new JSONObject(FileUtil.read(modInfoFile));
-        mId = modPath.getName().toLowerCase(Locale.US);
-        mName = modInfoContent.optString("name");
-        mDesc = modInfoContent.optString("description");
-        mVersion = modInfoContent.optString("version");
-        mAuthor = modInfoContent.optString("author");
-        mContact = modInfoContent.optString("contact");
-        mModType = modInfoContent.optString("modType");
-        File submodsDir = new File(modPath, "Mods");
-        if (submodsDir.exists())
+        try
         {
-            final List<File> submodsFiles = new ArrayList<>();
-            Collections.addAll(submodsFiles, submodsDir.listFiles());
-            mSubmods.putAll(loadSubmods(submodsFiles));
+            final JSONObject modInfoContent = new JSONObject(FileUtil.read(modInfoFile));
+            mId = modPath.getName().toLowerCase(Locale.US);
+            mName = modInfoContent.optString("name");
+            mDesc = modInfoContent.optString("description");
+            mVersion = modInfoContent.optString("version");
+            mAuthor = modInfoContent.optString("author");
+            mContact = modInfoContent.optString("contact");
+            mModType = modInfoContent.optString("modType");
+
+            final File submodsDir = new File(modPath, "Mods");
+            if (submodsDir.exists())
+            {
+                final List<File> submodsFiles = new ArrayList<>();
+                Collections.addAll(submodsFiles, submodsDir.listFiles());
+                mSubmods.putAll(loadSubmods(submodsFiles));
+            }
+            return true;
         }
-        return true;
+        catch (final JSONException ex)
+        {
+            mName = modPath.getAbsolutePath();
+            return false;
+        }
     }
 
     @Override
