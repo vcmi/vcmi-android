@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -22,6 +23,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.support.annotation.NonNull;
 import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.InputDevice;
@@ -50,6 +52,7 @@ import eu.vcmi.vcmi.R;
 import eu.vcmi.vcmi.ServerService;
 import eu.vcmi.vcmi.util.LibsLoader;
 import eu.vcmi.vcmi.util.Log;
+import eu.vcmi.vcmi.util.Utils;
 
 /**
  * SDL Activity
@@ -1140,6 +1143,24 @@ public class SDLActivity extends ActivityBase
         }
     }
 
+    /**
+     * called from native code when content of an active text input has changed so that we should update overlay EditText
+     * @param textContext current value of the focused ctextinput control
+     */
+    public static void notifyTextInputChanged(final String textContext)
+    {
+        if (mHolder == null)
+        {
+            return;
+        }
+        final DummyEdit edit = mHolder.edit();
+        if (edit == null)
+        {
+            return;
+        }
+        edit.notifyContentChanged(textContext);
+    }
+
     // Messagebox
 
     private interface IncomingServerMessageHandlerCallback
@@ -1151,7 +1172,7 @@ public class SDLActivity extends ActivityBase
     {
         private WeakReference<SDLActivity> mSingleton;
         private WeakReference<SDLSurface> mSurface;
-        private WeakReference<View> mTextEdit;
+        private WeakReference<DummyEdit> mTextEdit;
         private WeakReference<ViewGroup> mLayout;
 
         SDLActivity singleton()
@@ -1172,7 +1193,7 @@ public class SDLActivity extends ActivityBase
             return mSurface.get();
         }
 
-        View edit()
+        DummyEdit edit()
         {
             if (mTextEdit == null)
             {
@@ -1200,7 +1221,7 @@ public class SDLActivity extends ActivityBase
             mSurface = new WeakReference<>(singleton);
         }
 
-        void setEdit(final View singleton)
+        void setEdit(final DummyEdit singleton)
         {
             mTextEdit = new WeakReference<>(singleton);
         }
@@ -1239,7 +1260,7 @@ public class SDLActivity extends ActivityBase
                     }
                     break;
                 case COMMAND_TEXTEDIT_HIDE:
-                    final View edit = mHolder.edit();
+                    final DummyEdit edit = mHolder.edit();
                     if (edit != null)
                     {
                         // Note: On some devices setting view to GONE creates a flicker in landscape.
@@ -1248,7 +1269,7 @@ public class SDLActivity extends ActivityBase
                         edit.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
 
                         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(edit.getWindowToken(), 0);
+                        imm.hideSoftInputFromWindow(edit.mEditText.getWindowToken(), 0);
                     }
                     break;
                 case COMMAND_SET_KEEP_SCREEN_ON:
@@ -1287,7 +1308,7 @@ public class SDLActivity extends ActivityBase
 
         public int x, y, w, h;
 
-        public ShowTextInputTask(int x, int y, int w, int h)
+        ShowTextInputTask(int x, int y, int w, int h)
         {
             this.x = x;
             this.y = y;
@@ -1298,28 +1319,39 @@ public class SDLActivity extends ActivityBase
         @Override
         public void run()
         {
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(w, h + HEIGHT_PADDING);
-            params.leftMargin = x;
-            params.topMargin = y;
-
-            View edit = mHolder.edit();
+            DummyEdit edit = mHolder.edit();
             if (edit == null)
             {
                 edit = new DummyEdit(getContext());
                 mHolder.setEdit(edit);
 
-                mHolder.layout().addView(edit, params);
+                mHolder.layout().addView(edit, createEditLayoutParams(edit.getContext()));
             }
             else
             {
-                edit.setLayoutParams(params);
+                edit.setLayoutParams(createEditLayoutParams(edit.getContext()));
             }
 
             edit.setVisibility(View.VISIBLE);
             edit.requestFocus();
 
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(edit, 0);
+            imm.showSoftInput(edit.mEditText, 0);
+        }
+
+        @NonNull
+        private RelativeLayout.LayoutParams createEditLayoutParams(final Context context)
+        {
+            final Resources res = context.getResources();
+            final int margin = (int) Utils.convertDpToPx(res, 20);
+            final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                (int) Utils.convertDpToPx(res, 50));
+            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            params.topMargin = margin;
+            params.leftMargin = margin;
+            params.topMargin = margin;
+            return params;
         }
     }
 

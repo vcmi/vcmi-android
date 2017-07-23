@@ -1,8 +1,10 @@
 package eu.vcmi.vcmi;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
@@ -134,6 +136,17 @@ public class NativeMethods
     public static void hideProgress()
     {
         internalProgressDisplay(false);
+    }
+
+    @SuppressWarnings(Const.JNI_METHOD_SUPPRESS)
+    public static void notifyTextInputChanged(final String textContext)
+    {
+        final Context ctx = requireContext();
+        if (!(ctx instanceof SDLActivity))
+        {
+            return;
+        }
+        ((Activity) ctx).runOnUiThread(() -> SDLActivity.notifyTextInputChanged(textContext));
     }
 
     private static void internalProgressDisplay(final boolean show)
