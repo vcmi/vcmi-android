@@ -55,6 +55,7 @@ def fixLibsFiles():
 	import fix_boost_files
 	import fix_sdl_makefiles
 	import fix_ffmpeg_confs
+	import fix_fuzzylite_dirs
 		
 def moveSDLIncludes():
 	vcmiutil.flatCopyWithExt("ext/SDL2/core/code/include/", "ext/SDL2/core/include/", ".h")

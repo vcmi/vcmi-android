@@ -20,9 +20,10 @@ function(build_fuzzylite)
 	set(FL_BUILD_BINARY OFF CACHE BOOL "Build fuzzylite binary")
 	set(FL_CPP11 ON CACHE BOOL "Builds utilizing C++11, i.e., passing -std=c++11")
 	set(FL_INSTALL_LIBDIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-	set(FL_INSTALL_BINDIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+	set(FL_INSTALL_BINDIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}) 
+	set(FL_BACKTRACE OFF CACHE BOOL "Provide backtrace information in case of errors" FORCE) # backtrace requires execinfo.h, which ndk doesn't have
 	add_subdirectory(${VCMI_PATH_VCMI}/AI/FuzzyLite/fuzzylite ${VCMI_PATH_VCMI}/AI/FuzzyLite/OUT)
-	set_target_properties(fl-shared PROPERTIES OUTPUT_NAME vcmi-fuzzylite)
+	set_target_properties(fl-shared PROPERTIES OUTPUT_NAME vcmi-fuzzylite) 
 	set_target_properties(fl-shared PROPERTIES DEBUG_POSTFIX "")
 endfunction(build_fuzzylite)
 
@@ -62,7 +63,7 @@ function(build_libs)
 	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${VCMI_PATH_EXT_LIBS})
 	set(CMAKE_INSTALL_LIBDIR ${VCMI_PATH_EXT_LIBS})
 
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated -Wno-varargs")
 	set(CMAKE_BUILD_TYPE Release)
 
 	add_definitions(
