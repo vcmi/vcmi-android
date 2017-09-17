@@ -10,6 +10,6 @@ def fixFuzzyliteHardcodedOutputDirs():
 	vcmiutil.ReplacementEntry("set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)", "if (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)\n\tset(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin) #fixed via vcmi python\nendif()")
 	]
 	
-	vcmiutil.fixFile("./ext/vcmi/AI/Fuzzylite/fuzzylite/CMakeLists.txt", replacements)
+	vcmiutil.fixFile("./ext/vcmi/AI/FuzzyLite/fuzzylite/CMakeLists.txt", replacements)
 	
 fixFuzzyliteHardcodedOutputDirs()
