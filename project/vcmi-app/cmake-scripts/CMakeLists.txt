@@ -5,7 +5,7 @@ include(VCMIUtils)
 
 set(ANDROID ON)
 
-set(BOOST_ROOT ${VCMI_ROOT}/ext/boost/boost_1_64_0)
+set(BOOST_ROOT ${VCMI_ROOT}/ext/boost/boost_1_68_0)
 set(VCMI_PATH_VCMI ${VCMI_ROOT}/ext/vcmi)
 set(VCMI_PATH_EXT_LIBS ${VCMI_ROOT}/ext-output/${ANDROID_ABI})
 

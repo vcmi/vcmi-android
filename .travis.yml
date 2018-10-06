@@ -27,7 +27,7 @@ before_install:
 - git clone https://github.com/urho3d/android-ndk.git $HOME/android-ndk-root
 - export ANDROID_NDK_HOME=$HOME/android-ndk-root
 - python3.5 ./CI/create_travis_conf.py
-- wget -O ./boost.tar.gz https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.gz
+- wget -O ./boost.tar.gz https://dl.bintray.com/boostorg/release/1.68.0/source/boost_1_68_0.tar.gz
 - mkdir -p ext/boost/
 - tar xzvf boost.tar.gz -C ./ext/boost/ >/dev/null
 - chmod +x ./project/gradlew

@@ -9,7 +9,7 @@
 	"sdkRoot" : "$SDK_ROOT",
 	"javaRoot": "$JAVA_HOME",
 	"abis" : "armeabi-v7a",
-	"boostFolderName" : "boost_1_64_0",
+	"boostFolderName" : "boost_1_68_0",
 	"androidApi" : 16,
 	"cmakeBuildMode" : "Release"
 }
