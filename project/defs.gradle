@@ -12,7 +12,7 @@ ext {
     // can be 16 if building only for armeabi-v7a, definitely needs to be 21+ to build arm64 and x86_64
     VCMI_PLATFORM = rawConf.androidApi
     // we should be able to use the newest version to compile, but it seems that gradle-experimental is somehow broken and doesn't compile native libs correctly for apis older than this setting...
-    VCMI_COMPILE_SDK = 25
+    VCMI_COMPILE_SDK = 26
     VCMI_ABIS = rawConf.abis.split(" ")
 
     VCMI_STL_VERSION = "gnustl_shared"
