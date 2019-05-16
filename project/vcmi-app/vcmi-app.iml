@@ -73,6 +73,9 @@
     <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src">
       <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src" isTestSource="false" />
     </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/activation">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/activation" isTestSource="false" />
+    </content>
     <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/defuzzifier">
       <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/defuzzifier" isTestSource="false" />
     </content>
@@ -100,8 +103,47 @@
     <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/variable">
       <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/src/variable" isTestSource="false" />
     </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/test" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/test/activation">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/test/activation" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/test/hedge">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/test/hedge" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/test/imex">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/test/imex" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/test/norm">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/test/norm" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/test/term">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/test/term" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/test/variable">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/FuzzyLite/fuzzylite/test/variable" isTestSource="false" />
+    </content>
     <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/VCAI">
       <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/VCAI" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/VCAI/Behaviors">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/VCAI/Behaviors" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/VCAI/Engine">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/VCAI/Engine" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/VCAI/Goals">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/VCAI/Goals" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/VCAI/Pathfinding">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/VCAI/Pathfinding" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/VCAI/Pathfinding/Actions">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/VCAI/Pathfinding/Actions" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/AI/VCAI/Pathfinding/Rules">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/AI/VCAI/Pathfinding/Rules" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$/../../ext/vcmi/client">
       <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/client" isTestSource="false" />
@@ -112,6 +154,12 @@
     <content url="file://$MODULE_DIR$/../../ext/vcmi/client/gui">
       <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/client/gui" isTestSource="false" />
     </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/client/lobby">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/client/lobby" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/client/mainmenu">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/client/mainmenu" isTestSource="false" />
+    </content>
     <content url="file://$MODULE_DIR$/../../ext/vcmi/client/widgets">
       <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/client/widgets" isTestSource="false" />
     </content>
@@ -120,6 +168,9 @@
     </content>
     <content url="file://$MODULE_DIR$/../../ext/vcmi/lib">
       <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/lib" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/lib/battle">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/lib/battle" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$/../../ext/vcmi/lib/filesystem">
       <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/lib/filesystem" isTestSource="false" />
@@ -147,6 +198,12 @@
     </content>
     <content url="file://$MODULE_DIR$/../../ext/vcmi/lib/spells">
       <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/lib/spells" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/lib/spells/effects">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/lib/spells/effects" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../ext/vcmi/lib/vstd">
+      <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/lib/vstd" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$/../../ext/vcmi/server">
       <sourceFolder url="file://$MODULE_DIR$/../../ext/vcmi/server" isTestSource="false" />
@@ -191,14 +248,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/vcmiOnly/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/vcmiOnly/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/vcmiOnly/shaders" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/jni" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/rs" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestVcmiOnly/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestVcmiOnly/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestVcmiOnly/assets" type="java-test-resource" />
@@ -207,6 +256,14 @@
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestVcmiOnly/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestVcmiOnly/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestVcmiOnly/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/jni" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testVcmiOnly/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/assets" type="java-resource" />
@@ -249,16 +306,30 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/shaders" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/assets" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/blame" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/builds" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/check-manifest" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/classes" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/cmake" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-classes" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-runtime-classes" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-safeguard" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-verifier" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/instant-run-resources" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/instant-run-support" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/javaPrecompile" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/lint" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/pre-dexed" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/prebuild" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/reload-dex" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/restart-dex" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/rs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/shaders" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/split-apk" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/splits-support" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/symbols" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/transforms" />
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
@@ -271,21 +342,21 @@
     <content url="file://$MODULE_DIR$/../vcmi-server/src/main/cpp">
       <sourceFolder url="file://$MODULE_DIR$/../vcmi-server/src/main/cpp" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="Android API 25 Platform" jdkType="Android SDK" />
+    <orderEntry type="jdk" jdkName="Android API 26 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="stream-1.1.4" level="project" />
-    <orderEntry type="library" exported="" name="transition-25.3.1" level="project" />
-    <orderEntry type="library" exported="" name="design-25.3.1" level="project" />
-    <orderEntry type="library" exported="" name="support-core-ui-25.3.1" level="project" />
-    <orderEntry type="library" exported="" name="support-v4-25.3.1" level="project" />
-    <orderEntry type="library" exported="" name="support-media-compat-25.3.1" level="project" />
-    <orderEntry type="library" exported="" name="recyclerview-v7-25.3.1" level="project" />
-    <orderEntry type="library" exported="" name="support-annotations-25.3.1" level="project" />
-    <orderEntry type="library" exported="" name="appcompat-v7-25.3.1" level="project" />
-    <orderEntry type="library" exported="" name="support-vector-drawable-25.3.1" level="project" />
-    <orderEntry type="library" exported="" name="support-compat-25.3.1" level="project" />
-    <orderEntry type="library" exported="" name="support-core-utils-25.3.1" level="project" />
-    <orderEntry type="library" exported="" name="support-fragment-25.3.1" level="project" />
-    <orderEntry type="library" exported="" name="animated-vector-drawable-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.android.support:appcompat-v7-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.android.support:support-fragment-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.android.support:support-annotations:25.3.1@jar" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.android.support:support-v4-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.android.support:support-core-ui-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.android.support:support-media-compat-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.annimon:stream:1.1.4@jar" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.android.support:animated-vector-drawable-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.android.support:support-compat-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.android.support:recyclerview-v7-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.android.support:design-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.android.support:support-vector-drawable-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.android.support:transition-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.android.support:support-core-utils-25.3.1" level="project" />
   </component>
 </module>
