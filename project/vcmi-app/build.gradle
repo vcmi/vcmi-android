@@ -94,6 +94,7 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.releaseSigning
+            zipAlignEnabled true
         }
     }
 
