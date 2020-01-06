@@ -9,8 +9,12 @@ p = os.path
 def writeFolder(archive, folderPath, rootPath):
 	for root, dirs, filenames in os.walk(folderPath):
 		for name in filenames:
-			archive.write(p.normpath(p.join(root, name)), root[len(rootPath):] + "/" + name)
-			
+			outName = root[len(rootPath):] + "/" + name
+			try:
+				archive.getinfo(outName[1:])
+			except KeyError:
+				archive.write(p.normpath(p.join(root, name)), outName)
+
 def createHash(path, outPath):
 	blocksize = 65536
 	hasher = hashlib.md5()
@@ -33,7 +37,7 @@ pathMods = pathBase + "/Mods"
 assetsPaths = [
 	[pathConfig, pathBase],
 	[pathMods, pathBase],
-	[p.abspath(dir + "/../data/vcmi_submods/Mods"), p.abspath(dir + "/../data/vcmi_submods")] # templates + extra res
+	[p.abspath(dir + "/vcmi_submods"), p.abspath(dir + "/vcmi_submods")] # templates + extra res
 ]
 
 with zipfile.ZipFile(pathOutInternalData, "w", zipfile.ZIP_DEFLATED) as zf:
@@ -42,10 +46,10 @@ with zipfile.ZipFile(pathOutInternalData, "w", zipfile.ZIP_DEFLATED) as zf:
 			print("Skipping path " + path[0] + " (not found)")
 			continue
 		writeFolder(zf, path[0], path[1])
-		
+
 createHash(pathOutInternalData, pathOutHash)
 
-#copy authors file into app resources so that we can display it in about view 
+#copy authors file into app resources so that we can display it in about view
 try:
 	shutil.copy2(dir + "/ext/vcmi/AUTHORS", dir + "/project/vcmi-app/src/main/res/raw/authors.txt")
 except IOError as e:
