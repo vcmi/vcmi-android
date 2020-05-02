@@ -6,11 +6,13 @@ import android.view.View;
 
 class SDLGenericMotionListener_API12 implements View.OnGenericMotionListener
 {
+    private float x;
+    private float y;
+
     // Generic Motion (mouse hover, joystick...) events go here
     @Override
     public boolean onGenericMotion(View v, MotionEvent event)
     {
-        float x, y;
         int action;
 
         switch (event.getSource())
@@ -48,5 +50,15 @@ class SDLGenericMotionListener_API12 implements View.OnGenericMotionListener
 
         // Event was not managed
         return false;
+    }
+
+    public float getX()
+    {
+        return x;
+    }
+
+    public float getY()
+    {
+        return y;
     }
 }

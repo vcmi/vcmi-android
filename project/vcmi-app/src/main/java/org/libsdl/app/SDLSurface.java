@@ -10,6 +10,7 @@ import android.hardware.SensorManager;
 import android.view.Display;
 import android.view.InputDevice;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -30,6 +31,7 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback, View.OnK
     protected static SensorManager mSensorManager;
     protected static Display mDisplay;
     private SurfaceTouchHandler mSurfaceTouchHandler;
+    private SDLGenericMotionListener_API12 motionListener;
 
     // Startup
     public SDLSurface(Context context)
@@ -47,7 +49,7 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback, View.OnK
         mDisplay = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 
-        setOnGenericMotionListener(new SDLGenericMotionListener_API12());
+        setOnGenericMotionListener(motionListener = new SDLGenericMotionListener_API12());
     }
 
     public void handlePause()
@@ -293,14 +295,36 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback, View.OnK
             // they are ignored here because sending them as mouse input to SDL is messy
             if ((keyCode == KeyEvent.KEYCODE_BACK) || (keyCode == KeyEvent.KEYCODE_FORWARD))
             {
-                switch (event.getAction())
+                int action = event.getAction();
+
+                switch (action)
                 {
                     case KeyEvent.ACTION_DOWN:
                     case KeyEvent.ACTION_UP:
-                        // mark the event as handled or it will be handled by system
-                        // handling KEYCODE_BACK by system will call onBackPressed()
-                        return true;
+                        if(keyCode == KeyEvent.KEYCODE_BACK)
+                        {
+                            int mouseAction = -1;
+
+                            if (action == KeyEvent.ACTION_DOWN)
+                            {
+                                mouseAction = MotionEvent.ACTION_DOWN;
+                            }
+                            else if (action == KeyEvent.ACTION_UP)
+                            {
+                                mouseAction = MotionEvent.ACTION_UP;
+                            }
+
+                            SDLActivity.onNativeMouse(
+                                MotionEvent.BUTTON_SECONDARY,
+                                mouseAction,
+                                motionListener.getX(),
+                                motionListener.getY());
+                        }
                 }
+
+                // mark the event as handled or it will be handled by system
+                // handling KEYCODE_BACK by system will call onBackPressed()
+                return true;
             }
         }
 

@@ -70,18 +70,7 @@ class DummyEdit extends LinearLayout
                 return false;
             }
 
-            if (event.getAction() == KeyEvent.ACTION_DOWN)
-            {
-                SDLActivity.onNativeKeyDown(keyCode);
-                return false;
-            }
-            else if (event.getAction() == KeyEvent.ACTION_UP)
-            {
-                SDLActivity.onNativeKeyUp(keyCode);
-                return false;
-            }
-
-            return false;
+            return SDLActivity.mHolder.surface().onKey(v, keyCode, event);
         }
 
         //
