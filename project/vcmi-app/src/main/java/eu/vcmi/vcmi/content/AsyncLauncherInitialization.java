@@ -7,7 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -76,8 +76,12 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
             {
                 if (!tryToRetrieveH3DataFromLegacyDir(ctx, vcmiDir))
                 {
-                    return new InitResult(false, ctx.getString(R.string.launcher_error_vcmi_data_root_created,
-                        Const.VCMI_DATA_ROOT_FOLDER_NAME, vcmiDir.getAbsolutePath()));
+                    return new InitResult(
+                        false,
+                        ctx.getString(
+                            R.string.launcher_error_vcmi_data_root_created,
+                            Const.VCMI_DATA_ROOT_FOLDER_NAME,
+                            vcmiDir.getAbsolutePath()));
                 }
                 //else: we managed to copy the legacy data from old vcmi version (TODO should we tell the user that we moved the data?)
             }
@@ -90,8 +94,12 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
         if (!testH3DataFolder(vcmiDir))
         {
             // no h3 data present -> instruct user where to put it
-            new InitResult(false,
-                ctx.getString(R.string.launcher_error_h3_data_missing, vcmiDir.getAbsolutePath(), Const.VCMI_DATA_ROOT_FOLDER_NAME));
+            new InitResult(
+                false,
+                ctx.getString(
+                    R.string.launcher_error_h3_data_missing,
+                    vcmiDir.getAbsolutePath(),
+                    Const.VCMI_DATA_ROOT_FOLDER_NAME));
         }
 
         final File testVcmiData = new File(vcmiInternalDir, "Mods/vcmi/mod.json");

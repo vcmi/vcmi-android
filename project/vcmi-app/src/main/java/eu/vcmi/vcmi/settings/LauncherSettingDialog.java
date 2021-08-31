@@ -3,11 +3,11 @@ package eu.vcmi.vcmi.settings;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AlertDialog;
 
-import com.annimon.stream.Stream;
+import java.util.stream.Stream;
 
 import java.util.List;
 
@@ -41,7 +41,9 @@ public abstract class LauncherSettingDialog<T> extends DialogFragment
     {
         return new AlertDialog.Builder(getActivity())
             .setTitle(dialogTitleResId())
-            .setItems(Stream.of(mDataset).map(this::itemName).toArray(CharSequence[]::new), this::onItemChosenInternal)
+            .setItems(
+                    mDataset.stream().map(this::itemName).toArray(CharSequence[]::new),
+                    this::onItemChosenInternal)
             .create();
     }
 

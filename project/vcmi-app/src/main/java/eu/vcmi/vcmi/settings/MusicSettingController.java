@@ -1,6 +1,6 @@
 package eu.vcmi.vcmi.settings;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import eu.vcmi.vcmi.Config;
 import eu.vcmi.vcmi.R;

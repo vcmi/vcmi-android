@@ -26,7 +26,7 @@
         android:paddingLeft="@dimen/side_margin"
         android:paddingTop="5dp">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/mods_adapter_item_status"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -40,14 +40,14 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/mods_adapter_item_name"
                 style="@style/VCMI.Text.ModName"
                 android:ellipsize="end"
                 android:lines="1"
                 android:text="mod name, v1.0" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/mods_adapter_item_author"
                 style="@style/VCMI.Text.ModAuthor"
                 android:ellipsize="end"
@@ -60,14 +60,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/mods_adapter_item_modtype"
                 style="@style/VCMI.Text.ModType"
                 android:layout_width="wrap_content"
                 android:layout_gravity="right"
                 android:text="tools" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/mods_adapter_item_size"
                 style="@style/VCMI.Text.ModSize"
                 android:layout_width="wrap_content"
@@ -75,7 +75,7 @@
                 android:text="1000 MB" />
         </LinearLayout>
 
-        <android.support.v7.widget.AppCompatImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/mods_adapter_item_btn_download"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

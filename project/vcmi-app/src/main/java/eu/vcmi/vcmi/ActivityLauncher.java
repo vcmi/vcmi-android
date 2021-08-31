@@ -4,14 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.annimon.stream.Stream;
 
 import org.json.JSONObject;
 import org.libsdl.app.SDLActivity;
@@ -243,7 +241,9 @@ public class ActivityLauncher extends ActivityWithToolbar
         }
         mProgress.setVisibility(View.GONE);
         mCtrlStart.hide();
-        Stream.of(mActualSettings).forEach(LauncherSettingController::hide);
+        for (LauncherSettingController<?, ?> setting: mActualSettings) {
+            setting.hide();
+        }
         mErrorMessage.setVisibility(View.VISIBLE);
         mErrorMessage.setText(initResult.mMessage);
     }

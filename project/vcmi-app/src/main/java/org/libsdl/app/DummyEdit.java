@@ -2,7 +2,7 @@ package org.libsdl.app;
 
 import android.content.Context;
 import android.graphics.Rect;
-import android.support.v7.widget.LinearLayoutCompat;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
@@ -40,7 +40,7 @@ class DummyEdit extends LinearLayout
         mEditText.setText(textContext);
     }
 
-    static class DummyEditText extends android.support.v7.widget.AppCompatEditText implements View.OnKeyListener
+    static class DummyEditText extends androidx.appcompat.widget.AppCompatEditText implements View.OnKeyListener
     {
         InputConnection mInputConnection;
 

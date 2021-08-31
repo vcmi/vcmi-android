@@ -3,7 +3,7 @@ package eu.vcmi.vcmi.util;
 import android.annotation.TargetApi;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 
 import java.net.HttpURLConnection;
 import java.net.URL;

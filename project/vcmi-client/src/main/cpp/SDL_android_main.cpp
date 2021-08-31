@@ -17,10 +17,10 @@ extern "C" {
 
 extern "C" {
 /* Called before SDL_main() to initialize JNI bindings in SDL library */
-extern void SDL_Android_Init(JNIEnv * env, jclass cls);
+extern void SDL_Android_Init(JNIEnv *env, jclass cls);
 
 /* This prototype is needed to prevent a warning about the missing prototype for global function below */
-JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv * env, jclass cls,
+JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv *env, jclass cls,
 																 jobjectArray array);
 JNIEXPORT void JNICALL Java_org_libsdl_app_SurfaceTouchHandler_retrieveCursorPositions(JNIEnv * env, jclass cls,
 																					   jintArray outValues);
@@ -30,13 +30,13 @@ JNIEXPORT void JNICALL Java_org_libsdl_app_SurfaceTouchHandler_retrieveCursorPos
 //	return 0;
 //}
 /* Start up the SDL app */
-JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv * env, jclass cls, jobjectArray array)
+JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv *env, jclass cls, jobjectArray array)
 {
 	int i;
 	int argc;
 	int status;
 	int len;
-	char ** argv;
+	char **argv;
 
 	CAndroidVMHelper::cacheVM(env);
 
@@ -54,22 +54,22 @@ JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv * env, j
 	   https://bitbucket.org/MartinFelis/love-android-sdl2/issue/23/release-build-crash-on-start
 	 */
 	argv[argc++] = SDL_strdup("app_process");
-	for(i = 0; i < len; ++i)
+	for (i = 0; i < len; ++i)
 	{
-		const char * utf;
-		char * arg = NULL;
+		const char *utf;
+		char *arg = NULL;
 		jstring string = (jstring) env->GetObjectArrayElement(array, i);
-		if(string)
+		if (string)
 		{
 			utf = env->GetStringUTFChars(string, 0);
-			if(utf)
+			if (utf)
 			{
 				arg = SDL_strdup(utf);
 				env->ReleaseStringUTFChars(string, utf);
 			}
 			env->DeleteLocalRef(string);
 		}
-		if(!arg)
+		if (!arg)
 		{
 			arg = SDL_strdup("");
 		}
@@ -82,7 +82,7 @@ JNIEXPORT int JNICALL Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv * env, j
 	status = SDL_main(argc, argv);
 	/* Release the arguments. */
 
-	for(i = 0; i < argc; ++i)
+	for (i = 0; i < argc; ++i)
 	{
 		SDL_free(argv[i]);
 	}
@@ -97,7 +97,7 @@ JNIEXPORT void JNICALL Java_org_libsdl_app_SurfaceTouchHandler_retrieveCursorPos
 																					   jintArray outValues)
 {
 	auto len = env->GetArrayLength(outValues);
-	if(len != 2)
+	if (len != 2)
 	{
 		return;
 	}

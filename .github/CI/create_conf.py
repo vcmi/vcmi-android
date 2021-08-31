@@ -8,10 +8,10 @@ def rewriteFile(path, content):
 	
 dir = os.path.dirname(os.path.realpath(__file__))
 with open(dir + "/vcmiconf.json.in", "r") as templateFile:
-	rootDir = os.getcwd()
+	rootDir = os.path.abspath(dir + "/../..")
 	config = templateFile.read()
 	config = config.replace("$PROJECT_ROOT", rootDir)
 	config = config.replace("$NDK_ROOT", os.getenv("ANDROID_NDK_HOME", ""))
-	config = config.replace("$SDK_ROOT", "/usr/local/android-sdk")
+	config = config.replace("$SDK_ROOT", os.getenv("ANDROID_SDK_ROOT", ""))
 	config = config.replace("$JAVA_HOME", os.getenv("JAVA_HOME", ""))
 	rewriteFile(rootDir + "/vcmiconf.json", config)

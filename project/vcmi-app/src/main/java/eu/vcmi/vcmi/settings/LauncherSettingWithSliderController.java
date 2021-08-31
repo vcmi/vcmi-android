@@ -1,7 +1,7 @@
 package eu.vcmi.vcmi.settings;
 
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatSeekBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatSeekBar;
 import android.view.View;
 import android.widget.SeekBar;
 

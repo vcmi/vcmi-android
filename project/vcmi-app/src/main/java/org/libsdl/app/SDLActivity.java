@@ -23,7 +23,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.support.annotation.NonNull;
 import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.InputDevice;
@@ -39,6 +38,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.InputStream;

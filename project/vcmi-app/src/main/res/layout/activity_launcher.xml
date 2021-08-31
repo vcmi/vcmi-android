@@ -14,7 +14,7 @@
         android:layout_marginTop="10dp"
         android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/launcher_version_info"
             style="@style/VCMI.Text"
             android:padding="@dimen/side_margin"
@@ -22,7 +22,7 @@
 
         <include layout="@layout/inc_separator" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             style="@style/VCMI.Text.LauncherSection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
                 android:id="@+id/launcher_btn_start"
                 layout="@layout/inc_launcher_btn" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/launcher_error"
                 style="@style/VCMI.Text"
                 android:drawableLeft="@drawable/ic_error"
@@ -57,7 +57,7 @@
 
         <include layout="@layout/inc_separator" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             style="@style/VCMI.Text.LauncherSection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

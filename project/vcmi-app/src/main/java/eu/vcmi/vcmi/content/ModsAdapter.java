@@ -1,12 +1,12 @@
 package eu.vcmi.vcmi.content;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.annimon.stream.Collectors;
-import com.annimon.stream.Stream;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +116,11 @@ public class ModsAdapter extends RecyclerView.Adapter<ModBaseViewHolder>
     public void attachSubmods(final ModItem mod, final RecyclerView.ViewHolder vh)
     {
         int adapterPosition = vh.getAdapterPosition();
-        final List<ModItem> submods = Stream.of(mod.mMod.submods()).map(v -> new ModItem(v, mod.mNestingLevel + 1)).collect(Collectors.toList());
+        final List<ModItem> submods = mod.mMod.submods()
+                .stream()
+                .map(v -> new ModItem(v, mod.mNestingLevel + 1))
+                .collect(Collectors.toList());
+
         mDataset.addAll(adapterPosition + 1, submods);
         notifyItemRangeInserted(adapterPosition + 1, submods.size());
     }

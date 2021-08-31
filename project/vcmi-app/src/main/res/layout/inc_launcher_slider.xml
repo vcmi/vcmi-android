@@ -16,7 +16,7 @@
             style="@style/VCMI.Text.LauncherEntry"
             android:text="@string/app_name" />
 
-        <android.support.v7.widget.AppCompatSeekBar
+        <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/inc_launcher_btn_slider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
