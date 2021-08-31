@@ -3,21 +3,18 @@ package eu.vcmi.vcmi;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
-import com.annimon.stream.Collectors;
-import com.annimon.stream.Stream;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +24,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 import eu.vcmi.vcmi.content.ModBaseViewHolder;
 import eu.vcmi.vcmi.content.ModsAdapter;
@@ -207,7 +206,11 @@ public class ActivityMods extends ActivityWithToolbar
             {
                 mProgress.setVisibility(View.GONE);
                 mRecycler.setVisibility(View.VISIBLE);
-                mModsAdapter = new ModsAdapter(Stream.of(mModContainer.submods()).map(ModsAdapter.ModItem::new).collect(Collectors.toList()),
+                mModsAdapter = new ModsAdapter(
+                    mModContainer.submods()
+                        .stream()
+                        .map(ModsAdapter.ModItem::new)
+                        .collect(Collectors.toList()),
                     new OnAdapterItemAction());
                 mRecycler.setAdapter(mModsAdapter);
             }

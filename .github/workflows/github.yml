@@ -1,0 +1,72 @@
+name: VCMI
+
+on:
+    push:
+      branches:
+        - features/*
+        - develop
+    pull_request:
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - uses: actions/checkout@v2
+        
+    - name: Update VCMI Sources
+      run: |
+        git submodule update --init --recursive ${{github.workspace}}/ext/vcmi
+        git submodule update --init --recursive ${{github.workspace}}/ext/iconv
+
+    - name: Dependencies
+      run: |
+        wget https://dependencies.vcmi.download/android/ext-output.zip
+        unzip ext-output.zip
+        wget -O ./boost.tar.gz https://boostorg.jfrog.io/artifactory/main/release/1.68.0/source/boost_1_68_0.tar.gz
+        mkdir -p ext/boost/
+        tar xzvf boost.tar.gz -C ./ext/boost/ >/dev/null
+
+#    - name: Build Number
+#      run: |
+#        source '${{github.workspace}}/CI/get_package_name.sh'
+#        echo VCMI_PACKAGE_FILE_NAME="$VCMI_PACKAGE_FILE_NAME" >> $GITHUB_ENV
+#        echo VCMI_PACKAGE_NAME_SUFFIX="$VCMI_PACKAGE_NAME_SUFFIX" >> $GITHUB_ENV
+#      env:
+#        PULL_REQUEST: ${{ github.event.pull_request.number }}
+
+    - name: Build
+      run: |
+        chmod +x ./project/gradlew
+        python ./.github/CI/create_conf.py
+        python ./update_internal_assets.py
+        cd ./project
+        ./gradlew vcmi-app:assembleVcmiOnlyRelease --info
+        
+    - name: Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: vcmi.apk
+        path: ${{github.workspace}}/project/vcmi-app/build/outputs/apk/VcmiOnly/release/vcmi-app-debug.apk
+  
+#    - name: Upload build
+#      run: |
+#        cd '${{github.workspace}}/build'
+#        source '${{github.workspace}}/.github/CI/upload_package.sh'
+#      env:
+#        DEPLOY_RSA: ${{ secrets.DEPLOY_RSA }}
+#        PACKAGE_EXTENSION: apk
+#        
+#    - uses: act10ns/slack@v1
+#      with:
+#        status: ${{ job.status }}
+#        channel: '#notifications'
+#      env:
+#        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+#      if: always()
