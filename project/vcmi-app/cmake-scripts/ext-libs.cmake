@@ -28,6 +28,11 @@ function(build_fuzzylite)
 	set_target_properties(fl-shared PROPERTIES DEBUG_POSTFIX "")
 endfunction(build_fuzzylite)
 
+function(build_tbb)
+	set(TBB_TEST OFF CACHE BOOL "TBB tests")
+	add_subdirectory(${VCMI_ROOT}/ext/oneTBB ${VCMI_PATH_EXT_LIBS})
+endfunction(build_tbb)
+
 function(build_minizip)
 	set(minizippath ${VCMI_PATH_VCMI}/lib/minizip)
 	add_library(minizip SHARED ${minizippath}/zip.c ${minizippath}/unzip.c ${minizippath}/ioapi.c)
@@ -75,6 +80,7 @@ function(build_libs)
 	build_boost()
 	build_minizip()
 	build_fuzzylite()
+	build_tbb()
 
 endfunction(build_libs)
 
