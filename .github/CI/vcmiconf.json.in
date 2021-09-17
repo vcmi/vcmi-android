@@ -8,7 +8,7 @@
 	"ndkRoot" : "$NDK_ROOT",
 	"sdkRoot" : "$SDK_ROOT",
 	"javaRoot": "$JAVA_HOME",
-    "abis" : "arm64-v8a x86 x86_64 armeabi-v7a",
+    "abis" : "arm64-v8a armeabi-v7a",
 	"boostFolderName" : "boost_1_68_0",
 	"androidApi" : 21,
 	"cmakeBuildMode" : "Release"
