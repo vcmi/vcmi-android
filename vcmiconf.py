@@ -8,8 +8,7 @@ def updateProjectProps():
 	
 def createLocalProps():
 	vcmiutil.rewriteFile("./project/local.properties", 
-		"sdk.dir=" + config["sdkRoot"].replace(":", "\\:") 
-		+ "\nndk.dir=" + config["ndkRoot"].replace(":", "\\:"))
+		"sdk.dir=" + config["sdkRoot"].replace(":", "\\:"))
 	
 config = []
 with open("./vcmiconf.json", "r") as confFile:

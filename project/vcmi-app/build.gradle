@@ -6,7 +6,7 @@ android {
 	compileSdk 31
 
 	defaultConfig {
-		applicationId "eu.vcmi.vcmi"
+		applicationId "is.xyz.vcmi"
 		minSdk 21
 		targetSdk 31
 		versionCode 1
@@ -26,10 +26,17 @@ android {
 			abiFilters.addAll(VCMI_ABIS)
 		}
 	}
+	
+	signingConfigs {
+        releaseSigning
+        LoadSigningConfig(PROJECT_PATH_BASE)
+    }
 
 	buildTypes {
 		release {
 			minifyEnabled false
+			zipAlignEnabled true
+			signingConfig signingConfigs.releaseSigning
 			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 		}
 	}
@@ -99,6 +106,86 @@ android {
 			}
 		}
 	}
+}
+
+def RenameOutput(final baseName, final variant) {
+    final def apkPath = variant.outputs[0].outputFile.parent
+    final def travisId = System.getenv("TRAVIS_JOB_ID")
+    ResolveGitInfo()
+    def name = baseName + "-" + ext.gitInfoLauncher + "-" + ext.gitInfoVcmi
+
+    if (travisId != null && !travisId.isEmpty()) {
+        name = travisId + "-" + name
+    }
+
+    if (!variant.buildType.name != "release") {
+        name += "-" + variant.buildType.name
+    }
+
+    variant.outputs*.outputFile = new File(apkPath, name + ".apk")
+}
+
+def CommandOutput(final cmd, final arguments, final cwd) {
+    try {
+        new ByteArrayOutputStream().withStream { final os ->
+            exec {
+                executable cmd
+                args arguments
+                workingDir cwd
+                standardOutput os
+            }
+            return os.toString().trim()
+        }
+    }
+    catch (final Exception ex) {
+        print("Broken: " + cmd + " " + arguments + " in " + cwd + " :: " + ex.toString())
+        return ""
+    }
+}
+
+def ResolveGitInfo() {
+    if (ext.gitInfoLauncher != "none" && ext.gitInfoVcmi != "none") {
+        return
+    }
+    ext.gitInfoLauncher = CommandOutput("git", ["describe", "--match=", "--always", "--abbrev=7"], PROJECT_PATH_BASE)
+    ext.gitInfoVcmi =
+            CommandOutput("git", ["rev-parse", "--abbrev-ref", "HEAD"], PROJECT_PATH_BASE + "/ext/vcmi").replaceAll("[^a-zA-Z0-9\\-_]", "_") +
+                    "-" +
+                    CommandOutput("git", ["describe", "--match=", "--always", "--abbrev=7"], PROJECT_PATH_BASE + "/ext/vcmi")
+}
+
+def SigningPropertiesPath(final basePath) {
+    return file(basePath + "/.github/CI/signing.properties")
+}
+
+def SigningKeystorePath(final basePath, final keystoreFileName) {
+    return file(basePath + "/.github/CI/" + keystoreFileName)
+}
+
+def LoadSigningConfig(final basePath) {
+    final def props = new Properties()
+    final def propFile = SigningPropertiesPath(basePath)
+    if (propFile.canRead()) {
+        props.load(new FileInputStream(propFile))
+
+        if (props != null
+                && props.containsKey('STORE_FILE')
+                && props.containsKey('STORE_PASSWORD')
+                && props.containsKey('KEY_ALIAS')
+                && props.containsKey('KEY_PASSWORD')) {
+
+            android.signingConfigs.releaseSigning.storeFile = SigningKeystorePath(basePath, props['STORE_FILE'])
+            android.signingConfigs.releaseSigning.storePassword = props['STORE_PASSWORD']
+            android.signingConfigs.releaseSigning.keyAlias = props['KEY_ALIAS']
+            android.signingConfigs.releaseSigning.keyPassword = props['KEY_PASSWORD']
+        } else {
+            println("Some props from signing file are missing")
+            android.buildTypes.release.signingConfig = null
+        }
+    } else {
+        println("file with signing properties is missing")
+        android.buildTypes.release.signingConfig = null
+    }
 }
 
 dependencies {
