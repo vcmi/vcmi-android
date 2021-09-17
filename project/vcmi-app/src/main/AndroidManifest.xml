@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="eu.vcmi.vcmi">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:extractNativeLibs="true"
@@ -44,7 +45,9 @@
 
         <service
             android:name=".ServerService"
-            android:process="eu.vcmi.vcmi.srv" />
+            android:process="eu.vcmi.vcmi.srv"
+            android:description="@string/server_name"
+            android:exported="false"/>
     </application>
 
 </manifest>

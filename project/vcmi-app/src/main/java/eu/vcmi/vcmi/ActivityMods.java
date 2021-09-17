@@ -75,7 +75,7 @@ public class ActivityMods extends ActivityWithToolbar
 
     private void loadLocalModData() throws IOException, JSONException
     {
-        final String dataRoot = Environment.getExternalStorageDirectory() + "/" + Const.VCMI_DATA_ROOT_FOLDER_NAME;
+        final String dataRoot = getDataDir() + "/" + Const.VCMI_DATA_ROOT_FOLDER_NAME;
         final String internalDataRoot = getFilesDir() + "/" + Const.VCMI_DATA_ROOT_FOLDER_NAME;
 
         final File modsRoot = new File(dataRoot + "/Mods");
@@ -150,7 +150,7 @@ public class ActivityMods extends ActivityWithToolbar
 
     private void saveModSettingsToFile()
     {
-        mModContainer.saveToFile(new File(Environment.getExternalStorageDirectory(), Const.VCMI_DATA_ROOT_FOLDER_NAME + "/config/modSettings.json"));
+        mModContainer.saveToFile(new File(getDataDir(), Const.VCMI_DATA_ROOT_FOLDER_NAME + "/config/modSettings.json"));
     }
 
     private class OnModsRepoInitialized implements VCMIModsRepo.IOnModsRepoDownloaded

@@ -14,6 +14,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -155,15 +156,45 @@ public class FileUtil
     {
         try
         {
+            final InputStream inputStream = assets.open("internalData.zip");
+            final boolean success = unpackZipFile(inputStream, vcmiInternalDir);
+            inputStream.close();
+            return success;
+        }
+        catch (final Exception e)
+        {
+            Log.e("Couldn't extract vcmi data to internal dir", e);
+            return false;
+        }
+    }
+    public static boolean unpackZipFile(final File inputFile, final File destDir)
+    {
+        try
+        {
+            final InputStream inputStream = new FileInputStream(inputFile);
+            final boolean success = unpackZipFile(inputStream, destDir);
+            inputStream.close();
+            return success;
+        }
+        catch (final Exception e)
+        {
+            Log.e("Couldn't extract file to " + destDir, e);
+            return false;
+        }
+    }
+
+    public static boolean unpackZipFile(final InputStream inputStream, final File destDir)
+    {
+        try
+        {
             int unpackedEntries = 0;
             final byte[] buffer = new byte[BUFFER_SIZE];
-            final ZipInputStream is = new ZipInputStream(assets.open("internalData.zip"));
+            final ZipInputStream is = new ZipInputStream(inputStream);
             ZipEntry zipEntry;
             while ((zipEntry = is.getNextEntry()) != null)
             {
-
                 final String fileName = zipEntry.getName();
-                final File newFile = new File(vcmiInternalDir, fileName);
+                final File newFile = new File(destDir, fileName);
 
                 if (newFile.exists())
                 {
@@ -208,14 +239,14 @@ public class FileUtil
         }
         catch (final Exception e)
         {
-            Log.e("Couldn't extract vcmi data to internal dir", e);
+            Log.e("Couldn't extract vcmi data to " + destDir, e);
             return false;
         }
     }
 
-    public static String configFileLocation()
+    public static String configFileLocation(File filesDir)
     {
-        return Environment.getExternalStorageDirectory() + "/" + Const.VCMI_DATA_ROOT_FOLDER_NAME + "/config/settings.json";
+        return filesDir + "/" + Const.VCMI_DATA_ROOT_FOLDER_NAME + "/config/settings.json";
     }
 
     public static String readAssetsStream(final AssetManager assets, final String assetPath)

@@ -3,7 +3,10 @@ package eu.vcmi.vcmi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import androidx.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,9 +17,16 @@ import android.widget.Toast;
 import org.json.JSONObject;
 import org.libsdl.app.SDLActivity;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import eu.vcmi.vcmi.content.AsyncLauncherInitialization;
 import eu.vcmi.vcmi.settings.CodepageSettingController;
@@ -29,6 +39,7 @@ import eu.vcmi.vcmi.settings.PointerMultiplierSettingController;
 import eu.vcmi.vcmi.settings.ScreenResSettingController;
 import eu.vcmi.vcmi.settings.SoundSettingController;
 import eu.vcmi.vcmi.settings.StartGameController;
+import eu.vcmi.vcmi.settings.UpdateVcmiFilesController;
 import eu.vcmi.vcmi.util.FileUtil;
 import eu.vcmi.vcmi.util.Log;
 import eu.vcmi.vcmi.util.SharedPrefs;
@@ -50,6 +61,7 @@ public class ActivityLauncher extends ActivityWithToolbar
     private LauncherSettingController<Float, SharedPrefs> mCtrlPointerMulti;
     private LauncherSettingController<Integer, Config> mCtrlSoundVol;
     private LauncherSettingController<Integer, Config> mCtrlMusicVol;
+    private LauncherSettingController<Void, Void> mCtrlUpdateFiles;
     private final AsyncLauncherInitialization.ILauncherCallbacks mInitCallbacks = new AsyncLauncherInitialization.ILauncherCallbacks()
     {
         @Override
@@ -140,6 +152,7 @@ public class ActivityLauncher extends ActivityWithToolbar
         mCtrlPointerMulti = new PointerMultiplierSettingController(this).init(R.id.launcher_btn_pointer_multi, mPrefs);
         mCtrlSoundVol = new SoundSettingController(this).init(R.id.launcher_btn_volume_sound, mConfig);
         mCtrlMusicVol = new MusicSettingController(this).init(R.id.launcher_btn_volume_music, mConfig);
+        mCtrlUpdateFiles = new UpdateVcmiFilesController(this, v -> onVcmiDataImportRequested()).init(R.id.launcher_btn_update_zip);
 
         mActualSettings.clear();
         mActualSettings.add(mCtrlCodepage);
@@ -150,6 +163,45 @@ public class ActivityLauncher extends ActivityWithToolbar
         mActualSettings.add(mCtrlMusicVol);
 
         mCtrlStart.hide(); // start is initially hidden, until we confirm that everything is okay via AsyncLauncherInitialization
+    }
+
+    private static final int PICK_VCMI_ZIP_FILE = 2;
+
+    private void onVcmiDataImportRequested()
+    {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/zip");
+
+        startActivityForResult(intent, PICK_VCMI_ZIP_FILE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData)
+    {
+        if (requestCode == PICK_VCMI_ZIP_FILE && resultCode == Activity.RESULT_OK)
+        {
+            // The result data contains a URI for the document or directory that
+            // the user selected.
+            Uri uri = null;
+            if (resultData != null) {
+                uri = resultData.getData();
+                try (
+                     InputStream inputStream = getContentResolver().openInputStream(uri)
+                ) {
+                    if (FileUtil.unpackZipFile(inputStream, Const.getVcmiDataDir(this))) {
+                        return;
+                    }
+                }
+                catch(Exception e) {
+                    Log.e("Can not parse zip file", e);
+                }
+            }
+
+            return;
+        }
+
+        super.onActivityResult(requestCode, resultCode, resultData);
     }
 
     private void onLaunchGameBtnPressed()
@@ -167,7 +219,7 @@ public class ActivityLauncher extends ActivityWithToolbar
 
         try
         {
-            mConfig.save(new File(FileUtil.configFileLocation()));
+            mConfig.save(new File(FileUtil.configFileLocation(Const.getVcmiDataDir(this))));
         }
         catch (final Exception e)
         {
@@ -181,7 +233,7 @@ public class ActivityLauncher extends ActivityWithToolbar
         try
         {
             final String settingsFileContent =
-                FileUtil.read(new File(FileUtil.configFileLocation()));
+                FileUtil.read(new File(FileUtil.configFileLocation(Const.getVcmiDataDir(this))));
             mConfig = Config.load(new JSONObject(settingsFileContent));
         }
         catch (final Exception e)
