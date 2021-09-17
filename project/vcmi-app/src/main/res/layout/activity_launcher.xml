@@ -57,6 +57,10 @@
 
         <include layout="@layout/inc_separator" />
 
+        <include
+            android:id="@+id/launcher_btn_update_zip"
+            layout="@layout/inc_launcher_btn" />
+
         <androidx.appcompat.widget.AppCompatTextView
             style="@style/VCMI.Text.LauncherSection"
             android:layout_width="match_parent"

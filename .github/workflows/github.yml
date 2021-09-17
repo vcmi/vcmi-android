@@ -19,11 +19,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        submodules: recursive
         
     - name: Update VCMI Sources
       run: |
         git submodule update --init --recursive ${{github.workspace}}/ext/vcmi
-        git submodule update --init --recursive ${{github.workspace}}/ext/iconv
 
     - name: Dependencies
       run: |

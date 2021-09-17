@@ -3,6 +3,7 @@ package eu.vcmi.vcmi.content;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -36,13 +37,17 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
 
     private InitResult init()
     {
-        Log.d(this, "Starting init checks");
-        InitResult initResult = handlePermissions();
-        if (!initResult.mSuccess)
+        InitResult initResult;
+
+        if(Build.VERSION.SDK_INT < 24)
         {
-            return initResult;
+            Log.d(this, "Starting init checks");
+            initResult = handlePermissions();
+            if (!initResult.mSuccess) {
+                return initResult;
+            }
+            Log.d(this, "Permissions check passed");
         }
-        Log.d(this, "Permissions check passed");
 
         initResult = handleDataFoldersInitialization();
         if (!initResult.mSuccess)
@@ -62,11 +67,13 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
             return new InitResult(false, "Internal error");
         }
         final Context ctx = callbacks.ctx();
-        final File baseDir = Environment.getExternalStorageDirectory();
+
+        final File vcmiDir = Const.getVcmiDataDir(ctx);
+
         final File internalDir = ctx.getFilesDir();
-        final File vcmiDir = new File(baseDir, Const.VCMI_DATA_ROOT_FOLDER_NAME);
         final File vcmiInternalDir = new File(internalDir, Const.VCMI_DATA_ROOT_FOLDER_NAME);
         Log.i(this, "Using " + vcmiDir.getAbsolutePath() + " as root vcmi dir");
+
         if (!vcmiDir.exists()) // we don't have root folder == new install (or deleted)
         {
             boolean allCreated = vcmiDir.mkdir();
@@ -104,10 +111,10 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
 
         final File testVcmiData = new File(vcmiInternalDir, "Mods/vcmi/mod.json");
         final boolean internalVcmiDataExisted = testVcmiData.exists();
-        if (!internalVcmiDataExisted && !FileUtil.unpackVcmiDataToInternalDir(vcmiInternalDir, ctx.getAssets()))
-        {
-            // unpacking internal data normally shouldn't fail, probably only sensible reason is no space left on device
-            return new InitResult(false, ctx.getString(R.string.launcher_error_vcmi_data_internal_missing));
+        if (!internalVcmiDataExisted && !FileUtil.unpackVcmiDataToInternalDir(vcmiInternalDir, ctx.getAssets())) {
+            // no h3 data present -> instruct user where to put it
+            new InitResult(false,
+                    ctx.getString(R.string.launcher_error_h3_data_missing, vcmiDir.getAbsolutePath(), Const.VCMI_DATA_ROOT_FOLDER_NAME));
         }
 
         final String previousInternalDataHash = callbacks.prefs().load(SharedPrefs.KEY_CURRENT_INTERNAL_ASSET_HASH, null);

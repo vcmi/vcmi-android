@@ -5,6 +5,7 @@
     <string name="url_launcher_repo" translatable="false">http://github.com/vcmi/vcmi-launcher</string>
 
     <string name="app_name">VCMI</string>
+    <string name="server_name">VCMI Server</string>
     <string name="launcher_title">VCMI Launcher</string>
     <string name="launcher_btn_res_title">Change game native resolution</string>
     <string name="launcher_btn_res_subtitle_unknown">Currently: unknown (probably 800x600)</string>
@@ -22,6 +23,8 @@
     <string name="launcher_btn_pointermulti_subtitle">Currently: %1$s</string>
     <string name="launcher_btn_sound_title">Sound volume</string>
     <string name="launcher_btn_music_title">Music volume</string>
+    <string name="launcher_btn_import_zip">Import VCMI files</string>
+    <string name="launcher_btn_import_zip_description">Import HOMM3 files from a zip file to the internal storage</string>
     <string name="launcher_version">Current launcher version: %1$s</string>
     <string name="launcher_error_vcmi_data_root_created">VCMI created folder \'%1$s\' (in %2$s). Place your H3 data files there (so that you have a folder %1$s/Data and %1$s/Mp3 etc) and restart the application.</string>
     <string name="launcher_error_vcmi_data_root_failed">Could not create VCMI data folder in %1$s.</string>

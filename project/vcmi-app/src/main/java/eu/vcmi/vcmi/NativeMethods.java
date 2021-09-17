@@ -51,7 +51,9 @@ public class NativeMethods
     @SuppressWarnings(Const.JNI_METHOD_SUPPRESS)
     public static String dataRoot()
     {
-        String root = new File(Environment.getExternalStorageDirectory(), Const.VCMI_DATA_ROOT_FOLDER_NAME).getAbsolutePath();
+        Context ctx = requireContext();
+        String root = Const.getVcmiDataDir(ctx).getAbsolutePath();
+
         Log.i("Accessing data root: " + root);
         return root;
     }
