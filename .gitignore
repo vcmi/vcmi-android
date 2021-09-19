@@ -16,3 +16,4 @@
 /project/.idea/workspace.xml
 /project/jni/**/*.suo
 /__pycache__
+/project/local.properties
