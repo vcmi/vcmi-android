@@ -61,7 +61,7 @@ public class ActivityLauncher extends ActivityWithToolbar
     private LauncherSettingController<Float, SharedPrefs> mCtrlPointerMulti;
     private LauncherSettingController<Integer, Config> mCtrlSoundVol;
     private LauncherSettingController<Integer, Config> mCtrlMusicVol;
-    private LauncherSettingController<Void, Void> mCtrlUpdateFiles;
+    private LauncherSettingController<Void, Void> mCtrlStorage;
     private final AsyncLauncherInitialization.ILauncherCallbacks mInitCallbacks = new AsyncLauncherInitialization.ILauncherCallbacks()
     {
         @Override
@@ -100,11 +100,14 @@ public class ActivityLauncher extends ActivityWithToolbar
     public void onCreate(final Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
         if (savedInstanceState == null) // only clear the log if this is initial onCreate and not config change
         {
             Log.init();
         }
+
         Log.i(this, "Starting launcher");
+        Storage.initStorage(this);
         setContentView(R.layout.activity_launcher);
         initToolbar(R.string.launcher_title, true);
 
@@ -113,6 +116,7 @@ public class ActivityLauncher extends ActivityWithToolbar
         mErrorMessage.setVisibility(View.GONE);
 
         ((TextView) findViewById(R.id.launcher_version_info)).setText(getString(R.string.launcher_version, BuildConfig.VERSION_NAME));
+
         initSettingsGui();
         new AsyncLauncherInitialization(mInitCallbacks).execute((Void) null);
     }
@@ -152,7 +156,7 @@ public class ActivityLauncher extends ActivityWithToolbar
         mCtrlPointerMulti = new PointerMultiplierSettingController(this).init(R.id.launcher_btn_pointer_multi, mPrefs);
         mCtrlSoundVol = new SoundSettingController(this).init(R.id.launcher_btn_volume_sound, mConfig);
         mCtrlMusicVol = new MusicSettingController(this).init(R.id.launcher_btn_volume_music, mConfig);
-        mCtrlUpdateFiles = new UpdateVcmiFilesController(this, v -> onVcmiDataImportRequested()).init(R.id.launcher_btn_update_zip);
+        mCtrlStorage = new UpdateVcmiFilesController(this, v -> onSetupStorage()).init(R.id.launcher_btn_storage);
 
         mActualSettings.clear();
         mActualSettings.add(mCtrlCodepage);
@@ -165,43 +169,9 @@ public class ActivityLauncher extends ActivityWithToolbar
         mCtrlStart.hide(); // start is initially hidden, until we confirm that everything is okay via AsyncLauncherInitialization
     }
 
-    private static final int PICK_VCMI_ZIP_FILE = 2;
-
-    private void onVcmiDataImportRequested()
+    private void onSetupStorage()
     {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/zip");
-
-        startActivityForResult(intent, PICK_VCMI_ZIP_FILE);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent resultData)
-    {
-        if (requestCode == PICK_VCMI_ZIP_FILE && resultCode == Activity.RESULT_OK)
-        {
-            // The result data contains a URI for the document or directory that
-            // the user selected.
-            Uri uri = null;
-            if (resultData != null) {
-                uri = resultData.getData();
-                try (
-                     InputStream inputStream = getContentResolver().openInputStream(uri)
-                ) {
-                    if (FileUtil.unpackZipFile(inputStream, Const.getVcmiDataDir(this))) {
-                        return;
-                    }
-                }
-                catch(Exception e) {
-                    Log.e("Can not parse zip file", e);
-                }
-            }
-
-            return;
-        }
-
-        super.onActivityResult(requestCode, resultCode, resultData);
+        startActivity(new Intent(this, ActivityStorage.class));
     }
 
     private void onLaunchGameBtnPressed()
@@ -219,7 +189,7 @@ public class ActivityLauncher extends ActivityWithToolbar
 
         try
         {
-            mConfig.save(new File(FileUtil.configFileLocation(Const.getVcmiDataDir(this))));
+            mConfig.save(new File(FileUtil.configFileLocation(Storage.getVcmiDataDir(this))));
         }
         catch (final Exception e)
         {
@@ -232,8 +202,11 @@ public class ActivityLauncher extends ActivityWithToolbar
     {
         try
         {
-            final String settingsFileContent =
-                FileUtil.read(new File(FileUtil.configFileLocation(Const.getVcmiDataDir(this))));
+            Storage.initStorage(this);
+
+            final String settingsFileContent = FileUtil.read(
+                    new File(FileUtil.configFileLocation(Storage.getVcmiDataDir(this))));
+
             mConfig = Config.load(new JSONObject(settingsFileContent));
         }
         catch (final Exception e)
@@ -254,30 +227,14 @@ public class ActivityLauncher extends ActivityWithToolbar
         updateCtrlConfig(mCtrlMusicVol, mConfig);
     }
 
-    private <TSetting, TConf> void updateCtrlConfig(final LauncherSettingController<TSetting, TConf> ctrl, final TConf config)
+    private <TSetting, TConf> void updateCtrlConfig(
+            final LauncherSettingController<TSetting, TConf> ctrl,
+            final TConf config)
     {
         if (ctrl != null)
         {
             ctrl.updateConfig(config);
         }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults)
-    {
-        if (requestCode == AsyncLauncherInitialization.PERMISSIONS_REQ_CODE)
-        {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
-                new AsyncLauncherInitialization(mInitCallbacks).execute((Void) null); // retry init (we still need to check folders)
-            }
-            else
-            {
-                onInitFailure(new AsyncLauncherInitialization.InitResult(false, getString(R.string.launcher_error_permissions)), true);
-            }
-            return;
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void onInitFailure(final AsyncLauncherInitialization.InitResult initResult, final boolean disableAccess)

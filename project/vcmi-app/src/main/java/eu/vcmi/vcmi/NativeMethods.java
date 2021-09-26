@@ -52,7 +52,7 @@ public class NativeMethods
     public static String dataRoot()
     {
         Context ctx = requireContext();
-        String root = Const.getVcmiDataDir(ctx).getAbsolutePath();
+        String root = Storage.getVcmiDataDir(ctx).getAbsolutePath();
 
         Log.i("Accessing data root: " + root);
         return root;
