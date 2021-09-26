@@ -82,16 +82,16 @@ public class FileUtil
             Log.e("Broken path given to fileutil");
             return false;
         }
+
         final File dir = file.getParentFile();
-        if (dir.exists())
+
+        if (dir.exists() || dir.mkdirs())
         {
             return true;
         }
-        if (dir.mkdirs())
-        {
-            return true;
-        }
+
         Log.e("Couldn't create dir " + dir);
+
         return false;
     }
 
@@ -103,6 +103,7 @@ public class FileUtil
             {
                 return false;
             }
+
             if (!f.delete())
             {
                 return false;
@@ -157,7 +158,7 @@ public class FileUtil
         try
         {
             final InputStream inputStream = assets.open("internalData.zip");
-            final boolean success = unpackZipFile(inputStream, vcmiInternalDir);
+            final boolean success = unpackZipFile(inputStream, vcmiInternalDir, null);
             inputStream.close();
             return success;
         }
@@ -167,12 +168,13 @@ public class FileUtil
             return false;
         }
     }
+
     public static boolean unpackZipFile(final File inputFile, final File destDir)
     {
         try
         {
             final InputStream inputStream = new FileInputStream(inputFile);
-            final boolean success = unpackZipFile(inputStream, destDir);
+            final boolean success = unpackZipFile(inputStream, destDir, null);
             inputStream.close();
             return success;
         }
@@ -183,7 +185,10 @@ public class FileUtil
         }
     }
 
-    public static boolean unpackZipFile(final InputStream inputStream, final File destDir)
+    public static boolean unpackZipFile(
+        final InputStream inputStream,
+        final File destDir,
+        final IZipProgressReporter progressReporter)
     {
         try
         {
@@ -195,6 +200,11 @@ public class FileUtil
             {
                 final String fileName = zipEntry.getName();
                 final File newFile = new File(destDir, fileName);
+
+                if(progressReporter != null)
+                {
+                    progressReporter.onPacking(newFile);
+                }
 
                 if (newFile.exists())
                 {
@@ -246,7 +256,7 @@ public class FileUtil
 
     public static String configFileLocation(File filesDir)
     {
-        return filesDir + "/" + Const.VCMI_DATA_ROOT_FOLDER_NAME + "/config/settings.json";
+        return filesDir + "/config/settings.json";
     }
 
     public static String readAssetsStream(final AssetManager assets, final String assetPath)

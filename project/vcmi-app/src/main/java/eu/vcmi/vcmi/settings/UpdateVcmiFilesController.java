@@ -24,13 +24,13 @@ public class UpdateVcmiFilesController extends LauncherSettingController<Void, V
     @Override
     protected String mainText()
     {
-        return mActivity.getString(R.string.launcher_btn_import_zip);
+        return mActivity.getString(R.string.launcher_btn_storage);
     }
 
     @Override
     protected String subText()
     {
-        return mActivity.getString(R.string.launcher_btn_import_zip_description);
+        return mActivity.getString(R.string.launcher_btn_storage_description);
     }
 
     @Override

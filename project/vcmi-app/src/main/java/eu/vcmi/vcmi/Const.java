@@ -4,7 +4,12 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
 
 /**
  * @author F
@@ -18,17 +23,6 @@ public class Const
     public static final String VCMI_DATA_ROOT_FOLDER_NAME = "vcmi-data";
 
     public static final String VCMI_DATA_ZIP_FILE_NAME = "vcmi-data.zip";
-
-    public static File getVcmiDataDir(Context context)
-    {
-        File root;
-
-        if (Build.VERSION.SDK_INT >= 24) {
-            root = context.getDataDir();
-        } else {
-            root = Environment.getExternalStorageDirectory();
-        }
-
-        return new File(root, Const.VCMI_DATA_ROOT_FOLDER_NAME);
-    }
+    public static final String STORAGE_CONFIG_FILE_NAME = "storage.config";
+    public static final boolean INTERNAL_STORAGE_AVAILABLE = Build.VERSION.SDK_INT >= 24;
 }

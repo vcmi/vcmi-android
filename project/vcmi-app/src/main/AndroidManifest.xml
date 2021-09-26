@@ -26,6 +26,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ActivityStorage"
+            android:screenOrientation="landscape" />
+        <activity
             android:name=".ActivityError"
             android:screenOrientation="landscape" />
         <activity

@@ -31,6 +31,7 @@ public class ServerService extends Service
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
+        Storage.initStorage(this);
         NativeMethods.setupCtx(ServerService.this);
         LibsLoader.loadServerLibs();
         if (INTENT_ACTION_KILL_SERVER.equals(intent.getAction()))

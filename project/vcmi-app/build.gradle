@@ -58,6 +58,7 @@ android {
 	
 	buildFeatures {
 		viewBinding true
+		dataBinding true
 	}
 	
 	flavorDimensions "vcmi"

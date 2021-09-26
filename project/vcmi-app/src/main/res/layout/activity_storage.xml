@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="vm"
+            type="eu.vcmi.vcmi.viewmodels.StorageViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar_include"
+        android:clipChildren="false"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/storage_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{vm.errorMessage}"
+                android:textColor="@color/design_default_color_error"
+                android:visibility="@{vm.visible(vm.errorMessage.length() > 0)}"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/storage_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/storage_description" />
+
+            <include
+                android:id="@+id/storage_btn_use_external_storage"
+                android:padding="@dimen/side_margin"
+                bind:title="@{@string/storage_btn_use_external_storage}"
+                bind:description="@{@string/storage_btn_use_external_storage_description}"
+                android:onClick="@{ (v) -> vm.onUseExternalStorage() }"
+                layout="@layout/inc_launcher_btn" />
+
+            <include
+                android:id="@+id/storage_btn_use_internal_storage"
+                android:padding="@dimen/side_margin"
+                bind:title="@{@string/storage_btn_use_internal_storage}"
+                bind:description="@{@string/storage_btn_use_internal_storage_description}"
+                android:onClick="@{ (v) -> vm.onUseInternalStorage() }"
+                layout="@layout/inc_launcher_btn" />
+
+            <include
+                android:id="@+id/storage_btn_test_external"
+                bind:title="@{@string/storage_btn_test_external_storage}"
+                bind:description="@{@string/storage_btn_test_external_storage_description}"
+                android:onClick="@{ (v) -> vm.onTestExternalStorage() }"
+                android:visibility="@{vm.visible(vm.useExternal)}"
+                layout="@layout/inc_launcher_btn" />
+
+            <include
+                android:id="@+id/storage_btn_import_files"
+                bind:title="@{@string/storage_btn_import_zip}"
+                bind:description="@{vm.importProgress}"
+                android:onClick="@{ (v) -> vm.importVcmiDataToInternalStorage() }"
+                android:visibility="@{vm.visible(!vm.useExternal)}"
+                layout="@layout/inc_launcher_btn" />
+
+            <ProgressBar
+                android:id="@+id/storage_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="@{vm.visible(vm.isBusy)}" />
+        </LinearLayout>
+    </ScrollView>
+</layout>
