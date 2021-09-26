@@ -56,7 +56,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: vcmi.apk
-        path: ${{github.workspace}}/project/vcmi-app/build/outputs/apk/AllTargets/release/vcmi-app-release.apk
+        path: ${{github.workspace}}/project/vcmi-app/build/outputs/apk/AllTargets/release/*.apk
   
 #    - name: Upload build
 #      run: |
