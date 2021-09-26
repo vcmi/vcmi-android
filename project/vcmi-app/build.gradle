@@ -11,6 +11,7 @@ android {
 		targetSdk 31
 		versionCode 1
 		versionName "0.99"
+		setProperty("archivesBaseName", "vcmi")
 
 		externalNativeBuild {
 			cmake {
@@ -40,6 +41,8 @@ android {
 			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 		}
 	}
+
+	applicationVariants.all { variant -> RenameOutput(project.archivesBaseName, variant) }
 
 	tasks.withType(JavaCompile) {
 		options.compilerArgs += ["-Xlint:deprecation"]
@@ -110,20 +113,24 @@ android {
 }
 
 def RenameOutput(final baseName, final variant) {
-    final def apkPath = variant.outputs[0].outputFile.parent
-    final def travisId = System.getenv("TRAVIS_JOB_ID")
-    ResolveGitInfo()
-    def name = baseName + "-" + ext.gitInfoLauncher + "-" + ext.gitInfoVcmi
+	final def buildTaskId = System.getenv("GITHUB_RUN_ID")
 
-    if (travisId != null && !travisId.isEmpty()) {
-        name = travisId + "-" + name
+	ResolveGitInfo()
+
+	def name = baseName + "-" + ext.gitInfoLauncher + "-" + ext.gitInfoVcmi
+
+    if (buildTaskId != null && !buildTaskId.isEmpty()) {
+        name = buildTaskId + "-" + name
     }
 
     if (!variant.buildType.name != "release") {
         name += "-" + variant.buildType.name
     }
 
-    variant.outputs*.outputFile = new File(apkPath, name + ".apk")
+	variant.outputs.each { output ->
+        def oldPath = output.outputFile.getAbsolutePath()
+		output.outputFileName = name + oldPath.substring(oldPath.lastIndexOf("."))
+	}
 }
 
 def CommandOutput(final cmd, final arguments, final cwd) {
