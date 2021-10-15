@@ -14,6 +14,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -95,7 +96,7 @@ public class FileUtil
         return false;
     }
 
-    private static boolean clearDirectory(final File dir)
+    public static boolean clearDirectory(final File dir)
     {
         for (final File f : dir.listFiles())
         {
@@ -132,18 +133,23 @@ public class FileUtil
         try (final FileInputStream input = new FileInputStream(srcFile);
              final FileOutputStream output = new FileOutputStream(dstFile))
         {
-            final byte[] buffer = new byte[BUFFER_SIZE];
-            int read;
-            while ((read = input.read(buffer)) != -1)
-            {
-                output.write(buffer, 0, read);
-            }
+            copyStream(input, output);
             return true;
         }
         catch (final Exception ex)
         {
             Log.e("Couldn't copy " + srcFile + " to " + dstFile, ex);
             return false;
+        }
+    }
+
+    public static void copyStream(InputStream source, OutputStream target) throws IOException
+    {
+        final byte[] buffer = new byte[BUFFER_SIZE];
+        int read;
+        while ((read = source.read(buffer)) != -1)
+        {
+            target.write(buffer, 0, read);
         }
     }
 

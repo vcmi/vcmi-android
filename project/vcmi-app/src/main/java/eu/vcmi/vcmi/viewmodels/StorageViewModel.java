@@ -7,8 +7,11 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +19,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.databinding.Bindable;
 import androidx.databinding.PropertyChangeRegistry;
 import androidx.databinding.library.baseAdapters.BR;
+import androidx.documentfile.provider.DocumentFile;
 import eu.vcmi.vcmi.ActivityLauncher;
 import eu.vcmi.vcmi.ActivityStorage;
 import eu.vcmi.vcmi.Const;
@@ -156,6 +160,16 @@ public class StorageViewModel extends ObservableViewModel
         activity.selectZipFile();
     }
 
+    public void clearInternalStorage()
+    {
+        FileUtil.clearDirectory(Storage.getVcmiDataDir(activity));
+    }
+
+    public void exportSaves()
+    {
+        activity.selectSavesFolder();
+    }
+
     public void setActivity(ActivityStorage activity)
     {
         this.activity = activity;
@@ -166,6 +180,41 @@ public class StorageViewModel extends ObservableViewModel
     {
         setIsBusy(true);
         new Thread(new UnzipTask(vcmiDataZip)).start();
+    }
+
+    public void exportSaves(Uri selectedFolder)
+    {
+        setErrorMessage("");
+
+        File savesRoot = new File(Storage.getVcmiDataDir(activity), "Saves");
+        DocumentFile targetDir = DocumentFile.fromTreeUri(activity, selectedFolder)
+                .createDirectory("vcmi-data")
+                .createDirectory("Saves");
+
+        if(savesRoot.exists())
+        {
+            for(File child : savesRoot.listFiles())
+            {
+                if(child.isFile())
+                {
+                    DocumentFile exported = targetDir.createFile(
+                            "application/octet-stream",
+                            child.getName());
+
+                    try(
+                            final OutputStream targetStream = activity.getContentResolver()
+                                    .openOutputStream(exported.getUri());
+                            final InputStream sourceStream = new FileInputStream(child))
+                    {
+                        FileUtil.copyStream(sourceStream, targetStream);
+                    }
+                    catch (IOException e)
+                    {
+                        setErrorMessage("Failed to copy file " + child.getName());
+                    }
+                }
+            }
+        }
     }
 
     private boolean createExternalStorageRootFolder()

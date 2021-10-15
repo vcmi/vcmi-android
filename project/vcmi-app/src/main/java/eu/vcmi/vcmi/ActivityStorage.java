@@ -7,8 +7,12 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.io.File;
 import java.io.InputStream;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +31,7 @@ import eu.vcmi.vcmi.viewmodels.StorageViewModel;
 public class ActivityStorage extends AppCompatActivity
 {
     private static final int PICK_VCMI_ZIP_FILE = 2;
+    private static final int PICK_SAVES_FOLDER = 3;
     public static final int PERMISSIONS_REQ_CODE = 123;
 
     StorageViewModel vm;
@@ -79,19 +84,45 @@ public class ActivityStorage extends AppCompatActivity
         startActivityForResult(intent, PICK_VCMI_ZIP_FILE);
     }
 
+    public void selectSavesFolder()
+    {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+
+        intent.putExtra(
+            DocumentsContract.EXTRA_INITIAL_URI,
+            Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "vcmi-data")));
+
+        startActivityForResult(intent, PICK_SAVES_FOLDER);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent resultData)
     {
         if (requestCode == PICK_VCMI_ZIP_FILE && resultCode == Activity.RESULT_OK)
         {
-            // The result data contains a URI for the document or directory that
-            // the user selected.
             Uri uri = null;
             if (resultData != null)
             {
                 uri = resultData.getData();
 
                 vm.importFilesFromStream(uri);
+            }
+
+            return;
+        }
+        else if(requestCode == PICK_SAVES_FOLDER && resultCode == Activity.RESULT_OK)
+        {
+            Uri uri = null;
+            if (resultData != null)
+            {
+                uri = resultData.getData();
+
+                final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+
+                getContentResolver().takePersistableUriPermission(uri, takeFlags);
+
+                vm.exportSaves(uri);
             }
 
             return;

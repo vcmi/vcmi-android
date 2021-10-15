@@ -81,6 +81,9 @@ public class ActivityLauncher extends ActivityWithToolbar
         {
             loadConfigFile();
             mCtrlStart.show();
+            for (LauncherSettingController<?, ?> setting: mActualSettings) {
+                setting.show();
+            }
             mErrorMessage.setVisibility(View.GONE);
             mProgress.setVisibility(View.GONE);
         }
@@ -118,6 +121,12 @@ public class ActivityLauncher extends ActivityWithToolbar
         ((TextView) findViewById(R.id.launcher_version_info)).setText(getString(R.string.launcher_version, BuildConfig.VERSION_NAME));
 
         initSettingsGui();
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
         new AsyncLauncherInitialization(mInitCallbacks).execute((Void) null);
     }
 

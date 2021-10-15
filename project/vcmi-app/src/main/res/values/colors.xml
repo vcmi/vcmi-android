@@ -6,4 +6,5 @@
     <color name="bgDark">#1F221F</color>
     <color name="accent">#BBBB55</color>
     <color name="separator">@color/accent</color>
+    <color name="splash">#00000000</color>
 </resources>
