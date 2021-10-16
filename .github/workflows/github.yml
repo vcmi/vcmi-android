@@ -58,14 +58,13 @@ jobs:
         name: vcmi.apk
         path: ${{github.workspace}}/project/vcmi-app/build/outputs/apk/AllTargets/release/*.apk
   
-#    - name: Upload build
-#      run: |
-#        cd '${{github.workspace}}/build'
-#        source '${{github.workspace}}/.github/CI/upload_package.sh'
-#      env:
-#        DEPLOY_RSA: ${{ secrets.DEPLOY_RSA }}
-#        PACKAGE_EXTENSION: apk
-#        
+    - name: Upload build
+      run: |
+        source '${{github.workspace}}/.github/CI/upload_package.sh'
+      env:
+        DEPLOY_RSA: ${{ secrets.DEPLOY_RSA }}
+        PACKAGE_EXTENSION: apk
+        
     - uses: act10ns/slack@v1
       with:
         status: ${{ job.status }}
