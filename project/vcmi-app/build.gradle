@@ -157,7 +157,7 @@ def ResolveGitInfo() {
     }
     ext.gitInfoLauncher = CommandOutput("git", ["describe", "--match=", "--always", "--abbrev=7"], PROJECT_PATH_BASE)
     ext.gitInfoVcmi =
-            CommandOutput("git", ["rev-parse", "--abbrev-ref", "HEAD"], PROJECT_PATH_BASE + "/ext/vcmi").replaceAll("[^a-zA-Z0-9\\-_]", "_") +
+            CommandOutput("git", ["log", "-1", "--pretty=%D", "--decorate-refs=refs/remotes/origin/*"], PROJECT_PATH_BASE + "/ext/vcmi").replace("origin/", "").replace(", HEAD", "").replaceAll("[^a-zA-Z0-9\\-_]", "_") +
                     "-" +
                     CommandOutput("git", ["describe", "--match=", "--always", "--abbrev=7"], PROJECT_PATH_BASE + "/ext/vcmi")
 }

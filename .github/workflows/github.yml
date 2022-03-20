@@ -27,7 +27,7 @@ jobs:
         
     - name: Update VCMI Sources
       run: |
-        git submodule update --init --recursive ${{github.workspace}}/ext/vcmi
+        git submodule update --init --remote --recursive ${{github.workspace}}/ext/vcmi
 
     - name: Dependencies
       run: |
