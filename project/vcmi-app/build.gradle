@@ -15,7 +15,7 @@ android {
 
 		externalNativeBuild {
 			cmake {
-				version "3.18.1"
+				version "3.18.1+"
 				arguments "-DANDROID_STL=${VCMI_STL_VERSION}",
 					"-DANDROID_NATIVE_API_LEVEL=${VCMI_PLATFORM}",
 					"-DANDROID_TOOLCHAIN=clang",
