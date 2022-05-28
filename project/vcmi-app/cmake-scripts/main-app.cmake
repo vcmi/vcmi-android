@@ -48,6 +48,7 @@ function(build_vcmi)
 
 	include(versions)
 
+	add_library(Boost::boost INTERFACE)
 	set(FFMPEG_LIBRARIES ffmpeg::avcodec ffmpeg::avdevice ffmpeg::avfilter ffmpeg::avformat ffmpeg::avutil ffmpeg::swresample ffmpeg::swscale smpeg2::smpeg2 postproc::postproc x264::x264)
 	set(SDL_CLIENT_LIBRARIES SDL2::SDL2 SDL2::Image SDL2::Mixer SDL2::TTF)
 	set(SYSTEM_LIBS ${SYSTEM_LIBS} ${syslib_log} ZLIB::ZLIB fuzzylite::fuzzylite)
