@@ -9,8 +9,8 @@ function(prepend var prefix)
 endfunction(prepend)
 
 macro(import_lib name alias)
-	add_library(alias SHARED IMPORTED)
-	set_target_properties(alias PROPERTIES IMPORTED_LOCATION ${VCMI_PATH_EXT_LIBS}/lib${name}.so)
+	add_library(${alias} SHARED IMPORTED)
+	set_target_properties(${alias} PROPERTIES IMPORTED_LOCATION ${VCMI_PATH_EXT_LIBS}/lib${name}.so)
 endmacro(import_lib)
 
 function(build_vcmi)
