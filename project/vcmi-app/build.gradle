@@ -15,11 +15,12 @@ android {
 
 		externalNativeBuild {
 			cmake {
+				version "3.18.1"
 				arguments "-DANDROID_STL=${VCMI_STL_VERSION}",
 					"-DANDROID_NATIVE_API_LEVEL=${VCMI_PLATFORM}",
 					"-DANDROID_TOOLCHAIN=clang",
 					"-DVCMI_ROOT=${PROJECT_PATH_BASE}"
-				cppFlags "-std=c++11", "-frtti", "-fexceptions", "-Wno-switch"
+				cppFlags "-frtti", "-fexceptions", "-Wno-switch"
 			}
 		}
 		ndk {

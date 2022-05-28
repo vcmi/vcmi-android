@@ -5,6 +5,7 @@ on:
       branches:
         - features/*
         - develop
+        - master
     pull_request:
     repository_dispatch:
 
