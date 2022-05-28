@@ -50,7 +50,7 @@ function(build_vcmi)
 
 	set(FFMPEG_LIBRARIES ffmpeg::avcodec ffmpeg::avdevice ffmpeg::avfilter ffmpeg::avformat ffmpeg::avutil ffmpeg::swresample ffmpeg::swscale smpeg2::smpeg2 postproc::postproc x264::x264)
 	set(SDL_CLIENT_LIBRARIES SDL2::SDL2 SDL2::Image SDL2::Mixer SDL2::TTF)
-	set(SYSTEM_LIBS ${SYSTEM_LIBS} ${syslib_log} ${syslib_z} fuzzylite::fuzzylite)
+	set(SYSTEM_LIBS ${SYSTEM_LIBS} ${syslib_log} ZLIB::ZLIB fuzzylite::fuzzylite)
 	set(Boost_LIBRARIES Boost::system Boost::filesystem Boost::date_time Boost::thread Boost::program_options Boost::locale)
 
 	include(lib)
