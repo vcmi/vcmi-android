@@ -37,7 +37,7 @@ function(build_minizip)
 	set(minizippath ${VCMI_PATH_VCMI}/lib/minizip)
 	add_library(minizip SHARED ${minizippath}/zip.c ${minizippath}/unzip.c ${minizippath}/ioapi.c)
 	set_target_properties(minizip PROPERTIES LINKER_LANGUAGE C)
-	target_link_libraries(minizip ${syslib_z})
+	target_link_libraries(minizip ZLIB::ZLIP)
 endfunction(build_minizip)
 
 function(build_boost)
