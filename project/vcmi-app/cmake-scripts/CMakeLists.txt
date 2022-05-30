@@ -10,6 +10,8 @@ set(VCMI_PATH_VCMI ${VCMI_ROOT}/ext/vcmi)
 set(VCMI_PATH_EXT_LIBS ${VCMI_ROOT}/ext-output/${ANDROID_ABI})
 
 find_library(syslib_z z)
+add_library(ZLIB::ZLIB UNKNOWN IMPORTED)
+set_target_properties(ZLIB::ZLIB PROPERTIES IMPORTED_LOCATION ${syslib_z})
 
 include_directories(${BOOST_ROOT})
 
