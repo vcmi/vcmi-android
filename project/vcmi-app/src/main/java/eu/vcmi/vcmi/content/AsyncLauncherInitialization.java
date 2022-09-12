@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
@@ -71,7 +72,8 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
             // no h3 data present -> instruct user where to put it
             return InitResult.failure(
                 ctx.getString(
-                    R.string.launcher_error_setup_storage));
+                    R.string.launcher_error_h3_data_missing,
+                        Storage.getVcmiDataDir(ctx)));
         }
 
         final File testVcmiData = new File(vcmiInternalDir, "Mods/vcmi/mod.json");

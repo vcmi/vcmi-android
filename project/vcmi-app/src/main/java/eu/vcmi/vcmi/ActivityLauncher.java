@@ -1,13 +1,11 @@
 package eu.vcmi.vcmi;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import androidx.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,17 +15,11 @@ import android.widget.Toast;
 import org.json.JSONObject;
 import org.libsdl.app.SDLActivity;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
+import androidx.core.app.ActivityCompat;
 import eu.vcmi.vcmi.content.AsyncLauncherInitialization;
 import eu.vcmi.vcmi.settings.CodepageSettingController;
 import eu.vcmi.vcmi.settings.DoubleConfig;
@@ -39,7 +31,6 @@ import eu.vcmi.vcmi.settings.PointerMultiplierSettingController;
 import eu.vcmi.vcmi.settings.ScreenResSettingController;
 import eu.vcmi.vcmi.settings.SoundSettingController;
 import eu.vcmi.vcmi.settings.StartGameController;
-import eu.vcmi.vcmi.settings.UpdateVcmiFilesController;
 import eu.vcmi.vcmi.util.FileUtil;
 import eu.vcmi.vcmi.util.Log;
 import eu.vcmi.vcmi.util.SharedPrefs;
@@ -50,6 +41,8 @@ import eu.vcmi.vcmi.util.SharedPrefs;
  */
 public class ActivityLauncher extends ActivityWithToolbar
 {
+    public static final int PERMISSIONS_REQ_CODE = 123;
+
     private final List<LauncherSettingController<?, ?>> mActualSettings = new ArrayList<>();
     private View mProgress;
     private TextView mErrorMessage;
@@ -61,7 +54,7 @@ public class ActivityLauncher extends ActivityWithToolbar
     private LauncherSettingController<Float, SharedPrefs> mCtrlPointerMulti;
     private LauncherSettingController<Integer, Config> mCtrlSoundVol;
     private LauncherSettingController<Integer, Config> mCtrlMusicVol;
-    private LauncherSettingController<Void, Void> mCtrlStorage;
+
     private final AsyncLauncherInitialization.ILauncherCallbacks mInitCallbacks = new AsyncLauncherInitialization.ILauncherCallbacks()
     {
         @Override
@@ -110,7 +103,7 @@ public class ActivityLauncher extends ActivityWithToolbar
         }
 
         Log.i(this, "Starting launcher");
-        Storage.initStorage(this);
+
         setContentView(R.layout.activity_launcher);
         initToolbar(R.string.launcher_title, true);
 
@@ -155,6 +148,33 @@ public class ActivityLauncher extends ActivityWithToolbar
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode,
+            String[] permissions,
+            int[] grantResults)
+    {
+        switch (requestCode)
+        {
+            case PERMISSIONS_REQ_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    // vm.onUseExternalStorage();
+                }
+                return;
+        }
+    }
+
+    public void requestStoragePermissions()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        {
+            requestPermissions(
+                    new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    PERMISSIONS_REQ_CODE);
+        }
+    }
+
     private void initSettingsGui()
     {
         mCtrlStart = new StartGameController(this, v -> onLaunchGameBtnPressed()).init(R.id.launcher_btn_start);
@@ -165,7 +185,6 @@ public class ActivityLauncher extends ActivityWithToolbar
         mCtrlPointerMulti = new PointerMultiplierSettingController(this).init(R.id.launcher_btn_pointer_multi, mPrefs);
         mCtrlSoundVol = new SoundSettingController(this).init(R.id.launcher_btn_volume_sound, mConfig);
         mCtrlMusicVol = new MusicSettingController(this).init(R.id.launcher_btn_volume_music, mConfig);
-        mCtrlStorage = new UpdateVcmiFilesController(this, v -> onSetupStorage()).init(R.id.launcher_btn_storage);
 
         mActualSettings.clear();
         mActualSettings.add(mCtrlCodepage);
@@ -178,9 +197,8 @@ public class ActivityLauncher extends ActivityWithToolbar
         mCtrlStart.hide(); // start is initially hidden, until we confirm that everything is okay via AsyncLauncherInitialization
     }
 
-    private void onSetupStorage()
+    private void openVcmiFolder()
     {
-        startActivity(new Intent(this, ActivityStorage.class));
     }
 
     private void onLaunchGameBtnPressed()
@@ -206,13 +224,10 @@ public class ActivityLauncher extends ActivityWithToolbar
         }
     }
 
-
     private void loadConfigFile()
     {
         try
         {
-            Storage.initStorage(this);
-
             final String settingsFileContent = FileUtil.read(
                     new File(FileUtil.configFileLocation(Storage.getVcmiDataDir(this))));
 
@@ -264,5 +279,31 @@ public class ActivityLauncher extends ActivityWithToolbar
         }
         mErrorMessage.setVisibility(View.VISIBLE);
         mErrorMessage.setText(initResult.mMessage);
+    }
+
+    private boolean requestExternalStoragePermissions()
+    {
+        try
+        {
+            int storageWritePermissions = ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+            if (storageWritePermissions == PackageManager.PERMISSION_GRANTED)
+            {
+                return true;
+            }
+        }
+        catch (final RuntimeException ignored)
+        {
+            mErrorMessage.setVisibility(View.VISIBLE);
+            mErrorMessage.setText(this.getString(R.string.launcher_error_permission_broken));
+
+            return false;
+        }
+
+        requestStoragePermissions();
+
+        return false;
     }
 }
