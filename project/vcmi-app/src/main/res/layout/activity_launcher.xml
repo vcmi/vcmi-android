@@ -55,10 +55,6 @@
                 android:layout_gravity="center" />
         </FrameLayout>
 
-        <include
-            android:id="@+id/launcher_btn_storage"
-            layout="@layout/inc_launcher_btn" />
-
         <include layout="@layout/inc_separator" />
 
         <androidx.appcompat.widget.AppCompatTextView
