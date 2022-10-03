@@ -34,6 +34,12 @@ android {
         LoadSigningConfig(PROJECT_PATH_BASE)
     }
 
+	sourceSets {
+		main {
+			jniLibs.srcDirs = ["${PROJECT_PATH_BASE}/ext-output"]
+		}
+	}
+
 	buildTypes {
 		release {
 			minifyEnabled false
@@ -56,6 +62,7 @@ android {
 	
 	externalNativeBuild {
 		cmake {
+			version "3.18.0+"
 			path file('cmake-scripts/CMakeLists.txt')
 		}
 	}
@@ -71,6 +78,7 @@ android {
 			dimension "vcmi"
 			externalNativeBuild {
 				cmake {
+					version "3.18+"
 					targets "vcmi",
 							"vcmiserver",
 							"vcmiclient"
@@ -81,6 +89,7 @@ android {
 			dimension "vcmi"
 			externalNativeBuild {
 				cmake {
+					version "3.18+"
 					targets "boost-datetime",
 							"boost-system",
 							"boost-filesystem",
@@ -96,6 +105,7 @@ android {
 			dimension "vcmi"
 			externalNativeBuild {
 				cmake {
+					version "3.18+"
 					targets "boost-datetime",
 							"boost-system",
 							"boost-filesystem",

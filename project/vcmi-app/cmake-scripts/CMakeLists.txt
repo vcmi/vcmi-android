@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.4.1)
+cmake_minimum_required(VERSION 3.17)
 
 set(CMAKE_MODULE_PATH "${VCMI_ROOT}/project/vcmi-app/cmake-scripts;${VCMI_ROOT}/ext/vcmi/cmake_modules")
 include(VCMIUtils)
