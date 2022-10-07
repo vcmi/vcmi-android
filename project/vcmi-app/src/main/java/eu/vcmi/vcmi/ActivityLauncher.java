@@ -21,6 +21,7 @@ import java.util.List;
 
 import androidx.core.app.ActivityCompat;
 import eu.vcmi.vcmi.content.AsyncLauncherInitialization;
+import eu.vcmi.vcmi.settings.AdventureAiController;
 import eu.vcmi.vcmi.settings.CodepageSettingController;
 import eu.vcmi.vcmi.settings.DoubleConfig;
 import eu.vcmi.vcmi.settings.LauncherSettingController;
@@ -54,6 +55,7 @@ public class ActivityLauncher extends ActivityWithToolbar
     private LauncherSettingController<Float, SharedPrefs> mCtrlPointerMulti;
     private LauncherSettingController<Integer, Config> mCtrlSoundVol;
     private LauncherSettingController<Integer, Config> mCtrlMusicVol;
+    private LauncherSettingController<String, Config> mAiController;
 
     private final AsyncLauncherInitialization.ILauncherCallbacks mInitCallbacks = new AsyncLauncherInitialization.ILauncherCallbacks()
     {
@@ -185,6 +187,7 @@ public class ActivityLauncher extends ActivityWithToolbar
         mCtrlPointerMulti = new PointerMultiplierSettingController(this).init(R.id.launcher_btn_pointer_multi, mPrefs);
         mCtrlSoundVol = new SoundSettingController(this).init(R.id.launcher_btn_volume_sound, mConfig);
         mCtrlMusicVol = new MusicSettingController(this).init(R.id.launcher_btn_volume_music, mConfig);
+        mAiController = new AdventureAiController(this).init(R.id.launcher_btn_adventure_ai, mConfig);
 
         mActualSettings.clear();
         mActualSettings.add(mCtrlCodepage);
@@ -193,6 +196,7 @@ public class ActivityLauncher extends ActivityWithToolbar
         mActualSettings.add(mCtrlPointerMulti);
         mActualSettings.add(mCtrlSoundVol);
         mActualSettings.add(mCtrlMusicVol);
+        mActualSettings.add(mAiController);
 
         mCtrlStart.hide(); // start is initially hidden, until we confirm that everything is okay via AsyncLauncherInitialization
     }
@@ -249,6 +253,7 @@ public class ActivityLauncher extends ActivityWithToolbar
         updateCtrlConfig(mCtrlPointerMulti, mPrefs);
         updateCtrlConfig(mCtrlSoundVol, mConfig);
         updateCtrlConfig(mCtrlMusicVol, mConfig);
+        updateCtrlConfig(mAiController, mConfig);
     }
 
     private <TSetting, TConf> void updateCtrlConfig(

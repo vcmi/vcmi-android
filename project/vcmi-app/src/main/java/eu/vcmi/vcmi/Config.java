@@ -30,18 +30,19 @@ public class Config
     public boolean mSwipeEnabled;
     public int mVolumeSound;
     public int mVolumeMusic;
+    private String adventureAi;
     private JSONObject mRawObject;
 
     private boolean mIsModified;
 
-    private static JSONObject accessGeneralNode(final JSONObject baseObj)
+    private static JSONObject accessNode(final JSONObject baseObj, String type)
     {
         if (baseObj == null)
         {
             return null;
         }
 
-        return baseObj.optJSONObject("general");
+        return baseObj.optJSONObject(type);
     }
 
     private static JSONObject accessScreenResNode(final JSONObject baseObj)
@@ -74,11 +75,14 @@ public class Config
     {
         Log.v("loading config from json: " + obj.toString());
         final Config config = new Config();
-        final JSONObject general = accessGeneralNode(obj);
+        final JSONObject general = accessNode(obj, "general");
+        final JSONObject server = accessNode(obj, "server");
         config.mCodepage = loadEntry(general, "encoding", DEFAULT_CODEPAGE);
         config.mVolumeSound = loadEntry(general, "sound", DEFAULT_SOUND_VALUE);
         config.mVolumeMusic = loadEntry(general, "music", DEFAULT_MUSIC_VALUE);
         config.mSwipeEnabled = loadEntry(general, "swipe", false);
+        config.adventureAi = loadEntry(server, "playerAI", "VCAI");
+
         final JSONObject screenRes = accessScreenResNode(obj);
         config.mResolutionWidth = loadEntry(screenRes, "width", DEFAULT_SCREEN_RES_W);
         config.mResolutionHeight = loadEntry(screenRes, "height", DEFAULT_SCREEN_RES_H);
@@ -145,21 +149,31 @@ public class Config
 
     private String toJson() throws JSONException
     {
-        final JSONObject generalNode = accessGeneralNode(mRawObject);
+        final JSONObject generalNode = accessNode(mRawObject, "general");
+        final JSONObject serverNode = accessNode(mRawObject, "server");
         final JSONObject screenResNode = accessScreenResNode(mRawObject);
 
         final JSONObject root = mRawObject == null ? new JSONObject() : mRawObject;
         final JSONObject general = generalNode == null ? new JSONObject() : generalNode;
         final JSONObject video = new JSONObject();
         final JSONObject screenRes = screenResNode == null ? new JSONObject() : screenResNode;
+        final JSONObject server = serverNode == null ? new JSONObject() : serverNode;
+
         if (mCodepage != null)
         {
             general.put("encoding", mCodepage);
         }
+
         general.put("swipe", mSwipeEnabled);
         general.put("music", mVolumeMusic);
         general.put("sound", mVolumeSound);
         root.put("general", general);
+
+        if(this.adventureAi != null)
+        {
+            server.put("playerAI", this.adventureAi);
+            root.put("server", server);
+        }
 
         if (mResolutionHeight > 0 && mResolutionWidth > 0)
         {
@@ -168,6 +182,18 @@ public class Config
             video.put("screenRes", screenRes);
             root.put("video", video);
         }
+
         return root.toString();
+    }
+
+    public void setAdventureAi(String ai)
+    {
+        adventureAi = ai;
+        mIsModified = true;
+    }
+
+    public String getAdventureAi()
+    {
+        return this.adventureAi == null ? "VCAI" : this.adventureAi;
     }
 }
