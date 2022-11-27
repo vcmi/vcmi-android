@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.File;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,10 +28,9 @@ public class ModsAdapter extends RecyclerView.Adapter<ModBaseViewHolder>
     private final List<ModItem> mDataset = new ArrayList<>();
     private final IOnItemAction mItemListener;
 
-    public ModsAdapter(final List<ModItem> mods, final IOnItemAction itemListener)
+    public ModsAdapter(final IOnItemAction itemListener)
     {
         mItemListener = itemListener;
-        mDataset.addAll(mods);
     }
 
     @Override
@@ -75,8 +75,17 @@ public class ModsAdapter extends RecyclerView.Adapter<ModBaseViewHolder>
                 modHolder.mModAuthor.setText(ctx.getString(R.string.mods_item_author_template, item.mMod.mAuthor));
                 modHolder.mStatusIcon.setImageResource(selectModStatusIcon(item.mMod.mActive));
 
+                modHolder.mDownloadBtn.setVisibility(View.GONE);
+                modHolder.mDownloadProgress.setVisibility(View.GONE);
 
-                modHolder.mDownloadBtn.setVisibility(View.GONE); // TODO visible for mods that aren't downloaded
+                if(item.mDownloadProgress != null)
+                {
+                    modHolder.mDownloadProgress.setText(item.mDownloadProgress);
+                    modHolder.mDownloadProgress.setVisibility(View.VISIBLE);
+                }
+                else if(!item.mMod.mInstalled){
+                    modHolder.mDownloadBtn.setVisibility(View.VISIBLE);
+                }
 
                 modHolder.itemView.setOnClickListener(v -> mItemListener.onItemPressed(item, holder));
                 modHolder.mStatusIcon.setOnClickListener(v -> mItemListener.onTogglePressed(item, holder));
@@ -138,6 +147,39 @@ public class ModsAdapter extends RecyclerView.Adapter<ModBaseViewHolder>
         notifyItemRangeRemoved(checkedPosition, detachedElements);
     }
 
+    public void updateModsList(List<VCMIMod> mods)
+    {
+        mDataset.clear();
+        mDataset.addAll(
+                mods.stream()
+                    .map(ModItem::new)
+                    .collect(Collectors.toList()));
+
+        notifyDataSetChanged();
+    }
+
+    public void modInstalled(ModItem mod, File modFolder)
+    {
+        try
+        {
+            mod.mMod.updateFromModInfo(modFolder);
+            mod.mMod.mLoadedCorrectly = true;
+            mod.mMod.mActive = true; // active by default
+            mod.mMod.mInstalled = true;
+            mod.mDownloadProgress = null;
+            notifyItemChanged(mDataset.indexOf(mod));
+        } catch (Exception ex)
+        {
+            Log.e("Failed to install mod", ex);
+        }
+    }
+
+    public void downloadProgress(ModItem mod, String progress)
+    {
+        mod.mDownloadProgress = progress;
+        notifyItemChanged(mDataset.indexOf(mod));
+    }
+
     public interface IOnItemAction
     {
         void onItemPressed(final ModItem mod, final RecyclerView.ViewHolder vh);
@@ -152,6 +194,7 @@ public class ModsAdapter extends RecyclerView.Adapter<ModBaseViewHolder>
         public final VCMIMod mMod;
         public int mNestingLevel;
         public boolean mExpanded;
+        public String mDownloadProgress;
 
         public ModItem(final VCMIMod mod)
         {

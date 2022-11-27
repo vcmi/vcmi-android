@@ -82,5 +82,12 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="@dimen/side_margin"
             android:src="@android:drawable/stat_sys_download" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/mods_adapter_item_install_progress"
+            android:padding="@dimen/side_margin" />
+
     </LinearLayout>
 </LinearLayout>

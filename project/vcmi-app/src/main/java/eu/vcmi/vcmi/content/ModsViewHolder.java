@@ -18,6 +18,7 @@ public class ModsViewHolder extends ModBaseViewHolder
     final TextView mModSize;
     final ImageView mStatusIcon;
     final View mDownloadBtn;
+    final TextView mDownloadProgress;
 
     ModsViewHolder(final View parentView)
     {
@@ -27,5 +28,6 @@ public class ModsViewHolder extends ModBaseViewHolder
         mModSize = (TextView) itemView.findViewById(R.id.mods_adapter_item_size);
         mDownloadBtn = itemView.findViewById(R.id.mods_adapter_item_btn_download);
         mStatusIcon = (ImageView) itemView.findViewById(R.id.mods_adapter_item_status);
+        mDownloadProgress = (TextView) itemView.findViewById(R.id.mods_adapter_item_install_progress);
     }
 }

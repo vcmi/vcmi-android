@@ -21,8 +21,4 @@ public class Const
     public static final int SUPPRESS_TRY_WITH_RESOURCES_WARNING = Build.VERSION_CODES.KITKAT;
 
     public static final String VCMI_DATA_ROOT_FOLDER_NAME = "vcmi-data";
-
-    public static final String VCMI_DATA_ZIP_FILE_NAME = "vcmi-data.zip";
-    public static final String STORAGE_CONFIG_FILE_NAME = "storage.config";
-    public static final boolean INTERNAL_STORAGE_AVAILABLE = Build.VERSION.SDK_INT >= 24;
 }

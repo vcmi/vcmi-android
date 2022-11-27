@@ -2,14 +2,14 @@ package eu.vcmi.vcmi;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
+
 import androidx.annotation.Nullable;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,24 +24,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
-import java.util.stream.Collectors;
 
 import eu.vcmi.vcmi.content.ModBaseViewHolder;
 import eu.vcmi.vcmi.content.ModsAdapter;
-import eu.vcmi.vcmi.content.ModsViewHolder;
+import eu.vcmi.vcmi.mods.VCMIMod;
 import eu.vcmi.vcmi.mods.VCMIModContainer;
 import eu.vcmi.vcmi.mods.VCMIModsRepo;
+import eu.vcmi.vcmi.util.InstallModAsync;
 import eu.vcmi.vcmi.util.FileUtil;
 import eu.vcmi.vcmi.util.Log;
+import eu.vcmi.vcmi.util.ServerResponse;
 
 /**
  * @author F
  */
 public class ActivityMods extends ActivityWithToolbar
 {
-    private static final boolean ENABLE_REPO_DOWNLOADING = false;
-    private static final String REPO_URL = "http://download.vcmi.eu/mods/repository/repository.json";
+    private static final boolean ENABLE_REPO_DOWNLOADING = true;
+    private static final String REPO_URL = "https://raw.githubusercontent.com/vcmi/vcmi-mods-repository/develop/github.json";
     private VCMIModsRepo mRepo;
     private RecyclerView mRecycler;
 
@@ -70,15 +70,18 @@ public class ActivityMods extends ActivityWithToolbar
         mRecycler.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecycler.setVisibility(View.GONE);
 
+        mModsAdapter = new ModsAdapter(new OnAdapterItemAction());
+        mRecycler.setAdapter(mModsAdapter);
+
         new AsyncLoadLocalMods().execute((Void) null);
     }
 
     private void loadLocalModData() throws IOException, JSONException
     {
-        final String dataRoot = getDataDir() + "/" + Const.VCMI_DATA_ROOT_FOLDER_NAME;
+        final File dataRoot = Storage.getVcmiDataDir(this);
         final String internalDataRoot = getFilesDir() + "/" + Const.VCMI_DATA_ROOT_FOLDER_NAME;
 
-        final File modsRoot = new File(dataRoot + "/Mods");
+        final File modsRoot = new File(dataRoot,"/Mods");
         final File internalModsRoot = new File(internalDataRoot + "/Mods");
         if (!modsRoot.exists() && !internalModsRoot.exists())
         {
@@ -98,8 +101,7 @@ public class ActivityMods extends ActivityWithToolbar
         }
         mModContainer = VCMIModContainer.createContainer(topLevelModsFolders);
 
-        final String configPath = dataRoot + "/config/modSettings.json";
-        final File modConfigFile = new File(configPath);
+        final File modConfigFile = new File(dataRoot, "config/modSettings.json");
         if (!modConfigFile.exists())
         {
             Log.w(this, "We don't have mods config");
@@ -129,6 +131,7 @@ public class ActivityMods extends ActivityWithToolbar
             Log.i(this, "Should download repo now...");
             if (ENABLE_REPO_DOWNLOADING)
             {
+                mProgress.setVisibility(View.VISIBLE);
                 mRepo.init(REPO_URL, new OnModsRepoInitialized()); // disabled because the json is broken anyway
             }
             else
@@ -150,16 +153,21 @@ public class ActivityMods extends ActivityWithToolbar
 
     private void saveModSettingsToFile()
     {
-        mModContainer.saveToFile(new File(getDataDir(), Const.VCMI_DATA_ROOT_FOLDER_NAME + "/config/modSettings.json"));
+        mModContainer.saveToFile(
+                new File(
+                        Storage.getVcmiDataDir(this),
+                        "config/modSettings.json"));
     }
 
     private class OnModsRepoInitialized implements VCMIModsRepo.IOnModsRepoDownloaded
     {
         @Override
-        public void onSuccess()
+        public void onSuccess(ServerResponse<List<VCMIMod>> response)
         {
             Log.i(this, "Initialized mods repo");
-            // TODO update dataset
+            mModContainer.updateFromRepo(response.mContent);
+            mModsAdapter.updateModsList(mModContainer.submods());
+            mProgress.setVisibility(View.GONE);
         }
 
         @Override
@@ -206,13 +214,7 @@ public class ActivityMods extends ActivityWithToolbar
             {
                 mProgress.setVisibility(View.GONE);
                 mRecycler.setVisibility(View.VISIBLE);
-                mModsAdapter = new ModsAdapter(
-                    mModContainer.submods()
-                        .stream()
-                        .map(ModsAdapter.ModItem::new)
-                        .collect(Collectors.toList()),
-                    new OnAdapterItemAction());
-                mRecycler.setAdapter(mModsAdapter);
+                mModsAdapter.updateModsList(mModContainer.submods());
             }
         }
     }
@@ -242,14 +244,58 @@ public class ActivityMods extends ActivityWithToolbar
         public void onDownloadPressed(final ModsAdapter.ModItem mod, final RecyclerView.ViewHolder vh)
         {
             Log.i(this, "Mod download pressed: " + mod);
+            mModsAdapter.downloadProgress(mod, "0%");
+            installModAsync(mod);
         }
 
         @Override
         public void onTogglePressed(final ModsAdapter.ModItem item, final ModBaseViewHolder holder)
         {
-            item.mMod.mActive = !item.mMod.mActive;
-            mModsAdapter.notifyItemChanged(holder.getAdapterPosition());
-            saveModSettingsToFile();
+            if(item.mMod.mInstalled)
+            {
+                item.mMod.mActive = !item.mMod.mActive;
+                mModsAdapter.notifyItemChanged(holder.getAdapterPosition());
+                saveModSettingsToFile();
+            }
+        }
+    }
+
+    private void installModAsync(ModsAdapter.ModItem mod){
+        File dataDir = Storage.getVcmiDataDir(this);
+
+        InstallModAsync modInstaller = new InstallModAsync(
+            new File(dataDir, "Mods"),
+            this,
+            new InstallModCallback(mod)
+        );
+
+        modInstaller.execute(mod.mMod.mArchiveUrl);
+    }
+
+    public class InstallModCallback implements InstallModAsync.PostDownload
+    {
+        private ModsAdapter.ModItem mod;
+
+        public InstallModCallback(ModsAdapter.ModItem mod)
+        {
+            this.mod = mod;
+        }
+
+        @Override
+        public void downloadDone(Boolean succeed, File modFolder)
+        {
+            if(succeed){
+                mModsAdapter.modInstalled(mod, modFolder);
+            }
+        }
+
+        @Override
+        public void downloadProgress(String... progress)
+        {
+            if(progress.length > 0)
+            {
+                mModsAdapter.downloadProgress(mod, progress[0]);
+            }
         }
     }
 }

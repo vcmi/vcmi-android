@@ -66,6 +66,7 @@ public class AsyncLauncherInitialization extends AsyncTask<Void, Void, AsyncLaun
         Log.i(this, "Using " + vcmiDir.getAbsolutePath() + " as root vcmi dir");
 
         if(!vcmiInternalDir.exists()) vcmiInternalDir.mkdir();
+        if(!vcmiDir.exists()) vcmiDir.mkdir();
 
         if (!Storage.testH3DataFolder(ctx))
         {

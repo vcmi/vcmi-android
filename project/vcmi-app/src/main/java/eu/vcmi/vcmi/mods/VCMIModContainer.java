@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import eu.vcmi.vcmi.BuildConfig;
 import eu.vcmi.vcmi.util.FileUtil;
@@ -37,6 +38,22 @@ public class VCMIModContainer extends VCMIMod
         if (coreStatus != null)
         {
             mCoreStatus = VCMIMod.buildFromConfigJson("core", coreStatus);
+        }
+    }
+
+    public void updateFromRepo(List<VCMIMod> repoMods){
+        for (VCMIMod mod : repoMods)
+        {
+            final String normalizedModId = mod.mId.toLowerCase(Locale.US);
+
+            if(mSubmods.containsKey(normalizedModId)){
+                VCMIMod existing = mSubmods.get(normalizedModId);
+
+                existing.updateFrom(mod);
+            }
+            else{
+                mSubmods.put(normalizedModId, mod);
+            }
         }
     }
 
