@@ -34,6 +34,7 @@ public class VCMIMod
     public String mModType;
     public String mArchiveUrl;
     public long mSize;
+    public File installationFolder;
 
     // config values
     public boolean mActive;
@@ -43,6 +44,7 @@ public class VCMIMod
 
     // internal
     public boolean mLoadedCorrectly;
+    public boolean mSystem;
 
     protected VCMIMod()
     {
@@ -85,6 +87,8 @@ public class VCMIMod
         mod.mLoadedCorrectly = true;
         mod.mActive = true; // active by default
         mod.mInstalled = true;
+        mod.installationFolder = modPath;
+
         return mod;
     }
 
@@ -113,6 +117,11 @@ public class VCMIMod
 
     public void updateFromConfigJson(final String id, final JSONObject obj) throws JSONException
     {
+        if(mSystem)
+        {
+            return;
+        }
+
         mId = id.toLowerCase(Locale.US);
         mActive = obj.optBoolean("active");
         mValidated = obj.optBoolean("validated");
@@ -161,6 +170,7 @@ public class VCMIMod
             mAuthor = modInfoContent.optString("author");
             mContact = modInfoContent.optString("contact");
             mModType = modInfoContent.optString("modType");
+            mSystem = mId.equals("vcmi");
 
             final File submodsDir = new File(modPath, "Mods");
             if (submodsDir.exists())

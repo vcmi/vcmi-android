@@ -38,7 +38,6 @@ public class VCMIModsRepo
 
     private class AsyncLoadRepo extends AsyncRequest<List<VCMIMod>>
     {
-
         @Override
         protected ServerResponse<List<VCMIMod>> doInBackground(final String... params)
         {

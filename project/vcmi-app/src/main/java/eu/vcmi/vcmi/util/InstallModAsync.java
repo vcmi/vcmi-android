@@ -24,7 +24,6 @@ public class InstallModAsync
     private PostDownload callback;
     private File downloadLocation;
     private File extractLocation;
-    private File modResultFolder;
     private Context context;
     private int totalFiles;
     private int unpackedFiles;
@@ -43,7 +42,11 @@ public class InstallModAsync
 
         try
         {
-            this.downloadLocation = File.createTempFile("tmp", ".zip", extractLocation);
+            File modsFolder = extractLocation.getParentFile();
+
+            if (!modsFolder.exists()) modsFolder.mkdir();
+
+            this.downloadLocation = File.createTempFile("tmp", ".zip", modsFolder);
 
             URL url = new URL(args[0]);
             URLConnection connection = url.openConnection();
@@ -91,10 +94,11 @@ public class InstallModAsync
             output.close();
             input.close();
 
-            File tempDir = File.createTempFile("tmp", "", extractLocation);
+            File tempDir = File.createTempFile("tmp", "", modsFolder);
 
             tempDir.delete();
             tempDir.mkdir();
+
             if (!extractLocation.exists()) extractLocation.mkdir();
 
             try
@@ -129,7 +133,7 @@ public class InstallModAsync
     @Override
     protected void onPostExecute(Boolean result)
     {
-        if (callback != null) callback.downloadDone(result, modResultFolder);
+        if (callback != null) callback.downloadDone(result, extractLocation);
     }
 
     private boolean moveModToExtractLocation(File tempDir)
@@ -151,11 +155,10 @@ public class InstallModAsync
         if (modJson != null && modJson.length > 0)
         {
             File modFolder = modJson[0].getParentFile();
-            modResultFolder = new File(extractLocation, modFolder.getName());
 
-            if (!modFolder.renameTo(modResultFolder))
+            if (!modFolder.renameTo(extractLocation))
             {
-                FileUtil.copyDir(modFolder, modResultFolder);
+                FileUtil.copyDir(modFolder, extractLocation);
             }
 
             return true;

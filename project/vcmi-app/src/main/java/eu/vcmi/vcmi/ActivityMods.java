@@ -1,10 +1,13 @@
 package eu.vcmi.vcmi;
 
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import com.google.android.material.snackbar.Snackbar;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import eu.vcmi.vcmi.content.ModBaseViewHolder;
 import eu.vcmi.vcmi.content.ModsAdapter;
@@ -251,20 +255,46 @@ public class ActivityMods extends ActivityWithToolbar
         @Override
         public void onTogglePressed(final ModsAdapter.ModItem item, final ModBaseViewHolder holder)
         {
-            if(item.mMod.mInstalled)
+            if(!item.mMod.mSystem && item.mMod.mInstalled)
             {
                 item.mMod.mActive = !item.mMod.mActive;
                 mModsAdapter.notifyItemChanged(holder.getAdapterPosition());
                 saveModSettingsToFile();
             }
         }
+
+        @Override
+        public void onUninstall(ModsAdapter.ModItem item, ModBaseViewHolder holder)
+        {
+            File installationFolder = item.mMod.installationFolder;
+            ActivityMods activity = ActivityMods.this;
+
+            if(installationFolder != null){
+                new AlertDialog.Builder(activity)
+                    .setTitle(activity.getString(R.string.mods_removal_title, item.mMod.mName))
+                    .setMessage(activity.getString(R.string.mods_removal_confirmation, item.mMod.mName))
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setNegativeButton(android.R.string.no, null)
+                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) ->
+                    {
+                        FileUtil.clearDirectory(installationFolder);
+                        installationFolder.delete();
+
+                        mModsAdapter.modRemoved(item);
+                    })
+                    .show();
+            }
+        }
     }
 
     private void installModAsync(ModsAdapter.ModItem mod){
         File dataDir = Storage.getVcmiDataDir(this);
+        File modFolder = new File(
+                new File(dataDir, "Mods"),
+                mod.mMod.mId.toLowerCase(Locale.US));
 
         InstallModAsync modInstaller = new InstallModAsync(
-            new File(dataDir, "Mods"),
+            modFolder,
             this,
             new InstallModCallback(mod)
         );

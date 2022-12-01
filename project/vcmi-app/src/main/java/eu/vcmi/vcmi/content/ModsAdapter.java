@@ -77,19 +77,30 @@ public class ModsAdapter extends RecyclerView.Adapter<ModBaseViewHolder>
 
                 modHolder.mDownloadBtn.setVisibility(View.GONE);
                 modHolder.mDownloadProgress.setVisibility(View.GONE);
+                modHolder.mUninstall.setVisibility(View.GONE);
 
-                if(item.mDownloadProgress != null)
+                if(!item.mMod.mSystem)
                 {
-                    modHolder.mDownloadProgress.setText(item.mDownloadProgress);
-                    modHolder.mDownloadProgress.setVisibility(View.VISIBLE);
-                }
-                else if(!item.mMod.mInstalled){
-                    modHolder.mDownloadBtn.setVisibility(View.VISIBLE);
+                    if (item.mDownloadProgress != null)
+                    {
+                        modHolder.mDownloadProgress.setText(item.mDownloadProgress);
+                        modHolder.mDownloadProgress.setVisibility(View.VISIBLE);
+                    }
+                    else if (!item.mMod.mInstalled)
+                    {
+                        modHolder.mDownloadBtn.setVisibility(View.VISIBLE);
+                    }
+                    else if (item.mMod.installationFolder != null)
+                    {
+                        modHolder.mUninstall.setVisibility(View.VISIBLE);
+                    }
+
+                    modHolder.itemView.setOnClickListener(v -> mItemListener.onItemPressed(item, holder));
+                    modHolder.mStatusIcon.setOnClickListener(v -> mItemListener.onTogglePressed(item, holder));
+                    modHolder.mDownloadBtn.setOnClickListener(v -> mItemListener.onDownloadPressed(item, holder));
+                    modHolder.mUninstall.setOnClickListener(v -> mItemListener.onUninstall(item, holder));
                 }
 
-                modHolder.itemView.setOnClickListener(v -> mItemListener.onItemPressed(item, holder));
-                modHolder.mStatusIcon.setOnClickListener(v -> mItemListener.onTogglePressed(item, holder));
-                modHolder.mDownloadBtn.setOnClickListener(v -> mItemListener.onDownloadPressed(item, holder));
                 break;
             case VIEWTYPE_FAILED_MOD:
                 holder.mModName.setText(ctx.getString(R.string.mods_failed_mod_loading, item.mMod.mName));
@@ -166,6 +177,7 @@ public class ModsAdapter extends RecyclerView.Adapter<ModBaseViewHolder>
             mod.mMod.mLoadedCorrectly = true;
             mod.mMod.mActive = true; // active by default
             mod.mMod.mInstalled = true;
+            mod.mMod.installationFolder = modFolder;
             mod.mDownloadProgress = null;
             notifyItemChanged(mDataset.indexOf(mod));
         } catch (Exception ex)
@@ -180,6 +192,23 @@ public class ModsAdapter extends RecyclerView.Adapter<ModBaseViewHolder>
         notifyItemChanged(mDataset.indexOf(mod));
     }
 
+    public void modRemoved(ModItem item)
+    {
+        int itemIndex = mDataset.indexOf(item);
+
+        if(item.mMod.mArchiveUrl != null && item.mMod.mArchiveUrl != "")
+        {
+            item.mMod.mInstalled = false;
+            item.mMod.installationFolder = null;
+
+            notifyItemChanged(itemIndex);
+        }
+        else{
+            mDataset.remove(item);
+            notifyItemRemoved(itemIndex);
+        }
+    }
+
     public interface IOnItemAction
     {
         void onItemPressed(final ModItem mod, final RecyclerView.ViewHolder vh);
@@ -187,6 +216,8 @@ public class ModsAdapter extends RecyclerView.Adapter<ModBaseViewHolder>
         void onDownloadPressed(final ModItem mod, final RecyclerView.ViewHolder vh);
 
         void onTogglePressed(ModItem item, ModBaseViewHolder holder);
+
+        void onUninstall(ModItem item, ModBaseViewHolder holder);
     }
 
     public static class ModItem
