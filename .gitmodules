@@ -1,7 +1,7 @@
 [submodule "ext/vcmi"]
 	path = ext/vcmi
 	url = https://github.com/vcmi/vcmi.git
-	branch = develop
+	branch = beta
 [submodule "ext/ff/ffmpeg"]
 	path = ext/ff/ffmpeg
 	url = https://git.ffmpeg.org/ffmpeg.git
