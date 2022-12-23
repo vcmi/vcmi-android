@@ -13,7 +13,7 @@
     <string name="launcher_btn_start_title">Start VCMI</string>
     <string name="launcher_btn_start_subtitle">Current VCMI version: %1$s</string>
     <string name="launcher_btn_mods_title">Mods</string>
-    <string name="launcher_btn_mods_subtitle">Currently not really functional</string>
+    <string name="launcher_btn_mods_subtitle">Install new factions, objects, extras</string>
     <string name="launcher_btn_cp_title">Codepage</string>
     <string name="launcher_btn_cp_subtitle_unknown">Currently: unknown</string>
     <string name="launcher_btn_cp_subtitle">Currently: %1$s</string>
@@ -48,6 +48,8 @@
 
     <string name="mods_title">Detected mods</string>
     <string name="mods_failed_mod_loading">Could not load the mod in \'%1$s\' folder</string>
+    <string name="mods_removal_title">Removing %1$s</string>
+    <string name="mods_removal_confirmation">Are you sure you want to remove %1$s</string>
 
     <string name="about_title">About application</string>
     <string name="about_version_app">App version: %1$s</string>

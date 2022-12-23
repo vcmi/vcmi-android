@@ -82,5 +82,20 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="@dimen/side_margin"
             android:src="@android:drawable/stat_sys_download" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/mods_adapter_item_btn_uninstall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/side_margin"
+            android:src="@android:drawable/ic_menu_delete" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/mods_adapter_item_install_progress"
+            android:padding="@dimen/side_margin" />
+
     </LinearLayout>
 </LinearLayout>

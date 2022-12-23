@@ -32,13 +32,12 @@ public class VCMIModsRepo
 
     public interface IOnModsRepoDownloaded
     {
-        void onSuccess();
+        void onSuccess(ServerResponse<List<VCMIMod>> response);
         void onError(final int code);
     }
 
     private class AsyncLoadRepo extends AsyncRequest<List<VCMIMod>>
     {
-
         @Override
         protected ServerResponse<List<VCMIMod>> doInBackground(final String... params)
         {
@@ -53,7 +52,25 @@ public class VCMIModsRepo
                     for (int i = 0; i < names.length(); ++i)
                     {
                         String name = names.getString(i);
-                        mods.add(VCMIMod.buildFromRepoJson(name, jsonContent.getJSONObject(name)));
+                        JSONObject modDownloadData = jsonContent.getJSONObject(name);
+
+                        if(modDownloadData.has("mod"))
+                        {
+                            String modFileAddress = modDownloadData.getString("mod");
+                            ServerResponse<List<VCMIMod>> modFile = sendRequest(modFileAddress);
+
+                            if (!modFile.isValid())
+                            {
+                                continue;
+                            }
+
+                            JSONObject modJson = new JSONObject(modFile.mRawContent);
+                            mods.add(VCMIMod.buildFromRepoJson(name, modJson, modDownloadData));
+                        }
+                        else
+                        {
+                            mods.add(VCMIMod.buildFromRepoJson(name, modDownloadData, modDownloadData));
+                        }
                     }
                     serverResponse.mContent = mods;
                 }
@@ -73,7 +90,7 @@ public class VCMIModsRepo
             {
                 mModsList.clear();
                 mModsList.addAll(response.mContent);
-                mCallback.onSuccess();
+                mCallback.onSuccess(response);
             }
             else
             {

@@ -28,9 +28,4 @@ public class Storage
     public static String getH3DataFolder(Context context){
         return getVcmiDataDir(context).getAbsolutePath();
     }
-
-    private static File getStorageSettingsFile(Context context)
-    {
-        return new File(context.getFilesDir(),"storage.config");
-    }
 }

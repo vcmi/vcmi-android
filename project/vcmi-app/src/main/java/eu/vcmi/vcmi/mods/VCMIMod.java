@@ -34,21 +34,26 @@ public class VCMIMod
     public String mModType;
     public String mArchiveUrl;
     public long mSize;
+    public File installationFolder;
 
     // config values
     public boolean mActive;
+    public boolean mInstalled;
     public boolean mValidated;
     public String mChecksum;
 
     // internal
     public boolean mLoadedCorrectly;
+    public boolean mSystem;
 
     protected VCMIMod()
     {
         mSubmods = new HashMap<>();
     }
 
-    public static VCMIMod buildFromRepoJson(final String id, final JSONObject obj)
+    public static VCMIMod buildFromRepoJson(final String id,
+                                            final JSONObject obj,
+                                            JSONObject modDownloadData)
     {
         final VCMIMod mod = new VCMIMod();
         mod.mId = id.toLowerCase(Locale.US);
@@ -58,7 +63,7 @@ public class VCMIMod
         mod.mAuthor = obj.optString("author");
         mod.mContact = obj.optString("contact");
         mod.mModType = obj.optString("modType");
-        mod.mArchiveUrl = obj.optString("download");
+        mod.mArchiveUrl = modDownloadData.optString("download");
         mod.mSize = obj.optLong("size");
         mod.mLoadedCorrectly = true;
         return mod;
@@ -68,6 +73,7 @@ public class VCMIMod
     {
         final VCMIMod mod = new VCMIMod();
         mod.updateFromConfigJson(id, obj);
+        mod.mInstalled = true;
         return mod;
     }
 
@@ -80,6 +86,9 @@ public class VCMIMod
         }
         mod.mLoadedCorrectly = true;
         mod.mActive = true; // active by default
+        mod.mInstalled = true;
+        mod.installationFolder = modPath;
+
         return mod;
     }
 
@@ -108,6 +117,11 @@ public class VCMIMod
 
     public void updateFromConfigJson(final String id, final JSONObject obj) throws JSONException
     {
+        if(mSystem)
+        {
+            return;
+        }
+
         mId = id.toLowerCase(Locale.US);
         mActive = obj.optBoolean("active");
         mValidated = obj.optBoolean("validated");
@@ -156,6 +170,7 @@ public class VCMIMod
             mAuthor = modInfoContent.optString("author");
             mContact = modInfoContent.optString("contact");
             mModType = modInfoContent.optString("modType");
+            mSystem = mId.equals("vcmi");
 
             final File submodsDir = new File(modPath, "Mods");
             if (submodsDir.exists())
@@ -219,5 +234,13 @@ public class VCMIMod
         final ArrayList<VCMIMod> ret = new ArrayList<>();
         ret.addAll(mSubmods.values());
         return ret;
+    }
+
+    protected void updateFrom(VCMIMod other)
+    {
+        this.mModType = other.mModType;
+        this.mAuthor = other.mAuthor;
+        this.mDesc = other.mDesc;
+        this.mArchiveUrl = other.mArchiveUrl;
     }
 }

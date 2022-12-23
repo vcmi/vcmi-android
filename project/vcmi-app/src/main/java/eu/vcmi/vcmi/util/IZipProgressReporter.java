@@ -4,5 +4,5 @@ import java.io.File;
 
 public interface IZipProgressReporter
 {
-    void onPacking(File newFile);
+    void onUnpacked(File newFile);
 }

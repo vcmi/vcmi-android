@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import eu.vcmi.vcmi.Const;
@@ -113,6 +114,27 @@ public class FileUtil
         return true;
     }
 
+    public static void copyDir(final File srcFile, final File dstFile)
+    {
+        File[] files = srcFile.listFiles();
+
+        if(!dstFile.exists()) dstFile.mkdir();
+
+        if(files == null)
+            return;
+
+        for (File child : files){
+            File childTarget = new File(dstFile, child.getName());
+
+            if(child.isDirectory()){
+                copyDir(child, childTarget);
+            }
+            else{
+                copyFile(child, childTarget);
+            }
+        }
+    }
+
     public static boolean copyFile(final File srcFile, final File dstFile)
     {
         if (!srcFile.exists())
@@ -175,13 +197,21 @@ public class FileUtil
         }
     }
 
-    public static boolean unpackZipFile(final File inputFile, final File destDir)
+    public static boolean unpackZipFile(
+            final File inputFile,
+            final File destDir,
+            IZipProgressReporter progressReporter)
     {
         try
         {
             final InputStream inputStream = new FileInputStream(inputFile);
-            final boolean success = unpackZipFile(inputStream, destDir, null);
+            final boolean success = unpackZipFile(
+                    inputStream,
+                    destDir,
+                    progressReporter);
+
             inputStream.close();
+
             return success;
         }
         catch (final Exception e)
@@ -189,6 +219,33 @@ public class FileUtil
             Log.e("Couldn't extract file to " + destDir, e);
             return false;
         }
+    }
+
+    public static int countFilesInZip(final File zipFile)
+    {
+        int totalEntries = 0;
+
+        try
+        {
+            final InputStream inputStream = new FileInputStream(zipFile);
+            ZipInputStream is = new ZipInputStream(inputStream);
+            ZipEntry zipEntry;
+
+            while ((zipEntry = is.getNextEntry()) != null)
+            {
+                totalEntries++;
+            }
+
+            is.closeEntry();
+            is.close();
+            inputStream.close();
+        }
+        catch (final Exception e)
+        {
+            Log.e("Couldn't count items in zip", e);
+        }
+
+        return totalEntries;
     }
 
     public static boolean unpackZipFile(
@@ -200,17 +257,14 @@ public class FileUtil
         {
             int unpackedEntries = 0;
             final byte[] buffer = new byte[BUFFER_SIZE];
-            final ZipInputStream is = new ZipInputStream(inputStream);
+
+            ZipInputStream is = new ZipInputStream(inputStream);
             ZipEntry zipEntry;
+
             while ((zipEntry = is.getNextEntry()) != null)
             {
                 final String fileName = zipEntry.getName();
                 final File newFile = new File(destDir, fileName);
-
-                if(progressReporter != null)
-                {
-                    progressReporter.onPacking(newFile);
-                }
 
                 if (newFile.exists())
                 {
@@ -246,6 +300,11 @@ public class FileUtil
                 fos.flush();
                 fos.close();
                 ++unpackedEntries;
+
+                if(progressReporter != null)
+                {
+                    progressReporter.onUnpacked(newFile);
+                }
             }
             Log.d("Unpacked data (" + unpackedEntries + " entries)");
 
