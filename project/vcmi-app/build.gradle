@@ -10,7 +10,7 @@ android {
 		minSdk 21
 		targetSdk 31
 		versionCode 1
-		versionName "0.99"
+		versionName "1.1"
 		setProperty("archivesBaseName", "vcmi")
 
 		externalNativeBuild {

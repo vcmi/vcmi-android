@@ -51,25 +51,32 @@ public class VCMIModsRepo
                     final JSONArray names = jsonContent.names();
                     for (int i = 0; i < names.length(); ++i)
                     {
-                        String name = names.getString(i);
-                        JSONObject modDownloadData = jsonContent.getJSONObject(name);
-
-                        if(modDownloadData.has("mod"))
+                        try
                         {
-                            String modFileAddress = modDownloadData.getString("mod");
-                            ServerResponse<List<VCMIMod>> modFile = sendRequest(modFileAddress);
+                            String name = names.getString(i);
+                            JSONObject modDownloadData = jsonContent.getJSONObject(name);
 
-                            if (!modFile.isValid())
+                            if(modDownloadData.has("mod"))
                             {
-                                continue;
-                            }
+                                String modFileAddress = modDownloadData.getString("mod");
+                                ServerResponse<List<VCMIMod>> modFile = sendRequest(modFileAddress);
 
-                            JSONObject modJson = new JSONObject(modFile.mRawContent);
-                            mods.add(VCMIMod.buildFromRepoJson(name, modJson, modDownloadData));
+                                if (!modFile.isValid())
+                                {
+                                    continue;
+                                }
+
+                                JSONObject modJson = new JSONObject(modFile.mRawContent);
+                                mods.add(VCMIMod.buildFromRepoJson(name, modJson, modDownloadData));
+                            }
+                            else
+                            {
+                                mods.add(VCMIMod.buildFromRepoJson(name, modDownloadData, modDownloadData));
+                            }
                         }
-                        else
+                        catch (JSONException e)
                         {
-                            mods.add(VCMIMod.buildFromRepoJson(name, modDownloadData, modDownloadData));
+                            Log.e(this, "Could not parse the response as json", e);
                         }
                     }
                     serverResponse.mContent = mods;
