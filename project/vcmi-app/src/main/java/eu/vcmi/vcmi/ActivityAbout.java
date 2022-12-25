@@ -39,7 +39,7 @@ public class ActivityAbout extends ActivityWithToolbar
         initControlUrl(R.id.about_link_repo_launcher, R.string.about_links_repo_launcher, R.string.url_launcher_repo, this::onUrlPressed);
         initControlBtn(R.id.about_btn_authors, this::onBtnAuthorsPressed);
         initControlBtn(R.id.about_btn_libs, this::onBtnLibsPressed);
-        initControlBtn(R.id.about_btn_privacy, this::onBtnPrivacyPressed);
+        initControlUrl(R.id.about_btn_privacy, R.string.about_btn_privacy, R.string.url_launcher_privacy, this::onUrlPressed);
     }
 
     private void initControlBtn(final int viewId, final View.OnClickListener callback)
