@@ -10,13 +10,13 @@
     <string name="launcher_btn_start_subtitle">Aktuelle VCMI-Version: %1$s</string>
     <string name="launcher_btn_mods_title">Mods</string>
     <string name="launcher_btn_mods_subtitle">Neue Burgen, Kreaturen, Objekte und Erweiterungen hinzufügen</string>
-    <string name="launcher_btn_cp_title">Codepage</string>
+    <string name="launcher_btn_cp_title">Zeichensatz</string>
     <string name="launcher_btn_cp_subtitle_unknown">Aktuell: unbekannt</string>
     <string name="launcher_btn_cp_subtitle">Aktuell: %1$s</string>
     <string name="launcher_btn_pointermode_title">Zeigermodus ändern</string>
     <string name="launcher_btn_pointermode_subtitle">Aktuell: %1$s</string>
     <string name="launcher_btn_pointermulti_subtitle">Aktuell: %1$s</string>
-    <string name="launcher_version">Aktuelle Version des Launchers: %1$s</string>
+    <string name="launcher_version">Aktuelle Version des Starters: %1$s</string>
     <string name="launcher_error_vcmi_data_root_created">VCMI hat den Ordner \'%1$s\' (in %2$s) erstellt. Legen Sie Ihre H3-Datendateien dort ab (so dass Sie einen Ordner %1$s/Data und %1$s/Mp3 usw. haben) und starten Sie die Anwendung neu.</string>
     <string name="launcher_error_h3_data_missing">Der Datenordner in \'%1$s\' konnte nicht gefunden werden. Legen Sie Ihre H3-Datendateien dort ab (so dass Sie einen Ordner %1$s/Data und %1$s/Mp3 usw. haben) und starten Sie die Anwendung neu.</string>
     <string name="launcher_btn_pointermulti_title">Multiplikator der relativen Zeigergeschwindigkeit</string>
@@ -50,10 +50,10 @@
     <string name="about_section_legal">Rechtliches</string>
     <string name="about_links_main">Website: %1$s</string>
     <string name="about_links_repo">Projekt-Repository: %1$s</string>
-    <string name="about_links_repo_launcher">Launcher-Repository: %1$s</string>
+    <string name="about_links_repo_launcher">Starter-Repository: %1$s</string>
     <string name="about_btn_authors">Autoren</string>
     <string name="about_btn_libs">Bibliotheken von Drittanbietern</string>
     <string name="about_error_opening_url">Die Seite kann nicht geöffnet werden (wahrscheinlich konnte kein Browser gefunden werden)</string>
     <string name="dialog_authors_vcmi">VCMI-Autoren</string>
-    <string name="dialog_authors_launcher">Autoren des Launchers</string>
+    <string name="dialog_authors_launcher">Autoren des Starters</string>
 </resources>
