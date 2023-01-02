@@ -1,6 +1,6 @@
 /*
-  SDL_mixer:  An audio mixer library based on the SDL library
-  Copyright (C) 1997-2016 Sam Lantinga <slouken@libsdl.org>
+  Simple DirectMedia Layer
+  Copyright (C) 1997-2022 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -19,42 +19,45 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 
-/* $Id$ */
+/**
+ *  \file SDL_test_memory.h
+ *
+ *  Include file for SDL test framework.
+ *
+ *  This code is a part of the SDL2_test library, not the main SDL library.
+ */
 
-#ifndef _INCLUDE_EFFECTS_INTERNAL_H_
-#define _INCLUDE_EFFECTS_INTERNAL_H_
+#ifndef SDL_test_memory_h_
+#define SDL_test_memory_h_
 
-#ifndef __MIX_INTERNAL_EFFECT__
-#error You should not include this file or use these functions.
-#endif
-
-#include "SDL_mixer.h"
-
+#include "begin_code.h"
 /* Set up for C function definitions, even when using C++ */
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-extern int _Mix_effects_max_speed;
-extern void *_Eff_volume_table;
-void *_Eff_build_volume_table_u8(void);
-void *_Eff_build_volume_table_s8(void);
 
-void _Mix_InitEffects(void);
-void _Mix_DeinitEffects(void);
-void _Eff_PositionDeinit(void);
+/**
+ * \brief Start tracking SDL memory allocations
+ * 
+ * \note This should be called before any other SDL functions for complete tracking coverage
+ */
+int SDLTest_TrackAllocations(void);
 
-int _Mix_RegisterEffect_locked(int channel, Mix_EffectFunc_t f,
-                               Mix_EffectDone_t d, void *arg);
-int _Mix_UnregisterEffect_locked(int channel, Mix_EffectFunc_t f);
-int _Mix_UnregisterAllEffects_locked(int channel);
+/**
+ * \brief Print a log of any outstanding allocations
+ *
+ * \note This can be called after SDL_Quit()
+ */
+void SDLTest_LogAllocations(void);
 
 
-/* Set up for C function definitions, even when using C++ */
+/* Ends C function definitions when using C++ */
 #ifdef __cplusplus
 }
 #endif
+#include "close_code.h"
 
+#endif /* SDL_test_memory_h_ */
 
-#endif
-
+/* vi: set ts=4 sw=4 expandtab: */
