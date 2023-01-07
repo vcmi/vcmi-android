@@ -1,6 +1,11 @@
 package eu.vcmi.vcmi.util;
 
+import android.content.Context;
 import android.os.Build;
+
+import org.libsdl.app.SDL;
+
+import eu.vcmi.vcmi.NativeMethods;
 
 /**
  * @author F
@@ -12,7 +17,7 @@ public final class LibsLoader
         if (!onlyForOldApis || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
         {
             Log.v("Loading native lib: " + libName);
-            System.loadLibrary(libName);
+            SDL.loadLibrary(libName);
         }
     }
 
@@ -27,7 +32,6 @@ public final class LibsLoader
         loadLib("boost-program-options", true);
         loadLib("boost-thread", true);
         loadLib("SDL2", false);
-        loadLib("smpeg2", true);
         loadLib("x264", true);
         loadLib("avutil", true);
         loadLib("swscale", true);
@@ -45,10 +49,13 @@ public final class LibsLoader
         loadLib("SDL2_ttf", false);
     }
 
-    public static void loadClientLibs()
+    public static void loadClientLibs(Context ctx)
     {
         loadCommon();
         loadLib("vcmi-client", false);
+        SDL.setContext(ctx);
+        NativeMethods.clientSetupJNI();
+        NativeMethods.initClassloader();
     }
 
     public static void loadServerLibs()
