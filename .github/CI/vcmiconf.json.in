@@ -2,7 +2,9 @@
 	"bash" :
 	{
 		"projectRoot" : "$PROJECT_ROOT",
-		"ndkRoot" : "$NDK_ROOT"
+		"ndkRoot" : "$NDK_ROOT",
+		"sdkRoot" : "$SDK_ROOT",
+		"extOutput" : "$PROJECT_ROOT/ext-output"
 	},
 	"projectRoot" : "$PROJECT_ROOT",
 	"ndkRoot" : "$NDK_ROOT",

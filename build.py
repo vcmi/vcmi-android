@@ -74,7 +74,7 @@ def buildSDL():
 	#moveSDLIncludes()
 	
 def buildFFMPEG():
-	subprocess.call(["bash", conf["bash"]["projectRoot"] + "/ext/ff/all.sh", conf["bash"]["ndkRoot"], conf["bash"]["extOutput"]])
+	subprocess.call(["bash", conf["bash"]["projectRoot"] + "/ext/ff/builder/ffmpeg-android-maker.sh", "--source-git-branch=release/5.1", "--binutils=llvm", "-x264", "-abis=armeabi-v7a,arm64-v8a,x86,x86_64"])
 	
 def buildCMakeExternals():	
 	os.chdir("project")

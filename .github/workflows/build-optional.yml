@@ -28,6 +28,7 @@ jobs:
 
     - name: Dependencies
       run: |
+        sudo apt-get install nasm
         wget -O ./sdl.tar.gz https://github.com/libsdl-org/SDL/releases/download/release-2.26.1/SDL2-2.26.1.tar.gz
         tar xzvf sdl.tar.gz -C ./ext/SDL2/core/ > /dev/null
         mv ./ext/SDL2/core/SDL* ./ext/SDL2/core/code
@@ -38,29 +39,24 @@ jobs:
         mkdir -p ext/boost/
         tar xzvf boost.tar.gz -C ./ext/boost/ >/dev/null
 
-#    - name: Build Number
-#      run: |
-#        source '${{github.workspace}}/CI/get_package_name.sh'
-#        echo VCMI_PACKAGE_FILE_NAME="$VCMI_PACKAGE_FILE_NAME" >> $GITHUB_ENV
-#        echo VCMI_PACKAGE_NAME_SUFFIX="$VCMI_PACKAGE_NAME_SUFFIX" >> $GITHUB_ENV
-#      env:
-#        PULL_REQUEST: ${{ github.event.pull_request.number }}
-
     - name: Build
       run: |
         chmod +x ./project/gradlew
-        chmod +x ./ext/ff/ffmpeg/configure
-        chmod +x ./ext/ff/x264/configure
+        
+        export ANDROID_SDK_HOME="$ANDROID_SDK_ROOT"
+        
         python ./.github/CI/create_conf.py
         python ./update_internal_assets.py
         python ./build.py fixpaths
         python ./build.py build-optional
         
     - name: Artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ext-output
-        path: ${{github.workspace}}/libs/*
+        path: |
+          ${{github.workspace}}/libs/*
+          ${{github.workspace}}/ext/ff/builder/output/*
         
     - uses: act10ns/slack@v1
       with:
