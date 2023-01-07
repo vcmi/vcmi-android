@@ -69,9 +69,9 @@ def buildIconv():
 def buildSDL():
 	callBuild("ext/SDL2/core", "SDL2", "", False)
 	callBuild("ext/SDL2/SDL2-mixer", "SDL2_mixer", "", False)
-	callBuild("ext/SDL2/SDL2-image", "SDL2_image", "", False)
-	callBuild("ext/SDL2/SDL2-ttf", "SDL2_ttf", "", False)
-	moveSDLIncludes()
+	#callBuild("ext/SDL2/SDL2-image", "SDL2_image", "", False)
+	#callBuild("ext/SDL2/SDL2-ttf", "SDL2_ttf", "", False)
+	#moveSDLIncludes()
 	
 def buildFFMPEG():
 	subprocess.call(["bash", conf["bash"]["projectRoot"] + "/ext/ff/all.sh", conf["bash"]["ndkRoot"], conf["bash"]["extOutput"]])
@@ -89,8 +89,8 @@ def buildApp():
 	assertZero(os.system(cmd), cmd)
 	
 def buildAllOptional():
-	timed(buildIconv, "iconv")
-	timed(buildSDL, "sdl")
+	#timed(buildIconv, "iconv")
+	#timed(buildSDL, "sdl")
 	timed(buildFFMPEG, "ffmpeg")
 	
 def buildAllCmake():

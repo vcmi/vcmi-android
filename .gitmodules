@@ -11,9 +11,6 @@
 [submodule "ext/iconv/code"]
 	path = ext/iconv/code
 	url = https://github.com/ironsteel/iconv-android.git
-[submodule "ext/SDL2/core/code"]
-	path = ext/SDL2/core/code
-	url = https://github.com/Fayth/sdl2-for-vcmi-android.git
 [submodule "ext/oneTBB"]
 	path = ext/oneTBB
 	url = https://github.com/oneapi-src/oneTBB.git

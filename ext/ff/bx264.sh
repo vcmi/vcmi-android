@@ -10,7 +10,7 @@ TOOLCHAIN=$3
 EABISUFFIX=$4
 DISABLEASM=$5
 cd $FFDIR/x264
-./configure \
+sh ./configure \
 --prefix=./android/$ARCH \
 --enable-shared \
 --enable-pic \
