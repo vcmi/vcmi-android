@@ -69,9 +69,9 @@ def buildIconv():
 def buildSDL():
 	callBuild("ext/SDL2/core", "SDL2", "", False)
 	callBuild("ext/SDL2/SDL2-mixer", "SDL2_mixer", "", False)
-	#callBuild("ext/SDL2/SDL2-image", "SDL2_image", "", False)
-	#callBuild("ext/SDL2/SDL2-ttf", "SDL2_ttf", "", False)
-	#moveSDLIncludes()
+	callBuild("ext/SDL2/SDL2-image", "SDL2_image", "", False)
+	callBuild("ext/SDL2/SDL2-ttf", "SDL2_ttf", "", False)
+	moveSDLIncludes()
 	
 def buildFFMPEG():
 	subprocess.call(["bash", conf["bash"]["projectRoot"] + "/ext/ff/builder/ffmpeg-android-maker.sh", "--source-git-branch=release/5.1", "--binutils=llvm", "-x264", "-abis=armeabi-v7a,arm64-v8a,x86,x86_64"])
@@ -90,8 +90,8 @@ def buildApp():
 	
 def buildAllOptional():
 	#timed(buildIconv, "iconv")
-	#timed(buildSDL, "sdl")
-	timed(buildFFMPEG, "ffmpeg")
+	timed(buildSDL, "sdl")
+	#timed(buildFFMPEG, "ffmpeg")
 	
 def buildAllCmake():
 	timed(buildCMakeExternals, "cmake external libs")
