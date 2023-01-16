@@ -7,6 +7,8 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 
+import org.libsdl.app.SDL;
+
 import java.lang.ref.WeakReference;
 
 import eu.vcmi.vcmi.util.LibsLoader;
@@ -31,7 +33,7 @@ public class ServerService extends Service
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        NativeMethods.setupCtx(ServerService.this);
+        SDL.setContext(ServerService.this);
         LibsLoader.loadServerLibs();
         if (INTENT_ACTION_KILL_SERVER.equals(intent.getAction()))
         {

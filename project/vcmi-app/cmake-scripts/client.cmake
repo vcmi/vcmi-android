@@ -4,8 +4,6 @@ add_subdirectory(${VCMI_PATH_VCMI}/client ${VCMI_PATH_VCMI}/out/client)
 get_directory_property(LOCAL_CLIENT_SRCS DIRECTORY ${VCMI_PATH_VCMI}/client DEFINITION client_SRCS)
 prepend(VCMICLIENT_SRCS ${VCMI_PATH_VCMI}/client ${LOCAL_CLIENT_SRCS})
 
-set(CLIENT_ADDITIONAL_SRCS ${VCMI_ROOT}/project/vcmi-client/src/main/cpp/SDL_android_main.cpp)
-
 add_library(vcmiclient SHARED ${VCMICLIENT_SRCS} ${CLIENT_ADDITIONAL_SRCS})
 
 target_include_directories(vcmiclient PRIVATE ${VCMI_PATH_VCMI}/client)

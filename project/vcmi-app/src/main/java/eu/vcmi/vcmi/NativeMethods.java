@@ -9,6 +9,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 
+import org.libsdl.app.SDL;
 import org.libsdl.app.SDLActivity;
 
 import java.io.File;
@@ -21,7 +22,6 @@ import eu.vcmi.vcmi.util.Log;
  */
 public class NativeMethods
 {
-    private static WeakReference<Context> ctxRef;
     private static WeakReference<Messenger> serverMessengerRef;
 
     public NativeMethods()
@@ -29,6 +29,8 @@ public class NativeMethods
     }
 
     public static native void initClassloader();
+
+    public static native void clientSetupJNI();
 
     public static native void createServer();
 
@@ -38,11 +40,6 @@ public class NativeMethods
 
     public static native boolean tryToSaveTheGame();
 
-    public static void setupCtx(final Context ctx)
-    {
-        ctxRef = new WeakReference<>(ctx);
-    }
-
     public static void setupMsg(final Messenger msg)
     {
         serverMessengerRef = new WeakReference<>(msg);
@@ -51,7 +48,7 @@ public class NativeMethods
     @SuppressWarnings(Const.JNI_METHOD_SUPPRESS)
     public static String dataRoot()
     {
-        Context ctx = requireContext();
+        final Context ctx = SDL.getContext();
         String root = Storage.getVcmiDataDir(ctx).getAbsolutePath();
 
         Log.i("Accessing data root: " + root);
@@ -62,7 +59,7 @@ public class NativeMethods
     @SuppressWarnings(Const.JNI_METHOD_SUPPRESS)
     public static String internalDataRoot()
     {
-        Context ctx = requireContext();
+        final Context ctx = SDL.getContext();
         String root = new File(ctx.getFilesDir(), Const.VCMI_DATA_ROOT_FOLDER_NAME).getAbsolutePath();
         Log.i("Accessing internal data root: " + root);
         return root;
@@ -71,7 +68,7 @@ public class NativeMethods
     @SuppressWarnings(Const.JNI_METHOD_SUPPRESS)
     public static String nativePath()
     {
-        Context ctx = requireContext();
+        final Context ctx = SDL.getContext();
         Log.i("Accessing ndk path: " + ctx.getApplicationInfo().nativeLibraryDir);
         return ctx.getApplicationInfo().nativeLibraryDir;
     }
@@ -80,17 +77,19 @@ public class NativeMethods
     public static void startServer()
     {
         Log.i("Got server create request");
-        Context ctx = requireContext();
-        if (!(ctx instanceof SDLActivity))
+        final Context ctx = SDL.getContext();
+
+        if (!(ctx instanceof VcmiSDLActivity))
         {
             Log.e("Unexpected context... " + ctx);
             return;
         }
+
         Intent intent = new Intent(ctx, SDLActivity.class);
-        intent.setAction(SDLActivity.NATIVE_ACTION_CREATE_SERVER);
+        intent.setAction(VcmiSDLActivity.NATIVE_ACTION_CREATE_SERVER);
         // I probably do something incorrectly, but sending new intent to the activity "normally" breaks SDL events handling (probably detaches jnienv?)
         // so instead let's call onNewIntent directly, as out context SHOULD be SDLActivity anyway
-        ((SDLActivity) ctx).hackCallNewIntentDirectly(intent);
+        ((VcmiSDLActivity) ctx).hackCallNewIntentDirectly(intent);
 //        ctx.startActivity(intent);
     }
 
@@ -99,14 +98,14 @@ public class NativeMethods
     {
         Log.i("Got server close request");
 
-        Context ctx = requireContext();
+        final Context ctx = SDL.getContext();
         ctx.stopService(new Intent(ctx, ServerService.class));
 
         Messenger messenger = requireServerMessenger();
         try
         {
             // we need to actually inform client about killing the server, beacuse it needs to unbind service connection before server gets destroyed
-            messenger.send(Message.obtain(null, SDLActivity.SERVER_MESSAGE_SERVER_KILLED));
+            messenger.send(Message.obtain(null, VcmiSDLActivity.SERVER_MESSAGE_SERVER_KILLED));
         }
         catch (RemoteException e)
         {
@@ -122,7 +121,7 @@ public class NativeMethods
 
         try
         {
-            messenger.send(Message.obtain(null, SDLActivity.SERVER_MESSAGE_SERVER_READY));
+            messenger.send(Message.obtain(null, VcmiSDLActivity.SERVER_MESSAGE_SERVER_READY));
         }
         catch (RemoteException e)
         {
@@ -142,35 +141,14 @@ public class NativeMethods
         internalProgressDisplay(false);
     }
 
-    @SuppressWarnings(Const.JNI_METHOD_SUPPRESS)
-    public static void notifyTextInputChanged(final String textContext)
-    {
-        final Context ctx = requireContext();
-        if (!(ctx instanceof SDLActivity))
-        {
-            return;
-        }
-        ((Activity) ctx).runOnUiThread(() -> SDLActivity.notifyTextInputChanged(textContext));
-    }
-
     private static void internalProgressDisplay(final boolean show)
     {
-        final Context ctx = requireContext();
-        if (!(ctx instanceof SDLActivity))
+        final Context ctx = SDL.getContext();
+        if (!(ctx instanceof VcmiSDLActivity))
         {
             return;
         }
-        ((SDLActivity) ctx).runOnUiThread(() -> ((SDLActivity) ctx).displayProgress(show));
-    }
-
-    private static Context requireContext()
-    {
-        Context ctx = ctxRef.get();
-        if (ctx == null)
-        {
-            throw new RuntimeException("Broken context");
-        }
-        return ctx;
+        ((SDLActivity) ctx).runOnUiThread(() -> ((VcmiSDLActivity) ctx).displayProgress(show));
     }
 
     private static Messenger requireServerMessenger()

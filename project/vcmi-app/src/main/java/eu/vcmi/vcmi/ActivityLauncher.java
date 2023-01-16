@@ -36,7 +36,6 @@ import eu.vcmi.vcmi.util.FileUtil;
 import eu.vcmi.vcmi.util.Log;
 import eu.vcmi.vcmi.util.SharedPrefs;
 
-
 /**
  * @author F
  */
@@ -201,14 +200,10 @@ public class ActivityLauncher extends ActivityWithToolbar
         mCtrlStart.hide(); // start is initially hidden, until we confirm that everything is okay via AsyncLauncherInitialization
     }
 
-    private void openVcmiFolder()
-    {
-    }
-
     private void onLaunchGameBtnPressed()
     {
         saveConfig();
-        startActivity(new Intent(ActivityLauncher.this, SDLActivity.class));
+        startActivity(new Intent(ActivityLauncher.this, VcmiSDLActivity.class));
     }
 
     private void saveConfig()
