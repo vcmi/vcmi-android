@@ -33,7 +33,7 @@ jobs:
 
     - name: Dependencies
       run: |
-        wget https://dependencies.vcmi.download/android/ext-output.zip
+        wget https://github.com/vcmi/vcmi-android/releases/download/v.1.1/ext-output.zip
         unzip ext-output.zip
         wget -O ./boost.tar.gz https://boostorg.jfrog.io/artifactory/main/release/1.68.0/source/boost_1_68_0.tar.gz
         mkdir -p ext/boost/
