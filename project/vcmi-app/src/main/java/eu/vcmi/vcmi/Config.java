@@ -31,6 +31,8 @@ public class Config
     public int mVolumeSound;
     public int mVolumeMusic;
     private String adventureAi;
+    private double mPointerSpeedMultiplier;
+    private boolean mUseRelativePointer;
     private JSONObject mRawObject;
 
     private boolean mIsModified;
@@ -60,6 +62,16 @@ public class Config
         return null;
     }
 
+    private static double loadDouble(final JSONObject node, final String key, final double fallback)
+    {
+        if (node == null)
+        {
+            return fallback;
+        }
+
+        return node.optDouble(key, fallback);
+    }
+
     @SuppressWarnings("unchecked")
     private static <T> T loadEntry(final JSONObject node, final String key, final T fallback)
     {
@@ -80,8 +92,10 @@ public class Config
         config.mCodepage = loadEntry(general, "encoding", DEFAULT_CODEPAGE);
         config.mVolumeSound = loadEntry(general, "sound", DEFAULT_SOUND_VALUE);
         config.mVolumeMusic = loadEntry(general, "music", DEFAULT_MUSIC_VALUE);
-        config.mSwipeEnabled = loadEntry(general, "swipe", false);
+        config.mSwipeEnabled = loadEntry(general, "swipe", true);
         config.adventureAi = loadEntry(server, "playerAI", "VCAI");
+        config.mUseRelativePointer = loadEntry(general, "userRelativePointer", false);
+        config.mPointerSpeedMultiplier = loadDouble(general, "relativePointerSpeedMultiplier", 1.0);
 
         final JSONObject screenRes = accessScreenResNode(obj);
         config.mResolutionWidth = loadEntry(screenRes, "width", DEFAULT_SCREEN_RES_W);
@@ -120,6 +134,39 @@ public class Config
     {
         mVolumeMusic = i;
         mIsModified = true;
+    }
+
+    public void setAdventureAi(String ai)
+    {
+        adventureAi = ai;
+        mIsModified = true;
+    }
+
+    public String getAdventureAi()
+    {
+        return this.adventureAi == null ? "VCAI" : this.adventureAi;
+    }
+
+    public void setPointerSpeedMultiplier(float speedMultiplier)
+    {
+        mPointerSpeedMultiplier = speedMultiplier;
+        mIsModified = true;
+    }
+
+    public float getPointerSpeedMultiplier()
+    {
+        return (float)mPointerSpeedMultiplier;
+    }
+
+    public void setPointerMode(boolean isRelative)
+    {
+        mUseRelativePointer = isRelative;
+        mIsModified = true;
+    }
+
+    public boolean getPointerModeIsRelative()
+    {
+        return mUseRelativePointer;
     }
 
     public void save(final File location) throws IOException, JSONException
@@ -167,6 +214,8 @@ public class Config
         general.put("swipe", mSwipeEnabled);
         general.put("music", mVolumeMusic);
         general.put("sound", mVolumeSound);
+        general.put("userRelativePointer", mUseRelativePointer);
+        general.put("relativePointerSpeedMultiplier", mPointerSpeedMultiplier);
         root.put("general", general);
 
         if(this.adventureAi != null)
@@ -184,16 +233,5 @@ public class Config
         }
 
         return root.toString();
-    }
-
-    public void setAdventureAi(String ai)
-    {
-        adventureAi = ai;
-        mIsModified = true;
-    }
-
-    public String getAdventureAi()
-    {
-        return this.adventureAi == null ? "VCAI" : this.adventureAi;
     }
 }
