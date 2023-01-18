@@ -2,18 +2,12 @@
 	path = ext/vcmi
 	url = https://github.com/vcmi/vcmi.git
 	branch = beta
-[submodule "ext/ff/ffmpeg"]
-	path = ext/ff/ffmpeg
-	url = https://git.ffmpeg.org/ffmpeg.git
-[submodule "ext/ff/x264"]
-	path = ext/ff/x264
-	url = https://github.com/mirror/x264.git
 [submodule "ext/iconv/code"]
 	path = ext/iconv/code
 	url = https://github.com/ironsteel/iconv-android.git
-[submodule "ext/SDL2/core/code"]
-	path = ext/SDL2/core/code
-	url = https://github.com/Fayth/sdl2-for-vcmi-android.git
 [submodule "ext/oneTBB"]
 	path = ext/oneTBB
 	url = https://github.com/oneapi-src/oneTBB.git
+[submodule "ext/ff/builder"]
+	path = ext/ff/builder
+	url = https://github.com/Javernaut/ffmpeg-android-maker.git

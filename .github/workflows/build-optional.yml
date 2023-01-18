@@ -1,0 +1,75 @@
+name: VCMI Ext
+
+on:
+    push:
+      branches:
+        - build-optional
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+        fetch-depth: 0
+        
+    - name: Update VCMI Sources
+      run: |
+        git submodule update --init --remote --recursive ${{github.workspace}}/ext/vcmi
+
+    - name: Dependencies
+      run: |
+        sudo apt-get install nasm
+        wget -O ./sdl.tar.gz https://github.com/libsdl-org/SDL/releases/download/release-2.26.1/SDL2-2.26.1.tar.gz
+        tar xzvf sdl.tar.gz -C ./ext/SDL2/core/ > /dev/null
+        mv ./ext/SDL2/core/SDL* ./ext/SDL2/core/code
+        wget -O ./sdl_mixer.tar.gz https://github.com/libsdl-org/SDL_mixer/releases/download/release-2.6.2/SDL2_mixer-2.6.2.tar.gz
+        tar xzvf sdl_mixer.tar.gz -C ./ext/SDL2/SDL2-mixer/ > /dev/null
+        mv ./ext/SDL2/SDL2-mixer/SDL* ./ext/SDL2/SDL2-mixer/code
+        wget -O ./sdl_image.tar.gz https://github.com/libsdl-org/SDL_image/releases/download/release-2.6.2/SDL2_image-2.6.2.tar.gz
+        tar xzvf sdl_image.tar.gz -C ./ext/SDL2/SDL2-image/ > /dev/null
+        mv ./ext/SDL2/SDL2-image/SDL* ./ext/SDL2/SDL2-image/code
+        wget -O ./sdl_ttf.tar.gz https://github.com/libsdl-org/SDL_ttf/releases/download/release-2.20.1/SDL2_ttf-2.20.1.tar.gz
+        tar xzvf sdl_ttf.tar.gz -C ./ext/SDL2/SDL2-ttf/ > /dev/null
+        mv ./ext/SDL2/SDL2-ttf/SDL* ./ext/SDL2/SDL2-ttf/code
+        wget -O ./boost.tar.gz https://boostorg.jfrog.io/artifactory/main/release/1.68.0/source/boost_1_68_0.tar.gz
+        mkdir -p ext/boost/
+        tar xzvf boost.tar.gz -C ./ext/boost/ >/dev/null
+
+    - name: Build
+      run: |
+        chmod +x ./project/gradlew
+        
+        export ANDROID_SDK_HOME="$ANDROID_SDK_ROOT"
+        
+        python ./.github/CI/create_conf.py
+        python ./update_internal_assets.py
+        python ./build.py fixpaths
+        python ./build.py build-optional
+        
+    - name: Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ext-output
+        path: |
+          ${{github.workspace}}/libs/*
+          ${{github.workspace}}/ext-output/*
+          ${{github.workspace}}/ext/ff/builder/output/*
+          ${{github.workspace}}/ext/SDL2/*/code/include
+        
+    - uses: act10ns/slack@v1
+      with:
+        status: ${{ job.status }}
+        channel: '#notifications'
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      if: always()
