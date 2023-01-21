@@ -18,7 +18,7 @@
     <string name="launcher_btn_pointermulti_subtitle">Поточна: %1$s</string>
     <string name="launcher_version">Поточна версія лаунчера: %1$s</string>
     <string name="launcher_error_vcmi_data_root_created">VCMI створила папку \'%1$s\' (в %2$s). Скопіюйте ваші файли Героїв 3 туди (так щоб вийшла папка %1$s/Data та %1$s/Mp3 та %1$s/Maps) та перезапустіть гру.</string>
-    <string name="launcher_error_h3_data_missing">Не вдалося знайти папку \'%1$s\'. Скопіюйте ваші файли Героїв 3 туди (так щоб вийшла папка %1$s/Data та %1$s/Mp3 та %1$s/Maps) та перезапустіть гру.</string>
+    <string name="launcher_error_h3_data_missing">Не вдалося знайти файли Героїв у \'%1$s\'. Скопіюйте файли Героїв 3 туди вручну або скористайтеся кнопкою копіювання і перезапустіть гру.</string>
     <string name="launcher_btn_pointermulti_title">Відносна швидкість керування курсором</string>
     <string name="launcher_btn_sound_title">Громкість звуків</string>
     <string name="launcher_btn_music_title">Громкость музики</string>
@@ -56,4 +56,10 @@
     <string name="about_error_opening_url">Не вдалося відкрити сторінку (ймовірно, не вдалося знайти браузер)</string>
     <string name="dialog_authors_vcmi">Автори VCMI</string>
     <string name="dialog_authors_launcher">Автори лаунчера</string>
+    <string name="about_btn_privacy">Політика конфіденційності: %1$s</string>
+    <string name="launcher_btn_export_title">Експортувати дані VCMI</string>
+    <string name="launcher_btn_export_description">Зробити копію даних VCMI перед видаленням гри або перенести сейв-файли на версію для інших платформ</string>
+    <string name="launcher_btn_import_title">Завантажити дані VCMI у внутрішнє сховище</string>
+    <string name="launcher_btn_import_description">Копіювати дані VCMI у внутрішнє сховище. Ви можете завантажити стару папку vcmi-data від версії 0.99 чи файли героїв</string>
+    <string name="launcher_progress_copy">Копіюємо %1$s</string>
 </resources>

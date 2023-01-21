@@ -4,8 +4,11 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Debug;
+import android.os.Trace;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,14 +19,24 @@ import org.json.JSONObject;
 import org.libsdl.app.SDLActivity;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.core.app.ActivityCompat;
+import androidx.documentfile.provider.DocumentFile;
 import eu.vcmi.vcmi.content.AsyncLauncherInitialization;
 import eu.vcmi.vcmi.settings.AdventureAiController;
 import eu.vcmi.vcmi.settings.CodepageSettingController;
+import eu.vcmi.vcmi.settings.CopyDataController;
 import eu.vcmi.vcmi.settings.DoubleConfig;
+import eu.vcmi.vcmi.settings.ExportDataController;
 import eu.vcmi.vcmi.settings.LauncherSettingController;
 import eu.vcmi.vcmi.settings.ModsBtnController;
 import eu.vcmi.vcmi.settings.MusicSettingController;
@@ -55,6 +68,8 @@ public class ActivityLauncher extends ActivityWithToolbar
     private LauncherSettingController<Integer, Config> mCtrlSoundVol;
     private LauncherSettingController<Integer, Config> mCtrlMusicVol;
     private LauncherSettingController<String, Config> mAiController;
+    private CopyDataController mCtrlCopy;
+    private ExportDataController mCtrlExport;
 
     private final AsyncLauncherInitialization.ILauncherCallbacks mInitCallbacks = new AsyncLauncherInitialization.ILauncherCallbacks()
     {
@@ -75,6 +90,8 @@ public class ActivityLauncher extends ActivityWithToolbar
         {
             loadConfigFile();
             mCtrlStart.show();
+            mCtrlCopy.show();
+            mCtrlExport.show();
             for (LauncherSettingController<?, ?> setting: mActualSettings) {
                 setting.show();
             }
@@ -85,6 +102,7 @@ public class ActivityLauncher extends ActivityWithToolbar
         @Override
         public void onInitFailure(final AsyncLauncherInitialization.InitResult result)
         {
+            mCtrlCopy.show();
             if (result.mFailSilently)
             {
                 return;
@@ -150,20 +168,37 @@ public class ActivityLauncher extends ActivityWithToolbar
     }
 
     @Override
-    public void onRequestPermissionsResult(
-            int requestCode,
-            String[] permissions,
-            int[] grantResults)
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData)
     {
-        switch (requestCode)
+        if(requestCode == CopyDataController.PICK_EXTERNAL_VCMI_DATA_TO_COPY
+            && resultCode == Activity.RESULT_OK)
         {
-            case PERMISSIONS_REQ_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
-                    // vm.onUseExternalStorage();
-                }
-                return;
+            Uri uri = null;
+            if (resultData != null)
+            {
+                uri = resultData.getData();
+
+                mCtrlCopy.copyData(uri);
+            }
+
+            return;
         }
+
+        if(requestCode == ExportDataController.PICK_DIRECTORY_TO_EXPORT
+                && resultCode == Activity.RESULT_OK)
+        {
+            Uri uri = null;
+            if (resultData != null)
+            {
+                uri = resultData.getData();
+
+                mCtrlExport.copyData(uri);
+            }
+
+            return;
+        }
+
+        super.onActivityResult(requestCode, resultCode, resultData);
     }
 
     public void requestStoragePermissions()
@@ -179,6 +214,8 @@ public class ActivityLauncher extends ActivityWithToolbar
     private void initSettingsGui()
     {
         mCtrlStart = new StartGameController(this, v -> onLaunchGameBtnPressed()).init(R.id.launcher_btn_start);
+        (mCtrlCopy = new CopyDataController(this)).init(R.id.launcher_btn_copy);
+        (mCtrlExport = new ExportDataController(this)).init(R.id.launcher_btn_export);
         new ModsBtnController(this, v -> startActivity(new Intent(ActivityLauncher.this, ActivityMods.class))).init(R.id.launcher_btn_mods);
         mCtrlScreenRes = new ScreenResSettingController(this).init(R.id.launcher_btn_res, mConfig);
         mCtrlCodepage = new CodepageSettingController(this).init(R.id.launcher_btn_cp, mConfig);
@@ -198,6 +235,8 @@ public class ActivityLauncher extends ActivityWithToolbar
         mActualSettings.add(mAiController);
 
         mCtrlStart.hide(); // start is initially hidden, until we confirm that everything is okay via AsyncLauncherInitialization
+        mCtrlCopy.hide();
+        mCtrlExport.hide();
     }
 
     private void onLaunchGameBtnPressed()
@@ -279,31 +318,5 @@ public class ActivityLauncher extends ActivityWithToolbar
         }
         mErrorMessage.setVisibility(View.VISIBLE);
         mErrorMessage.setText(initResult.mMessage);
-    }
-
-    private boolean requestExternalStoragePermissions()
-    {
-        try
-        {
-            int storageWritePermissions = ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-            if (storageWritePermissions == PackageManager.PERMISSION_GRANTED)
-            {
-                return true;
-            }
-        }
-        catch (final RuntimeException ignored)
-        {
-            mErrorMessage.setVisibility(View.VISIBLE);
-            mErrorMessage.setText(this.getString(R.string.launcher_error_permission_broken));
-
-            return false;
-        }
-
-        requestStoragePermissions();
-
-        return false;
     }
 }

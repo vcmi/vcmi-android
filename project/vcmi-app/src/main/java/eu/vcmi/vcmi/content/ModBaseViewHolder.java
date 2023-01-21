@@ -19,7 +19,12 @@ public class ModBaseViewHolder extends RecyclerView.ViewHolder
 
     ModBaseViewHolder(final View parentView)
     {
-        this(LayoutInflater.from(parentView.getContext()).inflate(R.layout.mod_base_adapter_item, (ViewGroup) parentView, false), true);
+        this(
+            LayoutInflater.from(parentView.getContext()).inflate(
+                R.layout.mod_base_adapter_item,
+                (ViewGroup) parentView,
+                false),
+            true);
     }
 
     protected ModBaseViewHolder(final View v, final boolean internal)
