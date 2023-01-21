@@ -18,7 +18,7 @@
     <string name="launcher_btn_pointermulti_subtitle">Текущая: %1$s</string>
     <string name="launcher_version">Текущая версия лаунчера: %1$s</string>
     <string name="launcher_error_vcmi_data_root_created">VCMI создала папку \'%1$s\' (в %2$s). Скопируйте ваши файлы Героев 3 туда (так чтобы получилась папка %1$s/Data и %1$s/Mp3 и %1$s/Maps) и перезапустите игру.</string>
-    <string name="launcher_error_h3_data_missing">Не удалось найти файлы Героев в \'%1$s\'. Скопируйте ваши файлы Героев 3 туда (так чтобы получилась папка %1$s/Data и %1$s/Mp3 и %1$s/Maps) и перезапустите игру.</string>
+    <string name="launcher_error_h3_data_missing">Не удалось найти файлы Героев в \'%1$s\'. Скопируйте ваши файлы Героев 3 туда вручную или воспользуйтесь кнопкой копирования и перезапустите игру.</string>
     <string name="launcher_btn_pointermulti_title">Относительная скорость управления указателем</string>
     <string name="launcher_btn_sound_title">Громкость звуков</string>
     <string name="launcher_btn_music_title">Громкость музыки</string>
@@ -56,4 +56,10 @@
     <string name="about_error_opening_url">Не удалось открыть страничку (вероятно не удалось найти браузер)</string>
     <string name="dialog_authors_vcmi">Авторы VCMI</string>
     <string name="dialog_authors_launcher">Авторы лаунчера</string>
+    <string name="about_btn_privacy" translatable="false">Политика конфиденциальности: %1$s</string>
+    <string name="launcher_btn_export_title">Експортировать данные VCMI</string>
+    <string name="launcher_btn_export_description">Сделать копию данных VCMI перед удалением игры или чтобы перенести сейв-файлы на версию для других платформ</string>
+    <string name="launcher_btn_import_title">Загрузить данные VCMI во внутреннее хранилище</string>
+    <string name="launcher_btn_import_description">Скопировать данные VCMI во внутреннее хранилище. Вы можете загрузить стару папку vcmi-data от версии 0.99 или файлы героев</string>
+    <string name="launcher_progress_copy">Копируем %1$s</string>
 </resources>

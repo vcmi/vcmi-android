@@ -61,4 +61,10 @@
     <string name="dialog_authors_vcmi">Autorzy VCMI</string>
     <string name="dialog_authors_launcher">Autorzy launchera</string>
     <string name="launcher_error_config_saving_failed">Nie udało się zapisać konfiguracji VCMI; powód: %1$s</string>
+    
+    <string name="launcher_btn_export_title">Eksportuj dane VCMI</string>
+    <string name="launcher_btn_export_description">Stwórz kopię wewnętrznych danych VCMI przed odinstalowaniem lub by zachować zapisane gry do uruchomienia na innym urządzeniu. Możesz też mieć bezpośrednio operować na elementach wewnętrznego magazynu.</string>
+    <string name="launcher_btn_import_title">Importuj dane VCMI</string>
+    <string name="launcher_btn_import_description">Skopiuj dane VCMI do wewnętrznego magazynu. Możesz zaimportować stary folder vcmi-data z wersji 0.99 lub pliki HOMM3.</string>
+    <string name="launcher_progress_copy">Kopiowanie %1$s</string>
 </resources>

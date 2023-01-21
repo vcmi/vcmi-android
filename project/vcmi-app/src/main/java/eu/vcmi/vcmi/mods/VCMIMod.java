@@ -232,7 +232,9 @@ public class VCMIMod
     public List<VCMIMod> submods()
     {
         final ArrayList<VCMIMod> ret = new ArrayList<>();
+
         ret.addAll(mSubmods.values());
+
         return ret;
     }
 

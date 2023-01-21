@@ -4,15 +4,10 @@ import android.content.Context;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-
 import java.io.File;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 import eu.vcmi.vcmi.R;
 import eu.vcmi.vcmi.mods.VCMIMod;
 import eu.vcmi.vcmi.util.Log;
@@ -136,10 +131,13 @@ public class ModsAdapter extends RecyclerView.Adapter<ModBaseViewHolder>
     public void attachSubmods(final ModItem mod, final RecyclerView.ViewHolder vh)
     {
         int adapterPosition = vh.getAdapterPosition();
-        final List<ModItem> submods = mod.mMod.submods()
-                .stream()
-                .map(v -> new ModItem(v, mod.mNestingLevel + 1))
-                .collect(Collectors.toList());
+        final List<ModItem> submods = new ArrayList<>();
+
+        for (VCMIMod v : mod.mMod.submods())
+        {
+            ModItem modItem = new ModItem(v, mod.mNestingLevel + 1);
+            submods.add(modItem);
+        }
 
         mDataset.addAll(adapterPosition + 1, submods);
         notifyItemRangeInserted(adapterPosition + 1, submods.size());
@@ -161,10 +159,16 @@ public class ModsAdapter extends RecyclerView.Adapter<ModBaseViewHolder>
     public void updateModsList(List<VCMIMod> mods)
     {
         mDataset.clear();
-        mDataset.addAll(
-                mods.stream()
-                    .map(ModItem::new)
-                    .collect(Collectors.toList()));
+
+        List<ModItem> list = new ArrayList<>();
+
+        for (VCMIMod mod : mods)
+        {
+            ModItem modItem = new ModItem(mod);
+            list.add(modItem);
+        }
+
+        mDataset.addAll(list);
 
         notifyDataSetChanged();
     }
@@ -180,7 +184,8 @@ public class ModsAdapter extends RecyclerView.Adapter<ModBaseViewHolder>
             mod.mMod.installationFolder = modFolder;
             mod.mDownloadProgress = null;
             notifyItemChanged(mDataset.indexOf(mod));
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             Log.e("Failed to install mod", ex);
         }
@@ -203,7 +208,8 @@ public class ModsAdapter extends RecyclerView.Adapter<ModBaseViewHolder>
 
             notifyItemChanged(itemIndex);
         }
-        else{
+        else
+        {
             mDataset.remove(item);
             notifyItemRemoved(itemIndex);
         }

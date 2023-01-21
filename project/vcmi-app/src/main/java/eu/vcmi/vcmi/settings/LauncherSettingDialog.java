@@ -8,7 +8,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
-import java.util.stream.Stream;
 
 import java.util.List;
 
