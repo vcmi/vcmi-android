@@ -19,7 +19,7 @@
         <activity
             android:exported="true"
             android:name=".ActivityLauncher"
-            android:screenOrientation="landscape">
+            android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,13 +28,13 @@
         </activity>
         <activity
             android:name=".ActivityError"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".ActivityMods"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".ActivityAbout"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="sensorLandscape" />
 
         <activity
             android:name=".VcmiSDLActivity"

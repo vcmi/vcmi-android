@@ -2,13 +2,14 @@ package eu.vcmi.vcmi.settings;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import eu.vcmi.vcmi.Config;
 import eu.vcmi.vcmi.R;
-import eu.vcmi.vcmi.util.SharedPrefs;
 
 /**
  * @author F
  */
-public class PointerMultiplierSettingController extends LauncherSettingWithDialogController<Float, SharedPrefs>
+public class PointerMultiplierSettingController
+        extends LauncherSettingWithDialogController<Float, Config>
 {
     public PointerMultiplierSettingController(final AppCompatActivity activity)
     {
@@ -24,7 +25,7 @@ public class PointerMultiplierSettingController extends LauncherSettingWithDialo
     @Override
     public void onItemChosen(final Float item)
     {
-        mConfig.save(SharedPrefs.KEY_POINTER_MULTIPLIER, item);
+        mConfig.setPointerSpeedMultiplier(item);
         updateContent();
     }
 
@@ -41,7 +42,10 @@ public class PointerMultiplierSettingController extends LauncherSettingWithDialo
         {
             return "";
         }
-        return mActivity.getString(R.string.launcher_btn_pointermulti_subtitle,
-            PointerMultiplierSettingDialog.pointerMultiplierToUserString(mConfig.load(SharedPrefs.KEY_POINTER_MULTIPLIER, 1.0f)));
+
+        String pointerModeString = PointerMultiplierSettingDialog.pointerMultiplierToUserString(
+                mConfig.getPointerSpeedMultiplier());
+
+        return mActivity.getString(R.string.launcher_btn_pointermulti_subtitle, pointerModeString);
     }
 }

@@ -1,17 +1,14 @@
 package eu.vcmi.vcmi.settings;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.io.File;
-
+import eu.vcmi.vcmi.Config;
 import eu.vcmi.vcmi.R;
-import eu.vcmi.vcmi.util.FileUtil;
-import eu.vcmi.vcmi.util.SharedPrefs;
 
 /**
  * @author F
  */
-public class PointerModeSettingController extends LauncherSettingWithDialogController<PointerModeSettingController.PointerMode, DoubleConfig>
+public class PointerModeSettingController
+    extends LauncherSettingWithDialogController<PointerModeSettingController.PointerMode, Config>
 {
     public PointerModeSettingController(final AppCompatActivity activity)
     {
@@ -27,8 +24,8 @@ public class PointerModeSettingController extends LauncherSettingWithDialogContr
     @Override
     public void onItemChosen(final PointerMode item)
     {
-        mConfig.mPrefs.saveEnum(SharedPrefs.KEY_POINTER_MODE, item);
-        mConfig.mConfig.updateSwipe(item.supportsSwipe());
+        mConfig.setPointerMode(item == PointerMode.RELATIVE);
+        mConfig.updateSwipe(item.supportsSwipe());
         updateContent();
     }
 
@@ -46,7 +43,22 @@ public class PointerModeSettingController extends LauncherSettingWithDialogContr
             return "";
         }
         return mActivity.getString(R.string.launcher_btn_pointermode_subtitle,
-            PointerModeSettingDialog.pointerModeToUserString(mActivity, mConfig.mPrefs.loadEnum(SharedPrefs.KEY_POINTER_MODE, PointerMode.NORMAL)));
+            PointerModeSettingDialog.pointerModeToUserString(mActivity, getPointerMode()));
+    }
+
+    private PointerMode getPointerMode()
+    {
+        if(mConfig.getPointerModeIsRelative())
+        {
+            return PointerMode.RELATIVE;
+        }
+
+        if(mConfig.mSwipeEnabled)
+        {
+            return PointerMode.NORMAL_WITH_SWIPE;
+        }
+
+        return PointerMode.NORMAL;
     }
 
     public enum PointerMode

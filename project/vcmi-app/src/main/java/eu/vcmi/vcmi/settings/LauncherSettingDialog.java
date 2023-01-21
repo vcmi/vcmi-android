@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AlertDialog;
 
+import java.util.ArrayList;
 import java.util.stream.Stream;
 
 import java.util.List;
@@ -39,10 +40,18 @@ public abstract class LauncherSettingDialog<T> extends DialogFragment
     @Override
     public Dialog onCreateDialog(final Bundle savedInstanceState)
     {
+        List<CharSequence> list = new ArrayList<>();
+
+        for (T t : mDataset)
+        {
+            CharSequence charSequence = itemName(t);
+            list.add(charSequence);
+        }
+
         return new AlertDialog.Builder(getActivity())
             .setTitle(dialogTitleResId())
             .setItems(
-                    mDataset.stream().map(this::itemName).toArray(CharSequence[]::new),
+                    list.toArray(new CharSequence[0]),
                     this::onItemChosenInternal)
             .create();
     }

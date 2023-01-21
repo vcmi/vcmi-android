@@ -26,7 +26,9 @@ public class PointerModeSettingDialog extends LauncherSettingDialog<PointerModeS
         super(POINTER_MODES);
     }
 
-    public static String pointerModeToUserString(final Context ctx, final PointerModeSettingController.PointerMode pointerMode)
+    public static String pointerModeToUserString(
+            final Context ctx,
+            final PointerModeSettingController.PointerMode pointerMode)
     {
         switch (pointerMode)
         {

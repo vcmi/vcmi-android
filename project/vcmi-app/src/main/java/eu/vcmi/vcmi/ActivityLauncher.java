@@ -49,9 +49,9 @@ public class ActivityLauncher extends ActivityWithToolbar
     private Config mConfig;
     private LauncherSettingController<ScreenResSettingController.ScreenRes, Config> mCtrlScreenRes;
     private LauncherSettingController<String, Config> mCtrlCodepage;
-    private LauncherSettingController<PointerModeSettingController.PointerMode, DoubleConfig> mCtrlPointerMode;
+    private LauncherSettingController<PointerModeSettingController.PointerMode, Config> mCtrlPointerMode;
     private LauncherSettingController<Void, Void> mCtrlStart;
-    private LauncherSettingController<Float, SharedPrefs> mCtrlPointerMulti;
+    private LauncherSettingController<Float, Config> mCtrlPointerMulti;
     private LauncherSettingController<Integer, Config> mCtrlSoundVol;
     private LauncherSettingController<Integer, Config> mCtrlMusicVol;
     private LauncherSettingController<String, Config> mAiController;
@@ -182,8 +182,8 @@ public class ActivityLauncher extends ActivityWithToolbar
         new ModsBtnController(this, v -> startActivity(new Intent(ActivityLauncher.this, ActivityMods.class))).init(R.id.launcher_btn_mods);
         mCtrlScreenRes = new ScreenResSettingController(this).init(R.id.launcher_btn_res, mConfig);
         mCtrlCodepage = new CodepageSettingController(this).init(R.id.launcher_btn_cp, mConfig);
-        mCtrlPointerMode = new PointerModeSettingController(this).init(R.id.launcher_btn_pointer_mode, new DoubleConfig(mConfig, mPrefs));
-        mCtrlPointerMulti = new PointerMultiplierSettingController(this).init(R.id.launcher_btn_pointer_multi, mPrefs);
+        mCtrlPointerMode = new PointerModeSettingController(this).init(R.id.launcher_btn_pointer_mode, mConfig);
+        mCtrlPointerMulti = new PointerMultiplierSettingController(this).init(R.id.launcher_btn_pointer_multi, mConfig);
         mCtrlSoundVol = new SoundSettingController(this).init(R.id.launcher_btn_volume_sound, mConfig);
         mCtrlMusicVol = new MusicSettingController(this).init(R.id.launcher_btn_volume_music, mConfig);
         mAiController = new AdventureAiController(this).init(R.id.launcher_btn_adventure_ai, mConfig);
@@ -244,8 +244,8 @@ public class ActivityLauncher extends ActivityWithToolbar
     {
         updateCtrlConfig(mCtrlScreenRes, mConfig);
         updateCtrlConfig(mCtrlCodepage, mConfig);
-        updateCtrlConfig(mCtrlPointerMode, new DoubleConfig(mConfig, mPrefs));
-        updateCtrlConfig(mCtrlPointerMulti, mPrefs);
+        updateCtrlConfig(mCtrlPointerMode, mConfig);
+        updateCtrlConfig(mCtrlPointerMulti, mConfig);
         updateCtrlConfig(mCtrlSoundVol, mConfig);
         updateCtrlConfig(mCtrlMusicVol, mConfig);
         updateCtrlConfig(mAiController, mConfig);
