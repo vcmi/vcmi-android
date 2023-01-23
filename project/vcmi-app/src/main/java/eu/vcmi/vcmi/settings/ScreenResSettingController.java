@@ -18,7 +18,7 @@ public class ScreenResSettingController extends LauncherSettingWithDialogControl
     @Override
     protected LauncherSettingDialog<ScreenRes> dialog()
     {
-        return new ScreenResSettingDialog();
+        return new ScreenResSettingDialog(mActivity);
     }
 
     @Override

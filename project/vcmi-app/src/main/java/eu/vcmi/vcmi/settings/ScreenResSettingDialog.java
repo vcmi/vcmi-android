@@ -1,35 +1,26 @@
 package eu.vcmi.vcmi.settings;
 
+import android.app.Activity;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import java.io.File;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Queue;
 import eu.vcmi.vcmi.R;
+import eu.vcmi.vcmi.Storage;
+import eu.vcmi.vcmi.util.FileUtil;
 
 /**
  * @author F
  */
 public class ScreenResSettingDialog extends LauncherSettingDialog<ScreenResSettingController.ScreenRes>
 {
-    private static final List<ScreenResSettingController.ScreenRes> AVAILABLE_RESOLUTIONS = new ArrayList<>();
-
-    static
+    public ScreenResSettingDialog(Activity mActivity)
     {
-        AVAILABLE_RESOLUTIONS.add(new ScreenResSettingController.ScreenRes(800, 600));
-        AVAILABLE_RESOLUTIONS.add(new ScreenResSettingController.ScreenRes(1024, 600));
-        AVAILABLE_RESOLUTIONS.add(new ScreenResSettingController.ScreenRes(1024, 768));
-        AVAILABLE_RESOLUTIONS.add(new ScreenResSettingController.ScreenRes(1280, 800));
-        AVAILABLE_RESOLUTIONS.add(new ScreenResSettingController.ScreenRes(1280, 960));
-        AVAILABLE_RESOLUTIONS.add(new ScreenResSettingController.ScreenRes(1280, 1024));
-        AVAILABLE_RESOLUTIONS.add(new ScreenResSettingController.ScreenRes(1366, 768));
-        AVAILABLE_RESOLUTIONS.add(new ScreenResSettingController.ScreenRes(1440, 900));
-        AVAILABLE_RESOLUTIONS.add(new ScreenResSettingController.ScreenRes(1600, 1200));
-        AVAILABLE_RESOLUTIONS.add(new ScreenResSettingController.ScreenRes(1680, 1050));
-        AVAILABLE_RESOLUTIONS.add(new ScreenResSettingController.ScreenRes(1920, 1080));
-    }
-
-    public ScreenResSettingDialog()
-    {
-        super(AVAILABLE_RESOLUTIONS);
+        super(loadResolutions(mActivity));
     }
 
     @Override
@@ -42,5 +33,72 @@ public class ScreenResSettingDialog extends LauncherSettingDialog<ScreenResSetti
     protected CharSequence itemName(final ScreenResSettingController.ScreenRes item)
     {
         return item.toString();
+    }
+
+    private static List<ScreenResSettingController.ScreenRes> loadResolutions(Activity activity)
+    {
+        List<ScreenResSettingController.ScreenRes> availableResolutions = new ArrayList<>();
+
+        try
+        {
+            File modsFolder = new File(Storage.getVcmiDataDir(activity), "Mods");
+            Queue<File> folders = new ArrayDeque<File>();
+            folders.offer(modsFolder);
+
+            while (!folders.isEmpty())
+            {
+                File folder = folders.poll();
+                File[] children = folder.listFiles();
+
+                if(children == null) continue;
+
+                for (File child : children)
+                {
+                    if (child.isDirectory())
+                    {
+                        folders.add(child);
+                    }
+                    else if (child.getName().equals("resolutions.json"))
+                    {
+                        JSONArray resolutions = new JSONObject(FileUtil.read(child))
+                                .getJSONArray("GUISettings");
+
+                        for(int index = 0; index < resolutions.length(); index++)
+                        {
+                            try
+                            {
+                                JSONObject resolution = resolutions
+                                        .getJSONObject(index)
+                                        .getJSONObject("resolution");
+
+                                availableResolutions.add(new ScreenResSettingController.ScreenRes(
+                                        resolution.getInt("x"),
+                                        resolution.getInt("y")
+                                ));
+                            }
+                            catch (Exception ex)
+                            {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }
+
+            if(availableResolutions.isEmpty())
+            {
+                availableResolutions.add(new ScreenResSettingController.ScreenRes(800, 600));
+            }
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+
+            availableResolutions.clear();
+
+            availableResolutions.add(new ScreenResSettingController.ScreenRes(800, 600));
+        }
+
+        return availableResolutions;
     }
 }

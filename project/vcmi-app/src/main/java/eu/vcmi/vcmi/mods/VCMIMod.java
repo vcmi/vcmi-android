@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -234,6 +235,15 @@ public class VCMIMod
         final ArrayList<VCMIMod> ret = new ArrayList<>();
 
         ret.addAll(mSubmods.values());
+
+        Collections.sort(ret, new Comparator<VCMIMod>()
+        {
+            @Override
+            public int compare(VCMIMod left, VCMIMod right)
+            {
+                return left.mName.compareTo(right.mName);
+            }
+        });
 
         return ret;
     }
