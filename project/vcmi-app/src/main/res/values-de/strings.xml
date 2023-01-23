@@ -60,6 +60,6 @@
     <string name="launcher_btn_export_title">VCMI-Daten exportieren</string>
     <string name="launcher_btn_export_description">Erstellen Sie eine Kopie der internen VCMI-Daten vor der Deinstallation oder zur Synchronisierung der Speicherstände mit der Desktop-Version. Sie können auch direkt auf den internen Speicher zugreifen.</string>
     <string name="launcher_btn_import_title">VCMI-Daten importieren</string>
-    <string name="launcher_btn_import_description">Kopieren Sie VCMI-Dateien in den internen Speicher. Sie können den alten vcmi-data-Ordner von Version 0.99 oder HOMM3-Dateien importieren</string>
+    <string name="launcher_btn_import_description">Kopieren Sie VCMI-Dateien in den internen Speicher. Sie können den alten vcmi-data-Ordner von Version 0.99 oder HoMM3-Dateien importieren</string>
     <string name="launcher_progress_copy">Kopiere %1$s</string>
 </resources>
