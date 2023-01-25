@@ -7,9 +7,9 @@ android {
 
 	defaultConfig {
 		applicationId "is.xyz.vcmi"
-		minSdk 21
+		minSdk 19
 		targetSdk 31
-		versionCode 1100
+		versionCode 1102
 		versionName "1.1"
 		setProperty("archivesBaseName", "vcmi")
 

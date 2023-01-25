@@ -3,39 +3,23 @@ package eu.vcmi.vcmi;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Debug;
-import android.os.Trace;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import org.json.JSONObject;
-import org.libsdl.app.SDLActivity;
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.core.app.ActivityCompat;
-import androidx.documentfile.provider.DocumentFile;
 import eu.vcmi.vcmi.content.AsyncLauncherInitialization;
 import eu.vcmi.vcmi.settings.AdventureAiController;
 import eu.vcmi.vcmi.settings.CodepageSettingController;
 import eu.vcmi.vcmi.settings.CopyDataController;
-import eu.vcmi.vcmi.settings.DoubleConfig;
 import eu.vcmi.vcmi.settings.ExportDataController;
 import eu.vcmi.vcmi.settings.LauncherSettingController;
 import eu.vcmi.vcmi.settings.ModsBtnController;
@@ -107,7 +91,7 @@ public class ActivityLauncher extends ActivityWithToolbar
             {
                 return;
             }
-            ActivityLauncher.this.onInitFailure(result, false);
+            ActivityLauncher.this.onInitFailure(result);
         }
     };
 
@@ -173,7 +157,8 @@ public class ActivityLauncher extends ActivityWithToolbar
         if(requestCode == CopyDataController.PICK_EXTERNAL_VCMI_DATA_TO_COPY
             && resultCode == Activity.RESULT_OK)
         {
-            Uri uri = null;
+            Uri uri;
+
             if (resultData != null)
             {
                 uri = resultData.getData();
@@ -300,22 +285,18 @@ public class ActivityLauncher extends ActivityWithToolbar
         }
     }
 
-    private void onInitFailure(final AsyncLauncherInitialization.InitResult initResult, final boolean disableAccess)
+    private void onInitFailure(final AsyncLauncherInitialization.InitResult initResult)
     {
         Log.d(this, "Init failed with " + initResult);
-        if (disableAccess)
-        {
-            final Intent intent = new Intent(this, ActivityError.class);
-            intent.putExtra(ActivityError.ARG_ERROR_MSG, initResult.mMessage);
-            startActivity(intent);
-            finish();
-            return;
-        }
+
         mProgress.setVisibility(View.GONE);
         mCtrlStart.hide();
-        for (LauncherSettingController<?, ?> setting: mActualSettings) {
+
+        for (LauncherSettingController<?, ?> setting: mActualSettings)
+        {
             setting.hide();
         }
+
         mErrorMessage.setVisibility(View.VISIBLE);
         mErrorMessage.setText(initResult.mMessage);
     }

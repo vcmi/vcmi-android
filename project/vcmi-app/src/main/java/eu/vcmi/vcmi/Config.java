@@ -1,14 +1,10 @@
 package eu.vcmi.vcmi;
 
-import android.content.Context;
-import android.os.Environment;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 
 import eu.vcmi.vcmi.util.FileUtil;
 import eu.vcmi.vcmi.util.Log;
