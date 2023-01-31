@@ -9,7 +9,7 @@ android {
 		applicationId "is.xyz.vcmi"
 		minSdk 19
 		targetSdk 31
-		versionCode 1102
+		versionCode 1103
 		versionName "1.1"
 		setProperty("archivesBaseName", "vcmi")
 
