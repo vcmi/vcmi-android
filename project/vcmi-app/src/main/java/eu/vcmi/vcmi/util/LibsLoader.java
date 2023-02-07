@@ -23,7 +23,7 @@ public final class LibsLoader
 
     private static void loadCommon()
     {
-        loadLib("gnustl_shared", true);
+        loadLib("c++_shared", true);
         loadLib("iconv", true);
         loadLib("boost-system", true);
         loadLib("boost-datetime", true);
@@ -62,5 +62,6 @@ public final class LibsLoader
     {
         loadCommon();
         loadLib("vcmi-server", false);
+        NativeMethods.initClassloader();
     }
 }

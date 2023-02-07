@@ -12,6 +12,6 @@
 	"javaRoot": "$JAVA_HOME",
     "abis" : "arm64-v8a armeabi-v7a x86_64 x86",
 	"boostFolderName" : "boost_1_68_0",
-	"androidApi" : 21,
+	"androidApi" : 19,
 	"cmakeBuildMode" : "Release"
 }
