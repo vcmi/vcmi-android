@@ -1,7 +1,7 @@
 [submodule "ext/vcmi"]
 	path = ext/vcmi
 	url = https://github.com/vcmi/vcmi.git
-	branch = develop
+	branch = android-remove-server-main
 [submodule "ext/iconv/code"]
 	path = ext/iconv/code
 	url = https://github.com/ironsteel/iconv-android.git
